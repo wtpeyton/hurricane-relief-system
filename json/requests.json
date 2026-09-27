@@ -1,0 +1,28 @@
+[
+    {
+        "id": "41b1a5ff-b0a7-430b-ad65-ae45f02fbe6b",
+        "requester": "7e6ff017-aa56-4cfb-8a27-7717ea9465f1",
+        "responders": ["c9a4915c-33ae-4173-a22e-a8953c2c6541"],
+        "created_at": "2026-09-27T16:00:00Z",
+        "priority": 1,
+        "request_type": "MEDICAL_EMERGENCY",
+        "location": [34.0007, -81.0348],
+        "description": "Need medical assistance",
+        "status": "SUBMITTED",
+        "comment": "Waiting for assistance",
+        "for_someone_else": false
+    },
+    {
+        "id": "758ab7c5-ac2f-4a32-956a-9f9109d7cb99",
+        "requester": "c9a4915c-33ae-4173-a22e-a8953c2c6541",
+        "responders": [],
+        "created_at": "2026-09-27T16:30:00Z",
+        "priority": 2,
+        "request_type": "ESSENTIAL_SUPPLIES",
+        "location": [34.00080, -81.0348],
+        "description": "Need drinking water and food",
+        "status": "EN_ROUTE",
+        "comment": "Assistance is on the way",
+        "for_someone_else": true
+    }
+]

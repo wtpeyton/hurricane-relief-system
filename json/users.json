@@ -1,0 +1,26 @@
+[
+    {
+        "user_id": "7e6ff017-aa56-4cfb-8a27-7717ea9465f1",
+        "location": [34.0007, -81.0348],
+        "location_zip": "29205",
+        "first_name": "Ethan",
+        "last_name": "Carter",
+        "password": "goGamecocks37!",
+        "phone_number": "8036798181",
+        "permissions": ["REGISTERED_USER"],
+        "credentials": [],
+        "equipment": []
+    },
+    {
+        "user_id": "c9a4915c-33ae-4173-a22e-a8953c2c6541",
+        "location": [34.00080, -81.0348],
+        "location_zip":"29205",
+        "first_name": "Miranda",
+        "last_name": "Coats",
+        "password": "Ete@cher42",
+        "phone_number": "8034883201",
+        "permissions": ["REGISTERED_USER", "VOLUNTEER"],
+        "credentials": ["REGISTERED_NURSE"],
+        "equipment": []
+    }
+]

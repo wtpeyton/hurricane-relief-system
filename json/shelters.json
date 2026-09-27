@@ -1,0 +1,41 @@
+[
+    {
+        "shelter_id": "91170c0f-6136-4756-aebf-37b10e708a78",
+        "name": "Columbia Shelter",
+        "location": [34.0007, -81.0348],
+        "capacity": 500,
+        "pet_acceptance": true,
+        "supplies": [
+            {
+                "resource_id": "a3c06ffd-b00d-4e32-932c-853c6bf04793",
+                "type": "Water",
+                "quantity": 100,
+                "location": [34.0007, -81.0348]
+            }
+        ],
+        "medical_service": "MINIMUM_SERVICE",
+        "vet_service": true,
+        "accessibility": "VERY_ACCESSIBLE",
+        "shelter_admin": "2b876114-3846-45e0-b7d2-18ca493767e4"
+    },
+        {
+        "shelter_id": "c9a2b878-130d-4050-9a16-60d7c6f81715",
+        "name": "Community Center Shelter",
+        "location": [34.0100, -81.0000],
+        "capacity": 300,
+        "pet_acceptance": false,
+        "supplies": [
+            {
+                "resource_id": "92e90ff3-0979-4909-83ba-3c33eaae6411",
+                "type": "Blankets",
+                "quantity": 100,
+                "location": [34.0100, -81.0000]
+            }
+        ],
+        "medical_service": "AVERAGE_SERVICE",
+        "vet_service": false,
+        "accessibility": "MODERATELY_ACCESSIBLE",
+        "shelter_admin": "4f275e96-b5a6-4e4f-bd4d-cc8830b76450"
+    }
+
+]

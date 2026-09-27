@@ -1,0 +1,9 @@
+[
+    {
+        "hurricane_id": "d161589c-0c58-45c6-a76c-f868e7d2c01f",
+        "name": "Hurricane Andy",
+        "affected_zip_codes": ["29201", "29205", "29206"],
+        "status": "CATEGORY_THREE",
+        "active": true
+    }
+]
