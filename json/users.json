@@ -22,5 +22,17 @@
         "permissions": ["REGISTERED_USER", "VOLUNTEER"],
         "credentials": ["REGISTERED_NURSE"],
         "equipment": []
+    },
+    {
+        "user_id": "6637dd5b-f21e-4276-a3ff-1f3a6a65b66a",
+        "location": [34.0050, -81.0300],
+        "location_zip": "29205",
+        "first_name": "Jordan",
+        "last_name": "Smith",
+        "password": "Shelter123!",
+        "phone_number": "8035551234",
+        "permissions": ["REGISTERED_USER", "SHELTER_ADMIN"],
+        "credentials": [],
+        "equipment": []
     }
 ]

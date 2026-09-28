@@ -16,7 +16,7 @@
         "medical_service": "MINIMUM_SERVICE",
         "vet_service": true,
         "accessibility": "VERY_ACCESSIBLE",
-        "shelter_admin": "2b876114-3846-45e0-b7d2-18ca493767e4"
+        "shelter_admin": "6637dd5b-f21e-4276-a3ff-1f3a6a65b66a"
     },
         {
         "shelter_id": "c9a2b878-130d-4050-9a16-60d7c6f81715",
@@ -35,7 +35,6 @@
         "medical_service": "AVERAGE_SERVICE",
         "vet_service": false,
         "accessibility": "MODERATELY_ACCESSIBLE",
-        "shelter_admin": "4f275e96-b5a6-4e4f-bd4d-cc8830b76450"
+        "shelter_admin": "6637dd5b-f21e-4276-a3ff-1f3a6a65b66a"
     }
-
 ]
