@@ -1,29 +1,35 @@
-# Hurricane Relief System
+# hurricane-relief-system
 
-A JavaFX application concept for coordinating emergency assistance during and after hurricanes. It connects people who need help with volunteers and helps users find nearby shelters and available resources.
+A alert system that allows users to submit, respond, and edit requests for assistance from volunteers in hurricane emergencies.
 
-## How the system is organized
+## What is does
 
-The class diagram describes the main parts of the system:
+- Allows users to submit requests for assistance
+- Locates users for assistance needs
+- Alerts volunteers of requests in their area
+- Includes required materials for volunteer response
+- Allows volunteers to submit credentials for their abilities
+- Specifies user permissions to have different roles for users
+- Allows users to search for shelters
+- Shows locations of emergency shelters
+- Includes information about shelters occupancy and resources
+- Maintains a database to keep information up to date across devices
 
-- **Users** have permissions that define their roles, such as registered user, volunteer, shelter administrator, or administrator. Volunteers may also have credentials and equipment.
-- **Relief requests** record the request type, location, priority, description, requester, responders, and status. Volunteers can find nearby opportunities and respond to requests.
-- **Shelters** provide location, capacity, accessibility, medical and veterinary services, pet acceptance, and available supplies.
-- **Hurricanes** track a storm’s status and affected ZIP codes so the system can notify users in affected areas.
-- **System services** coordinate user accounts, requests, shelters, and hurricane data; data loaders and writers provide JSON persistence.
+## Description
 
-## Project documents
+This project is intended to provide emergency assistance for individuals during
+hurricanes and relief after hurricanes. Intending to connect capable volunteers
+to other users that are currently in distress and need specific assistance. The
+app will allow volunteers to offer emergency resources or supplies in times of
+need. Additionally, the app will precoordinate volunteers with special
+creditionals to emergencies that might require additional expertise like injuries.
 
-- [Software requirements specification](docs/requirements.pdf)
-- [UML class diagram](docs/uml-class-diagram.pdf)
-- [User login and request submission sequence diagram](docs/uml-sequence-diagram1.pdf)
-- [Volunteer login and response sequence diagram](docs/uml-sequence-diagram2.pdf)
-- [Project board](https://github.com/wtpeyton/hurricane-relief-system/projects)
+## Documents
 
-## Run locally
+[Software Requirements Specification Document](docs/requirements.pdf)
 
-The application uses Java 11 and Maven. From the `hurricane_system` directory, run:
+[Hurricane Relief System UML Class Diagram](docs/uml-class-diagram.pdf)
 
-```sh
-mvn javafx:run
-```
+[User Login and Request Submission UML Sequence Diagram](docs/uml-sequence-diagram1.pdf)
+
+[Volunteer Login and Response UML Sequence Diagram](docs/uml-sequence-diagram2.pdf)
