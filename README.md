@@ -11,29 +11,29 @@ Users can submit requests for help, volunteers can see and respond to requests i
 ## Features
 
 ### For people in need
-Submit, edit, and cancel requests for assistance (medical emergency, evacuation, rescue, essential supplies, shelter help, pet assistance, emotional support, and more)
-Submit a request on behalf of someone else
-Track the status of a request from submission through closure
-
+- Submit, edit, and cancel requests for assistance (medical emergency, evacuation, rescue, essential supplies, shelter help, pet assistance, emotional support, and more)
+- Submit a request on behalf of someone else
+- Track the status of a request from submission through closure
+  
 ### For volunteers
-Discover open requests near their location
-Respond to, update, and withdraw from requests
-Submit credentials (for example, registered nurse or paramedic) so they are matched to requests that need their skills
-See the materials needed for a response
-
+- Discover open requests near their location
+- Respond to, update, and withdraw from requests
+- Submit credentials (for example, registered nurse or paramedic) so they are matched to requests that need their skills
+- See the materials needed for a response
+  
 ### For shelters
-Search for shelters by distance
-View shelter details: capacity, pet acceptance, medical and veterinary services, accessibility, and supplies
-Shelter administrators manage their own shelter's information
+- Search for shelters by distance
+- View shelter details: capacity, pet acceptance, medical and veterinary services, accessibility, and supplies
+- Shelter administrators manage their own shelter's information
 
 ### For administrators
-Create and manage hurricane events and affected zip codes
-Approve or reject requests
-Manage user roles and permissions
+- Create and manage hurricane events and affected zip codes
+- Approve or reject requests
+- Manage user roles and permissions
 
 ### Platform
-Role-based permissions
-JSON-backed data storage so information stays consistent across sessions and devices
+- Role-based permissions (see [User Roles](#user-roles))
+- JSON-backed data storage so information stays consistent across sessions and devices
 
 ## Documents
 
