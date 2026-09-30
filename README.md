@@ -1,4 +1,4 @@
-# hurricane-relief-system
+# Hurricane Relief System
 
 An app that connects people in need with nearby volunteers and emergency shelters during and after hurricanes.
 
@@ -18,8 +18,7 @@ Users can submit requests for help, volunteers can see and respond to requests i
 ### For volunteers
 - Discover open requests near their location
 - Respond to, update, and withdraw from requests
-- Submit credentials (for example, registered nurse or paramedic) so they are matched to requests that need their skills
-- See the materials needed for a response
+- Add professional credentials, such as registered nurse or paramedic
   
 ### For shelters
 - Search for shelters by distance
@@ -33,7 +32,7 @@ Users can submit requests for help, volunteers can see and respond to requests i
 
 ### Platform
 - Role-based permissions
-- JSON-backed data storage so information stays consistent across sessions and devices
+- JSON-backed data storage for persistent system information
 
 ## Documents
 
@@ -44,3 +43,5 @@ Users can submit requests for help, volunteers can see and respond to requests i
 [User Login and Request Submission UML Sequence Diagram](docs/uml-sequence-diagram1.pdf)
 
 [Volunteer Login and Response UML Sequence Diagram](docs/uml-sequence-diagram2.pdf)
+
+[SCRUM Board](https://github.com/users/wtpeyton/projects/2/views/1)
