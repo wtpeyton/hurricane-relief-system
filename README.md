@@ -32,7 +32,7 @@ Users can submit requests for help, volunteers can see and respond to requests i
 - Manage user roles and permissions
 
 ### Platform
-- Role-based permissions (see [User Roles](#user-roles))
+- Role-based permissions
 - JSON-backed data storage so information stays consistent across sessions and devices
 
 ## Documents
