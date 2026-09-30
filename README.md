@@ -1,28 +1,39 @@
 # hurricane-relief-system
 
-A alert system that allows users to submit, respond, and edit requests for assistance from volunteers in hurricane emergencies.
-
-## What is does
-
-- Allows users to submit requests for assistance
-- Locates users for assistance needs
-- Alerts volunteers of requests in their area
-- Includes required materials for volunteer response
-- Allows volunteers to submit credentials for their abilities
-- Specifies user permissions to have different roles for users
-- Allows users to search for shelters
-- Shows locations of emergency shelters
-- Includes information about shelters occupancy and resources
-- Maintains a database to keep information up to date across devices
+An app that connects people in need with nearby volunteers and emergency shelters during and after hurricanes.
 
 ## Description
 
-This project is intended to provide emergency assistance for individuals during
-hurricanes and relief after hurricanes. Intending to connect capable volunteers
-to other users that are currently in distress and need specific assistance. The
-app will allow volunteers to offer emergency resources or supplies in times of
-need. Additionally, the app will precoordinate volunteers with special
-creditionals to emergencies that might require additional expertise like injuries.
+During a hurricane, people can be stranded, injured, or short on basic supplies, while capable neighbors and trained responders are nearby and willing to help, but have no way to find each other. The Hurricane Relief System closes that gap.
+
+Users can submit requests for help, volunteers can see and respond to requests in their area, and everyone can find nearby emergency shelters. The system also pairs requests that need special expertise, such as medical emergencies, with volunteers who hold the right credentials.
+
+## Features
+
+### For people in need
+Submit, edit, and cancel requests for assistance (medical emergency, evacuation, rescue, essential supplies, shelter help, pet assistance, emotional support, and more)
+Submit a request on behalf of someone else
+Track the status of a request from submission through closure
+
+### For volunteers
+Discover open requests near their location
+Respond to, update, and withdraw from requests
+Submit credentials (for example, registered nurse or paramedic) so they are matched to requests that need their skills
+See the materials needed for a response
+
+### For shelters
+Search for shelters by distance
+View shelter details: capacity, pet acceptance, medical and veterinary services, accessibility, and supplies
+Shelter administrators manage their own shelter's information
+
+### For administrators
+Create and manage hurricane events and affected zip codes
+Approve or reject requests
+Manage user roles and permissions
+
+### Platform
+Role-based permissions
+JSON-backed data storage so information stays consistent across sessions and devices
 
 ## Documents
 
