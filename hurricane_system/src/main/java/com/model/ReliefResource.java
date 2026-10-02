@@ -11,16 +11,12 @@ public class ReliefResource
     private String type;
     private int quantity;
     private double[] location;
-<<<<<<< HEAD
-    
-=======
     /**
      * Constructs a new ReliefResource with the specified type, quantity, and location.
      * @param type the type of the relief resource
      * @param quantity the quantity of the relief resource
      * @param location the location of the relief resource as a double array [latitude, longitude]
      */
->>>>>>> RyanKouchoukos
     public ReliefResource(String type, int quantity, double[] location)
     {
         this.resourceId = UUID.randomUUID();
@@ -28,43 +24,6 @@ public class ReliefResource
         this.quantity = quantity;
         this.location = location;
     }
-<<<<<<< HEAD
-    public ReliefResource(UUID resourceId, String type, int quantity, double[] location)
-    {
-
-    }
-    public UUID getResourceId()
-    {
-
-    }
-    public String getType()
-    {
-
-    }
-    public void setType(String type)
-    {
-
-    }
-    public int getQuantity()
-    {
-
-    }
-    public void setQuantity(int quantity)
-    {
-
-    }
-    public double[] getLocation()
-    {
-
-    }
-    public void setLocation(double[] location)
-    {
-
-    }
-    public String toString()
-    {
-    
-=======
     /**
      * Constructs a new ReliefResource with the specified resource ID, type, quantity, and location.
      * this is used when the resource ID is already known, such as when retrieving resources from a database.
@@ -143,6 +102,5 @@ public class ReliefResource
                 ", quantity=" + quantity +
                 ", location=[" + location[0] + ", " + location[1] + "]" +
                 '}';
->>>>>>> RyanKouchoukos
     }
 }
