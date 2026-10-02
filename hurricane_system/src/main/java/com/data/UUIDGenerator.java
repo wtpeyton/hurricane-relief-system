@@ -1,3 +1,4 @@
+package com.data;
 import java.util.UUID;
 
 public class UUIDGenerator{
