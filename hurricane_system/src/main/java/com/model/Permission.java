@@ -1,5 +1,11 @@
 package com.model;
 
-public class Permission {
-    
+public enum Permission {
+    UNREGISTERED_USER,
+    REGISTERED_USER,
+    SHELTER_ADMIN,
+    APP_ADMINISTRATOR,
+    VOLUNTEER,
+    MEDICAL_VOLUNTEER,
+    EMERGENCY_RESPONSE_PROFESSIONAL
 }
