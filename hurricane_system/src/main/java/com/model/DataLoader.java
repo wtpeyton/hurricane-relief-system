@@ -51,27 +51,27 @@ public class DataLoader extends DataConstants {
             for (Object obj : sheltersArray) {
                 JSONObject shelterJson = (JSONObject) obj;
 
-                UUID shelterId = UUID.fromString((String) shelterJson.get(SHELTER_ID));
-                String name = (String) shelterJson.get(SHELTER_NAME);
-                JSONArray locationArray = (JSONArray) shelterJson.get(SHELTER_LOCATION);
+                UUID shelterId = UUID.fromString((String) shelterJson.get("shelter_id"));
+                String name = (String) shelterJson.get("name");
+                JSONArray locationArray = (JSONArray) shelterJson.get("location");
                 double[] location = new double[] { (double) locationArray.get(0), (double) locationArray.get(1) };
-                int capacity = ((Long) shelterJson.get(SHELTER_CAPACITY)).intValue();
-                boolean petAcceptance = (Boolean) shelterJson.get(SHELTER_PET_ACCEPTANCE);
+                int capacity = ((Long) shelterJson.get("capacity")).intValue();
+                boolean petAcceptance = (Boolean) shelterJson.get("pet_acceptance");
                 ArrayList<ReliefResource> supplies = new ArrayList<ReliefResource>();
-                JSONArray suppliesArray = (JSONArray) shelterJson.get(SHELTER_SUPPLIES);
+                JSONArray suppliesArray = (JSONArray) shelterJson.get("supplies");
                 for (Object supplyObj : suppliesArray) {
                     JSONObject supplyJson = (JSONObject) supplyObj;
-                    UUID resourceId = UUID.fromString((String) supplyJson.get(RESOURCE_ID));
-                    String type = (String) supplyJson.get(RESOURCE_TYPE);
-                    int quantity = ((Long) supplyJson.get(RESOURCE_QUANTITY)).intValue();
-                    JSONArray supplyLocationArray = (JSONArray) supplyJson.get(RESOURCE_LOCATION);
+                    UUID resourceId = UUID.fromString((String) supplyJson.get("resource_id"));
+                    String type = (String) supplyJson.get("type");
+                    int quantity = ((Long) supplyJson.get("quantity")).intValue();
+                    JSONArray supplyLocationArray = (JSONArray) supplyJson.get("location");
                     double[] supplyLocation = new double[] { (double) supplyLocationArray.get(0), (double) supplyLocationArray.get(1) };
                     supplies.add(new ReliefResource(resourceId, type, quantity, supplyLocation));
                 }
-                MedicalService medicalService = MedicalService.valueOf((String) shelterJson.get(SHELTER_MEDICAL_SERVICE));
-                boolean vetService = (Boolean) shelterJson.get(SHELTER_VET_SERVICE);
-                Accessibility accessibility = Accessibility.valueOf((String) shelterJson.get(SHELTER_ACCESSIBILITY));
-                User shelterAdmin = UserList.getInstance().getUserById(UUID.fromString((String) shelterJson.get(SHELTER_ADMIN)));
+                MedicalService medicalService = MedicalService.valueOf((String) shelterJson.get("medical_service"));
+                boolean vetService = (Boolean) shelterJson.get("vet_service");
+                Accessibility accessibility = Accessibility.valueOf((String) shelterJson.get("accessibility"));
+                User shelterAdmin = UserList.getInstance().getUserById(UUID.fromString((String) shelterJson.get("shelter_admin")));
 
                 Shelter shelter = new Shelter(shelterId, name, location, capacity, petAcceptance, 
                    supplies, medicalService, vetService, accessibility, shelterAdmin);

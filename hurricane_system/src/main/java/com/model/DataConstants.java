@@ -1,4 +1,7 @@
 package com.model;
+
+import java.util.Map;
+
 /**
  * Contains constant values for JSON keys and data file paths used in the hurricane relief system.
  * @author Jack Andrin
@@ -6,7 +9,7 @@ package com.model;
 public abstract class DataConstants {
     // Data file paths
     protected static final String DATA_PATH = "src/main/java/com/data/";
-    protected static final String USERS_FILE_PATH = DATA_PATH + "users.json";
+    protected static final Map USERS_FILE_PATH = DATA_PATH + "users.json";
     protected static final String HURRICANE_FILE_PATH = DATA_PATH + "hurricanes.json";
     protected static final String REQUESTS_FILE_PATH = DATA_PATH + "requests.json";
     protected static final String SHELTERS_FILE_PATH = DATA_PATH + "shelters.json";
