@@ -1,0 +1,60 @@
+package com.model;
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.security.Permissions;
+import java.util.ArrayList;
+import java.util.UUID;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
+public class DataWriter extends DataConstants {
+
+    public static boolean saveUsers(ArrayList<User> users){
+        UserList userList = UserList.getInstance();
+
+        JSONArray userArray = new JSONArray();
+        JSONObject userData = new JSONObject(USERS_FILE_PATH);
+        for (User user: users) {
+            UUID id = user.getUserId();
+            double[] location = user.getLocationZip();
+            String locationZip = user.getLocationZip();
+            String firstName = user.getFirstName();
+            String lastName = user.getLastName();
+            String password = user.getPassword();
+            String phoneNumber = user.getPhoneNumber();
+            ArrayList<Permissions> permissions = user.getPermissions();
+            ArrayList<Credential> credentials = user.getCredentials();
+            ArrayList<ReliefResource> equipment = user.getEquipment();
+
+            JSONObject currentUser = new JSONObject();
+
+            currentUser.put(USER_ID, id.toString());
+            currentUser.put(USER_LOCATION, location.toString());
+            currentUser.put(USER_LOCATION_ZIP, locationZip.toString());
+            currentUser.put(USER_FIRST_NAME, firstName);
+            currentUser.put(USER_LAST_NAME, lastName);
+            currentUser.put(USER_PASSWORD, password);
+            currentUser.put(USER_PHONE_NUMBER, phoneNumber);
+            currentUser.put(USER_PERMISSIONS, permissions.toString());
+            currentUser.put(USER_CREDENTIALS, credentials.toString());
+            currentUser.put(USER_EQUIPMENT, equipment.toString());
+
+            userArray.add(currentUser);
+        }
+        FileWriter
+
+
+        return true;
+    }
+    public boolean saveRequests(ArrayList<Request> requests){
+        return true;
+    }
+    public boolean saveShelters(ArrayList<Shelter> shelters){
+        return true;
+    }
+    public boolean saveHurricane(Hurricane hurricane){
+        return true;
+    }
+}
