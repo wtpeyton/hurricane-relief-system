@@ -1,5 +1,9 @@
 package com.model;
 
+/**
+ * Represents the different credentials a user can have.
+ * @author Olivia Casper
+ */
 public enum Credential {
     PHYSICIAN,
     CERTIFIED_REGISTERED_NURSE_ANESTHETIST,
