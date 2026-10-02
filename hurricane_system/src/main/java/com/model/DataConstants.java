@@ -8,9 +8,9 @@ import java.util.Map;
  */
 public abstract class DataConstants {
     // Data file paths
-    protected static final String DATA_PATH = "src/main/java/com/data/";
-    protected static final Map USERS_FILE_PATH = DATA_PATH + "users.json";
-    protected static final String HURRICANE_FILE_PATH = DATA_PATH + "hurricanes.json";
+    protected static final String DATA_PATH = "src/main/resources/data/";
+    protected static final String USERS_FILE_PATH = DATA_PATH + "users.json";
+    protected static final String HURRICANE_FILE_PATH = DATA_PATH + "hurricane.json";
     protected static final String REQUESTS_FILE_PATH = DATA_PATH + "requests.json";
     protected static final String SHELTERS_FILE_PATH = DATA_PATH + "shelters.json";
 
