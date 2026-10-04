@@ -2,7 +2,6 @@ package com.model;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.security.Permissions;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -43,7 +42,13 @@ public class DataWriter extends DataConstants {
 
             userArray.add(currentUser);
         }
-        FileWriter
+        try {
+            FileWriter file = new FileWriter(DATA_PATH);
+            file.write(userArray.toString());
+            file.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
         return true;
