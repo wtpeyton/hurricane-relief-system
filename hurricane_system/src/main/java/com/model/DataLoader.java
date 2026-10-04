@@ -88,7 +88,7 @@ public class DataLoader extends DataConstants {
      * @return Hurricane object.
      */
     public static Hurricane getHurricane() {
-        return new Hurricane();
+        return new Hurricane("", new ArrayList<String>(), HurricaneStatus.TROPICAL_STORM, true);
     }
 
     /**
