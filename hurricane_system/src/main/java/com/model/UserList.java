@@ -2,12 +2,13 @@ package com.model;
 
 import java.util.ArrayList;
 import java.util.UUID;
+import java.util.Iterator;
 
 /**
  * Represents a list of users in the hurricane relief system.
- * @author Olivia Casper
+ * @author Olivia Casper, Jack Andrin
  */
-public class UserList {
+public class UserList implements Iterable<User> {
     private static UserList instance;
     private ArrayList<User> users;
 
@@ -113,5 +114,15 @@ public class UserList {
             }
         }
         return false;
+    }
+
+    /**
+     * Returns an iterator over the users in the system.
+     *
+     * @return an Iterator of User objects
+     */
+    @Override
+    public Iterator<User> iterator() {
+        return users.iterator();
     }
 }
