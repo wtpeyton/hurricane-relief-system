@@ -2,7 +2,6 @@ package com.model;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.security.Permissions;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -15,16 +14,15 @@ public class DataWriter extends DataConstants {
         UserList userList = UserList.getInstance();
 
         JSONArray userArray = new JSONArray();
-        JSONObject userData = new JSONObject(USERS_FILE_PATH);
         for (User user: users) {
             UUID id = user.getUserId();
-            double[] location = user.getLocationZip();
+            double[] location = user.getLocation();
             String locationZip = user.getLocationZip();
             String firstName = user.getFirstName();
             String lastName = user.getLastName();
             String password = user.getPassword();
             String phoneNumber = user.getPhoneNumber();
-            ArrayList<Permissions> permissions = user.getPermissions();
+            ArrayList<Permission> permissions = user.getPermissions();
             ArrayList<Credential> credentials = user.getCredentials();
             ArrayList<ReliefResource> equipment = user.getEquipment();
 
@@ -43,7 +41,13 @@ public class DataWriter extends DataConstants {
 
             userArray.add(currentUser);
         }
-        FileWriter
+        try {
+            FileWriter file = new FileWriter(DATA_PATH);
+            file.write(userArray.toString());
+            file.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
         return true;
