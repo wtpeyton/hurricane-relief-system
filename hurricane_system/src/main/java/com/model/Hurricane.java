@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 /**
- * [PARTIAL STUB] Represents a hurricane with its details and status.
+ * Represents a hurricane with its details and status.
  * Provides methods to check if the hurricane is active and to notify affected users.
  *
  * @author Jack Andrin
@@ -46,18 +46,83 @@ public class Hurricane {
     }
 
     /**
+     * Returns the unique ID of the hurricane.
+     *
+     * @return the hurricane's UUID
+     */
+    public UUID getHurricaneId() {
+        return hurricaneId;
+    }
+
+    /**
+     * Returns the name of the hurricane.
+     *
+     * @return the hurricane's name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Returns the list of zip codes affected by the hurricane.
+     *
+     * @return the list of affected zip codes
+     */
+    public ArrayList<String> getAffectedZipCodes() {
+        return affectedZipCodes;
+    }
+
+    /**
+     * Returns the current status of the hurricane.
+     *
+     * @return the hurricane's status
+     */
+    public HurricaneStatus getStatus() {
+        return status;
+    }
+
+    /**
+     * Sets the current status of the hurricane.
+     *
+     * @param status the new status of the hurricane
+     */
+    public void setStatus(HurricaneStatus status) {
+        this.status = status;
+    }
+
+    /**
+     * Sets whether the hurricane is currently active.
+     *
+     * @param active true if the hurricane is active, false otherwise
+     */
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    /**
+     * Sets the name of the hurricane.
+     *
+     * @param name the new name of the hurricane
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * Sets the list of zip codes affected by the hurricane.
+     *
+     * @param affectedZipCodes the new list of affected zip codes
+     */
+    public void setAffectedZipCodes(ArrayList<String> affectedZipCodes) {
+        this.affectedZipCodes = affectedZipCodes;
+    }
+
+    /**
      * Returns whether the hurricane is currently active.
      *
      * @return true if the hurricane is active, false otherwise
      */
     public boolean isActive() {
         return active;
-    }
-
-    /**
-     * [STUB] Notifies users in the affected zip codes about the hurricane.
-     */
-    public void notifyAffectedUsers() {
-        
     }
 }
