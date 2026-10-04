@@ -12,9 +12,10 @@ public class UserList {
     private ArrayList<User> users;
 
     /**
-     * Creates the user list.
+     * Creates the user list and loads the users from the data loader.
      */
     private UserList() {
+        users = DataLoader.getUsers();
     }
 
     /**
@@ -22,15 +23,23 @@ public class UserList {
      * @return the singleton UserList instance
      */
     public static UserList getInstance() {
-        return null;
+        if (instance == null) {
+            instance = new UserList();
+        }
+        return instance;
     }
 
     /**
      * Gets a user by their unique identifier.
      * @param userId the user's unique identifier
-     * @return the user with the matching ID
+     * @return the user with the matching ID, or null if no user is found
      */
     public User getUser(UUID userId) {
+        for (User user : users) {
+            if (user.getUserId().equals(userId)) {
+                return user;
+            }
+        }
         return null;
     }
 
@@ -38,9 +47,14 @@ public class UserList {
      * Gets a user using their phone number and password.
      * @param phoneNumber the user's phone number
      * @param password the user's password
-     * @return the user with the matching login information
+     * @return the user with the matching login information, or null if no user is found
      */
     public User getUserForLogin(String phoneNumber, String password) {
+        for (User user : users) {
+            if (user.getPhoneNumber().equals(phoneNumber) && user.getPassword().equals(password)) {
+                return user;
+            }
+        }
         return null;
     }
 
@@ -56,7 +70,9 @@ public class UserList {
      */
     public User addUser(String firstName, String lastName, String password,
                         String phoneNumber, String locationZip, double[] location) {
-        return null;
+        User user = new User(firstName, lastName, password, phoneNumber, locationZip, location);
+        users.add(user);
+        return user;
     }
 
     /**
@@ -65,7 +81,7 @@ public class UserList {
      * @return true if the user was added successfully, false otherwise
      */
     public boolean addUser(User user) {
-        return false;
+        return users.add(user);
     }
 
     /**
@@ -73,7 +89,7 @@ public class UserList {
      * @return true if the users were saved successfully, false otherwise
      */
     public boolean saveUsers() {
-        return false;
+        return DataWriter.saveUsers(users);
     }
 
     /**
@@ -82,7 +98,7 @@ public class UserList {
      * @return true if the user was removed successfully, false otherwise
      */
     public boolean removeUser(User user) {
-        return false;
+        return users.remove(user);
     }
 
     /**
@@ -91,6 +107,11 @@ public class UserList {
      * @return true if the user exists, false otherwise
      */
     public boolean doesUserExist(String phoneNumber) {
+        for (User user : users) {
+            if (user.getPhoneNumber().equals(phoneNumber)) {
+                return true;
+            }
+        }
         return false;
     }
 }
