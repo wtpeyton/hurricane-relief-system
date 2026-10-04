@@ -71,7 +71,7 @@ public class DataLoader extends DataConstants {
                 MedicalService medicalService = MedicalService.valueOf((String) shelterJson.get("medical_service"));
                 boolean vetService = (Boolean) shelterJson.get("vet_service");
                 Accessibility accessibility = Accessibility.valueOf((String) shelterJson.get("accessibility"));
-                User shelterAdmin = UserList.getInstance().getUserById(UUID.fromString((String) shelterJson.get("shelter_admin")));
+                User shelterAdmin = UserList.getInstance().getUser(UUID.fromString((String) shelterJson.get("shelter_admin")));
 
                 Shelter shelter = new Shelter(shelterId, name, location, capacity, petAcceptance, 
                    supplies, medicalService, vetService, accessibility, shelterAdmin);
@@ -96,6 +96,10 @@ public class DataLoader extends DataConstants {
      * @param args Command-line arguments.
      */
     public static void main(String[] args) {
-        // Add code to test the DataLoader methods
+        // Testing getShelters()
+        ArrayList<Shelter> shelters = getShelters();
+        for (Shelter shelter : shelters) {
+            System.out.println(shelter);
+        }
     }
 }
