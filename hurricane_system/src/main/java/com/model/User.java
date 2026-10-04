@@ -116,6 +116,86 @@ public class User {
     public boolean removeCredential(Credential credential) {
         return credentials.remove(credential);
     }
+    
+    /**
+     * Returns the user's unique identifier.
+     * @return the user's unique identifier
+     */
+    public UUID getUserId() {
+        return userId;
+    }
+
+    /**
+     * Returns the user's location.
+     * @return the user's location
+     */
+    public double[] getLocation() {
+        return location;
+    }
+
+    /**
+     * Returns the user's location zip code.
+     * @return the user's location zip code
+     */
+    public String getLocationZip() {
+        return locationZip;
+    }
+
+    /**
+     * Returns the user's first name.
+     * @return the user's first name
+     */
+    public String getFirstName() {
+        return firstName;
+    }
+
+    /**
+     * Returns the user's last name.
+     * @return the user's last name
+     */
+    public String getLastName() {
+        return lastName;
+    }
+
+    /**
+     * Returns the user's password.
+     * @return the user's password
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * Returns the user's phone number.
+     * @return the user's phone number
+     */
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    /**
+     * Returns the user's permissions.
+     * @return the user's permissions
+     */
+    public ArrayList<Permission> getPermissions() {
+        return permissions;
+    }
+
+    /**
+     * Returns the user's credentials.
+     * @return the user's credentials
+     */
+    public ArrayList<Credential> getCredentials() {
+        return credentials;
+    }
+
+    /**
+     * Returns the user's equipment.
+     * @return the user's equipment
+     */
+    public ArrayList<ReliefResource> getEquipment() {
+        return equipment;
+    }
 
     /**
      * Returns the user's information as a string.
