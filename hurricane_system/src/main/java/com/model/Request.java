@@ -36,6 +36,7 @@ public class Request {
         this.createdAt = Instant.now();
         this.priority = 0;
 
+        // Add the priority values of all selected request types
         for(RequestType type : requestType) {
             this.priority += type.priority;
         }
@@ -43,7 +44,7 @@ public class Request {
         this.requestType = requestType;
         this.location = location;
         this.description = description;
-        this.status = RequestStatus.SUBMITTED; // Default status
+        this.status = RequestStatus.SUBMITTED;
         this.comment = "";
         this.forSomeoneElse = forSomeoneElse;
     }
@@ -115,60 +116,45 @@ public class Request {
     public void setStatus(RequestStatus status) {
         this.status = status;
     }
+
     /**
-     * Tests the Request class.
-     * @param args command-line arguments
+     * Returns the request's unique identifier.
+     * @return the request's unique identifier
      */
-    public static void main(String[] args) {
+    public UUID getId() {
+        return id;
+    }
 
-        User requester = new User(
-            "Amy", "Smith", "password123",
-            "8035551234", "29201",
-            new double[]{34.0007, -81.0348}
-        );
+    /**
+     * Returns the user who submitted the request.
+     * @return the user who submitted the request
+     */
+    public User getRequester() {
+        return requester;
+    }
 
-        User responder = new User(
-            "John", "Doe", "password456",
-            "8035555678", "29205",
-            new double[]{34.0190, -80.9950}
-        );
+    /**
+     * Returns the request types.
+     * @return the request types
+     */
+    public ArrayList<RequestType> getRequestType() {
+        return requestType;
+    }
 
-        // Create request with multiple request types
-        ArrayList<RequestType> requestTypes = new ArrayList<RequestType>();
-        requestTypes.add(RequestType.EVACUATION_ASSISTANCE);
-        requestTypes.add(RequestType.ESSENTIAL_SUPPLIES);
+    /**
+     * Returns the location of the request.
+     * @return the location of the request
+     */
+    public double[] getLocation() {
+        return location;
+    }
 
-        Request request = new Request(
-            requestTypes,
-            requester,
-            false,
-            new double[]{34.0007, -81.0348},
-            "Need help evacuating and need supplies"
-        );
-
-        // Test calculated priority
-        System.out.println("Priority: " + request.priority);
-
-        // Test whether request is for someone else
-        System.out.println("For someone else: "
-            + request.isForSomeoneElse());
-
-        // Test adding responder
-        System.out.println("Add responder index: "
-            + request.addResponder(responder));
-
-        // Test removing responder
-        System.out.println("Remove responder index: "
-            + request.removeResponder(responder));
-
-        // Test removing responder that is no longer there
-        System.out.println("Remove missing responder: "
-            + request.removeResponder(responder));
-
-        // Test changing status
-        request.setStatus(RequestStatus.IN_PROGRESS);
-
-        System.out.println("Request test complete.");
+    /**
+     * Returns the request status.
+     * @return the request status
+     */
+    public RequestStatus getStatus() {
+        return status;
     }
 }
 

@@ -13,9 +13,10 @@ public class RequestList implements Iterable<Request> {
     private ArrayList<Request> requests;
 
     /**
-     * Creates the request list
+     * Creates the request list and loads the requests from the data loader.
      */
     private RequestList() {
+        requests = DataLoader.getRequests();
     }
 
     /**
@@ -23,7 +24,10 @@ public class RequestList implements Iterable<Request> {
      * @return the singleton RequestList instance
      */
     public static RequestList getInstance() {
-        return null;
+        if (instance == null) {
+            instance = new RequestList();
+        }
+        return instance;
     }
 
     /**
@@ -35,8 +39,11 @@ public class RequestList implements Iterable<Request> {
      * @param description a description of the request
      * @return the newly added request
      */
-    public Request addRequest(ArrayList<RequestType> requestType, User requester, boolean forSomeoneElse, double[] location, String description) {
-        return null;
+    public Request addRequest(ArrayList<RequestType> requestType, User requester, 
+                              boolean forSomeoneElse, double[] location, String description) {
+        Request request = new Request(requestType, requester, forSomeoneElse, location, description);
+        requests.add(request);
+        return request;
     }
 
     /**
@@ -45,7 +52,7 @@ public class RequestList implements Iterable<Request> {
      * @return true if the request was added successfully, false otherwise
      */
     public boolean addRequest(Request request) {
-        return false;
+        return requests.add(request);
     }
 
     /**
@@ -54,7 +61,7 @@ public class RequestList implements Iterable<Request> {
      * @return true if the request was removed successfully, false otherwise
      */
     public boolean removeRequest(Request request) {
-        return false;
+        return requests.remove(request);
     }
 
     /**
@@ -63,6 +70,13 @@ public class RequestList implements Iterable<Request> {
      * @return true if the request was updated successfully, false otherwise
      */
     public boolean updateRequest(Request request) {
+        // Find the existing request with the same ID and replace it
+        for (int i = 0; i < requests.size(); i++) {
+            if (requests.get(i).getId().equals(request.getId())) {
+                requests.set(i, request);
+                return true;
+            }
+        }
         return false;
     }
 
@@ -72,16 +86,55 @@ public class RequestList implements Iterable<Request> {
      * @return the request with the matching ID
      */
     public Request getRequestById(UUID requestId) {
+        for (Request request : requests) {
+            if (request.getId().equals(requestId)) {
+                return request;
+            }
+        }
         return null;
     }
 
     /**
-     * Finds requests near a location
+     * Finds requests ordered by distance from a location
      * @param location the location to search from
-     * @return the requests near the location
+     * @return the requests ordered from closest to farthest
      */
     public ArrayList<Request> findRequestsByDistance(double[] location) {
-        return null;
+        ArrayList<Request> remaining = new ArrayList<Request>(requests);
+        ArrayList<Request> results = new ArrayList<Request>();
+
+        // Find the closest remaining request until all requests are ordered
+        while (!remaining.isEmpty()) {
+            Request closestRequest = remaining.get(0);
+            double[] closestLocation = closestRequest.getLocation();
+
+            // Calculate the distance from the given location
+            double closestDistance = Math.sqrt(
+                Math.pow(closestLocation[0] - location[0], 2)
+                + Math.pow(closestLocation[1] - location[1], 2)
+            );
+
+            // Check the remaining requests for one that is closer
+            for (Request request : remaining) {
+                double[] requestLocation = request.getLocation();
+
+                double distance = Math.sqrt(
+                    Math.pow(requestLocation[0] - location[0], 2)
+                    + Math.pow(requestLocation[1] - location[1], 2)
+                );
+
+                if (distance < closestDistance) {
+                    closestDistance = distance;
+                    closestRequest = request;
+                }
+            }
+
+            // Add the closest request and remove it from the remaining requests
+            results.add(closestRequest);
+            remaining.remove(closestRequest);
+        }
+
+        return results;
     }
 
     /**
@@ -90,7 +143,14 @@ public class RequestList implements Iterable<Request> {
      * @return the requests containing the specified request type
      */
     public ArrayList<Request> findRequestsByType(RequestType type) {
-        return null;
+        ArrayList<Request> results = new ArrayList<Request>();
+        
+        for (Request request : requests) {
+            if (request.getRequestType().contains(type)) {
+                results.add(request);
+            }
+        }
+        return results;
     }
 
     /**
@@ -99,7 +159,14 @@ public class RequestList implements Iterable<Request> {
      * @return the requests submitted by the user
      */
     public ArrayList<Request> findRequestsByUser(User user) {
-        return null;
+        ArrayList<Request> results = new ArrayList<Request>();
+        
+        for (Request request : requests) {
+            if (request.getRequester().equals(user)) {
+                results.add(request);
+            }
+        }
+        return results;
     }
 
     /**
@@ -108,16 +175,30 @@ public class RequestList implements Iterable<Request> {
      * @return the requests with the specified status
      */
     public ArrayList<Request> findRequestsByStatus(RequestStatus status) {
-        return null;
+        ArrayList<Request> results = new ArrayList<Request>();
+        
+        for (Request request : requests) {
+            if (request.getStatus() == status) {
+                results.add(request);
+            }
+        }
+        return results;
     }
 
     /**
-     * Finds requests for a volunteer
+     * Finds requests available for a volunteer to accept/respond to
      * @param volunteer the volunteer user
-     * @return the requests for the volunteer to respond to
+     * @return the requests available for the volunteer to respond to
      */
     public ArrayList<Request> findVolunteerRequests(User volunteer) {
-        return null;
+        ArrayList<Request> results = new ArrayList<Request>();
+        
+        for (Request request : requests) {
+            if (request.getStatus() == RequestStatus.SUBMITTED) {
+                results.add(request);
+            }
+        }
+        return results;
     }
 
     /**
@@ -125,7 +206,7 @@ public class RequestList implements Iterable<Request> {
      * @return true if the requests were saved successfully, false otherwise
      */
     public boolean saveRequests() {
-        return false;
+        return DataWriter.saveRequests(requests);
     }
 
     /**
@@ -134,6 +215,6 @@ public class RequestList implements Iterable<Request> {
      */
     @Override
     public Iterator<Request> iterator() {
-        return null;
+        return requests.iterator();
     }
 }
