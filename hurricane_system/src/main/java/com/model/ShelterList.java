@@ -1,11 +1,12 @@
 package com.model;
 import java.util.ArrayList;
 import java.util.UUID;
+import java.util.Iterator;
 /**
- * @author Ryan Kouchoukos
  * ShelterList manages the list of shelters in the system.
+ * @author Ryan Kouchoukos, Jack Andrin
  */
-public class ShelterList 
+public class ShelterList implements Iterable<Shelter>
 {
     private static ShelterList instance;
     private ArrayList<Shelter> shelters;
@@ -104,6 +105,16 @@ public class ShelterList
     public boolean saveShelters()
     {
         return DataWriter.saveShelters(shelters);
+    }
+    
+    /**
+     * Returns an iterator over the shelters in the system.
+     *
+     * @return an Iterator of Shelter objects
+     */
+    @Override
+    public Iterator<Shelter> iterator() {
+        return shelters.iterator();
     }
 
 }
