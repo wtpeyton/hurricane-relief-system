@@ -6,7 +6,7 @@ import java.util.UUID;
 
 /**
  * Represents a relief request in the hurricane relief system.
- * @author Olivia Casper
+ * @author Olivia Casper, Jack Andrin
  */
 public class Request {
     private UUID id;
@@ -118,6 +118,22 @@ public class Request {
     }
 
     /**
+     * Sets the comment for the request.
+     * @param comment the new comment for the request
+     */
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    /**
+     * Sets the location for the request.
+     * @param location the new location for the request
+     */
+    public void setLocation(double[] location) {
+        this.location = location;
+    }
+
+    /**
      * Returns the request's unique identifier.
      * @return the request's unique identifier
      */
@@ -155,6 +171,46 @@ public class Request {
      */
     public RequestStatus getStatus() {
         return status;
+    }
+
+    /**
+     * Returns the creation timestamp of the request.
+     * @return the creation timestamp of the request
+     */
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    /**
+     * Returns the list of responders for the request.
+     * @return the list of responders for the request
+     */
+    public ArrayList<User> getResponders() {
+        return responders;
+    }
+
+    /**
+     * Returns the description of the request.
+     * @return the description of the request
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Returns the comment for the request.
+     * @return the comment for the request
+     */
+    public String getComment() {
+        return comment;
+    }
+
+    /**
+     * Returns the priority of the request.
+     * @return the priority of the request
+     */
+    public int getPriority() {
+        return priority;
     }
 }
 
