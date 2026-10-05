@@ -14,7 +14,7 @@ public class Request {
     private ArrayList<User> responders;
     private Instant createdAt;
     private int priority;
-    private RequestType requestType;
+    private ArrayList<RequestType> requestType;
     private double[] location;
     private String description;
     private RequestStatus status;
@@ -29,7 +29,24 @@ public class Request {
      * @param location the location of the request as a double array [latitude, longitude]
      * @param description a description of the request
      */
-    public Request(RequestType requestType, User requester, boolean forSomeoneElse, double[] location, String description) {
+    public Request(ArrayList<RequestType> requestType, User requester, boolean forSomeoneElse, double[] location, String description) {
+        this.id = UUID.randomUUID();
+        this.requester = requester;
+        this.responders = new ArrayList<User>();
+        this.createdAt = Instant.now();
+        this.priority = 0;
+
+        // Add the priority values of all selected request types
+        for(RequestType type : requestType) {
+            this.priority += type.priority;
+        }
+        
+        this.requestType = requestType;
+        this.location = location;
+        this.description = description;
+        this.status = RequestStatus.SUBMITTED;
+        this.comment = "";
+        this.forSomeoneElse = forSomeoneElse;
     }
 
     /**
@@ -46,8 +63,19 @@ public class Request {
      * @param comment any additional comments related to the request
      * @param forSomeoneElse whether the request is for someone else
      */
-    public Request(UUID id, User requester, ArrayList<User> responders, Instant createdAt, int  priority, RequestType requestType, 
+    public Request(UUID id, User requester, ArrayList<User> responders, Instant createdAt, int  priority, ArrayList<RequestType> requestType, 
         double[] location, String description, RequestStatus status, String comment, boolean forSomeoneElse) {  
+        this.id = id;
+        this.requester = requester;
+        this.responders = responders;
+        this.createdAt = createdAt;
+        this.priority = priority;
+        this.requestType = requestType;
+        this.location = location;
+        this.description = description;
+        this.status = status;
+        this.comment = comment;
+        this.forSomeoneElse = forSomeoneElse;
     }
 
     /**
@@ -55,7 +83,7 @@ public class Request {
      * @return true if the request is for someone else, false otherwise
      */
     public boolean isForSomeoneElse() {
-        return false;
+        return forSomeoneElse;
     }
 
     /**
@@ -64,7 +92,8 @@ public class Request {
      * @return the index of the added responder
      */
     public int addResponder(User responder) {
-        return 0;
+        responders.add(responder);
+        return responders.indexOf(responder);
     }
 
     /**
@@ -73,7 +102,11 @@ public class Request {
      * @return the index of the removed responder
      */
     public int removeResponder(User responder) {
-        return 0;
+        int index = responders.indexOf(responder);
+        if (index != -1) {
+            responders.remove(index);
+        }
+        return index;
     }
 
     /**
@@ -81,6 +114,47 @@ public class Request {
      * @param status the new status of the request
      */
     public void setStatus(RequestStatus status) {
+        this.status = status;
+    }
+
+    /**
+     * Returns the request's unique identifier.
+     * @return the request's unique identifier
+     */
+    public UUID getId() {
+        return id;
+    }
+
+    /**
+     * Returns the user who submitted the request.
+     * @return the user who submitted the request
+     */
+    public User getRequester() {
+        return requester;
+    }
+
+    /**
+     * Returns the request types.
+     * @return the request types
+     */
+    public ArrayList<RequestType> getRequestType() {
+        return requestType;
+    }
+
+    /**
+     * Returns the location of the request.
+     * @return the location of the request
+     */
+    public double[] getLocation() {
+        return location;
+    }
+
+    /**
+     * Returns the request status.
+     * @return the request status
+     */
+    public RequestStatus getStatus() {
+        return status;
     }
 }
 
