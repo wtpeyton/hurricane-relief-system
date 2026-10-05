@@ -18,9 +18,9 @@ public class HurricaneReliefSystem {
      * Private constructor for the singleton HurricaneReliefSystem.
      */
     private HurricaneReliefSystem() {
-        this.userList = new UserList();
-        this.requestList = new RequestList();
-        this.shelterList = new ShelterList();
+        this.userList = UserList.getInstance();
+        this.requestList = RequestList.getInstance();
+        this.shelterList = ShelterList.getInstance();
     }
 
     /**

@@ -52,13 +52,13 @@ public class DataWriter extends DataConstants {
 
         return true;
     }
-    public boolean saveRequests(ArrayList<Request> requests){
+    public static boolean saveRequests(ArrayList<Request> requests){
         return true;
     }
-    public boolean saveShelters(ArrayList<Shelter> shelters){
+    public static boolean saveShelters(ArrayList<Shelter> shelters){
         return true;
     }
-    public boolean saveHurricane(Hurricane hurricane){
+    public static boolean saveHurricane(Hurricane hurricane){
         return true;
     }
 }
