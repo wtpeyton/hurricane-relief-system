@@ -1,7 +1,5 @@
 package com.model;
 
-import java.util.Map;
-
 /**
  * Contains constant values for JSON keys and data file paths used in the hurricane relief system.
  * @author Jack Andrin

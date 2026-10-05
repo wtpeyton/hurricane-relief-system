@@ -7,7 +7,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.UUID;
 
 /**
@@ -57,6 +56,7 @@ public class DataLoader extends DataConstants {
                 double[] location = new double[] { (double) locationArray.get(0), (double) locationArray.get(1) };
                 int capacity = ((Long) shelterJson.get("capacity")).intValue();
                 boolean petAcceptance = (Boolean) shelterJson.get("pet_acceptance");
+
                 ArrayList<ReliefResource> supplies = new ArrayList<ReliefResource>();
                 JSONArray suppliesArray = (JSONArray) shelterJson.get("supplies");
                 for (Object supplyObj : suppliesArray) {
@@ -68,6 +68,7 @@ public class DataLoader extends DataConstants {
                     double[] supplyLocation = new double[] { (double) supplyLocationArray.get(0), (double) supplyLocationArray.get(1) };
                     supplies.add(new ReliefResource(resourceId, type, quantity, supplyLocation));
                 }
+                
                 MedicalService medicalService = MedicalService.valueOf((String) shelterJson.get("medical_service"));
                 boolean vetService = (Boolean) shelterJson.get("vet_service");
                 Accessibility accessibility = Accessibility.valueOf((String) shelterJson.get("accessibility"));
