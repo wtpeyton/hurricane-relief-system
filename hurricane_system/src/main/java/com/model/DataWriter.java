@@ -3,7 +3,6 @@ package com.model;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.UUID;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -68,7 +67,7 @@ public class DataWriter extends DataConstants {
         JSONArray shelterArray = new JSONArray();
         for (Shelter shelter : shelters){
             JSONObject currentShelter = new JSONObject();
-            currentShelter.put(SHELTER_ACCESSIBILITY, shelter.getAccessibility())
+            currentShelter.put(SHELTER_ACCESSIBILITY, shelter.getAccessibility());
             currentShelter.put(SHELTER_ADMIN, shelter.getShelterAdmin().getUserId());
             currentShelter.put(SHELTER_CAPACITY, String.valueOf(shelter.getCapacity()));
             currentShelter.put(SHELTER_ID, shelter.getShelterId());
@@ -81,7 +80,7 @@ public class DataWriter extends DataConstants {
             currentShelter.put(SHELTER_MEDICAL_SERVICE, shelter.getMedicalService().name());
             currentShelter.put(SHELTER_NAME, shelter.getName());
             currentShelter.put(SHELTER_PET_ACCEPTANCE, shelter.isPetAcceptance());
-            currentShelter.put(SHELTER_SUPPLIES, createEquipmentArray(shelter);
+            currentShelter.put(SHELTER_SUPPLIES, createEquipmentArray(shelter));
             shelterArray.add(currentShelter);
         }
         try {
@@ -114,7 +113,7 @@ public class DataWriter extends DataConstants {
             currentRequest.put(REQUEST_REQUESTER, request.getRequester().getUserId());
             currentRequest.put(REQUEST_RESPONDERS, createRespondersArray(request));
             currentRequest.put(REQUEST_STATUS, request.getStatus().name());
-            currentRequest.put(REQUEST_TYPE, request.getRequestType())
+            currentRequest.put(REQUEST_TYPE, createTypeArray(request));
             
             requestArray.add(currentRequest);
         }
@@ -123,6 +122,7 @@ public class DataWriter extends DataConstants {
             file.write(requestArray.toJSONString());
             file.flush();
             file.close();
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
