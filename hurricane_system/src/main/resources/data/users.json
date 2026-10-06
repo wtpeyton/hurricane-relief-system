@@ -1,1 +1,47 @@
-[{"password":"password123","user_id":"46ec8cfe-c556-4071-b7bd-c8c37a1f82a3","credentials":["BASIC_LIFE_SUPPORT"],"permissions":["REGISTERED_USER","VOLUNTEER"],"last_name":"Lovelace","equipment":[{"quantity":2,"resource_id":"a763baa7-2285-4c4e-b990-f880adcbecb7","location":["34.001","-81.035"],"type":"Generator"}],"location":["34.0007","-81.0348"],"phone_number":"8035550100","location_zip":"29208","first_name":"Ada"},{"password":"cobol1906","user_id":"20560f06-8a86-4aa5-b348-b926a87f71a6","credentials":[],"permissions":[],"last_name":"Hopper","equipment":[],"location":["34.005","-81.03"],"phone_number":"8035550101","location_zip":"29205","first_name":"Grace"}]
+[
+    {
+        "password": "password123",
+        "user_id": "46ec8cfe-c556-4071-b7bd-c8c37a1f82a3",
+        "credentials": [
+            "BASIC_LIFE_SUPPORT"
+        ],
+        "permissions": [
+            "REGISTERED_USER",
+            "VOLUNTEER"
+        ],
+        "last_name": "Lovelace",
+        "equipment": [
+            {
+                "quantity": 2,
+                "resource_id": "a763baa7-2285-4c4e-b990-f880adcbecb7",
+                "location": [
+                    "34.001",
+                    "-81.035"
+                ],
+                "type": "Generator"
+            }
+        ],
+        "location": [
+            "34.0007",
+            "-81.0348"
+        ],
+        "phone_number": "8035550100",
+        "location_zip": "29208",
+        "first_name": "Ada"
+    },
+    {
+        "password": "cobol1906",
+        "user_id": "20560f06-8a86-4aa5-b348-b926a87f71a6",
+        "credentials": [],
+        "permissions": [],
+        "last_name": "Hopper",
+        "equipment": [],
+        "location": [
+            "34.005",
+            "-81.03"
+        ],
+        "phone_number": "8035550101",
+        "location_zip": "29205",
+        "first_name": "Grace"
+    }
+]
