@@ -15,15 +15,15 @@
                 "quantity": 2,
                 "resource_id": "a763baa7-2285-4c4e-b990-f880adcbecb7",
                 "location": [
-                    "34.001",
-                    "-81.035"
+                    34.001,
+                    -81.035
                 ],
                 "type": "Generator"
             }
         ],
         "location": [
-            "34.0007",
-            "-81.0348"
+            34.0007,
+            -81.0348
         ],
         "phone_number": "8035550100",
         "location_zip": "29208",
@@ -37,8 +37,8 @@
         "last_name": "Hopper",
         "equipment": [],
         "location": [
-            "34.005",
-            "-81.03"
+            34.005,
+            -81.03
         ],
         "phone_number": "8035550101",
         "location_zip": "29205",
