@@ -75,6 +75,46 @@ public class HurricaneReliefSystem {
     }
 
     /**
+     * Sets the currently logged-in user.
+     * @param currentUser the user to set as current
+     */
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
+    }
+
+    /**
+     * Sets the current hurricane being tracked.
+     * @param currentHurricane the hurricane to set as current
+     */
+    public void setCurrentHurricane(Hurricane currentHurricane) {
+        this.currentHurricane = currentHurricane;
+    }
+
+    /**
+     * Sets the list of users in the system.
+     * @param userList the user list to set
+     */
+    public void setUserList(UserList userList) {
+        this.userList = userList;
+    }
+
+    /**
+     * Sets the list of requests in the system.
+     * @param requestList the request list to set
+     */
+    public void setRequestList(RequestList requestList) {
+        this.requestList = requestList;
+    }
+
+    /**
+     * Sets the list of shelters in the system.
+     * @param shelterList the shelter list to set
+     */
+    public void setShelterList(ShelterList shelterList) {
+        this.shelterList = shelterList;
+    }
+
+    /**
      * [STUB] Logs in a user with the given phone number and password.
      * @param phoneNumber the user's phone number
      * @param password the user's password
