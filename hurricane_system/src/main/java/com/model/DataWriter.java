@@ -18,7 +18,7 @@ public class DataWriter extends DataConstants {
 
     }
     /**
-     * [STUB] Saves the list of users to JSON
+     * Saves the list of users to JSON
      * @param users ArrayList of Users
      * @return boolean whether it works or not
      */
@@ -94,6 +94,11 @@ public class DataWriter extends DataConstants {
             return false; 
         }
     }
+    /**
+     * Converts the RequestsList to a JSON File
+     * @param requests the ArrayList<Request> from Requests
+     * @return boolean if it succeeds or fails
+     */
     public static boolean saveRequests(ArrayList<Request> requests){
         JSONArray requestArray = new JSONArray();
         for(Request request : requests){
@@ -128,8 +133,40 @@ public class DataWriter extends DataConstants {
             return false;
         }
     }
+    /**
+     * Converts HurricaneList to a JSON file
+     * @param hurricane from Hurricane List
+     * @return boolean if it succeeds or fails
+     */
     public static boolean saveHurricane(Hurricane hurricane){
-        return true;
+        JSONObject hurricaneObject = new JSONObject();
+        hurricaneObject.put(HURRICANE_ID, hurricane.getHurricaneId().toString());
+        hurricaneObject.put(HURRICANE_NAME, hurricane.getName());
+        hurricaneObject.put(HURRICANE_STATUS, hurricane.getStatus().name());
+        hurricaneObject.put(HURRICANE_ACTIVE, hurricane.isActive());
+        hurricaneObject.put(HURRICANE_AFFECTED_ZIP_CODES, createZipArray(hurricane));
+        try {
+            FileWriter file = new FileWriter(HURRICANE_FILE_PATH);
+            file.write(hurricaneObject.toJSONString());
+            file.flush();
+            file.close();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    /**
+     * Converts all the affected zip codes into a JSONArray
+     * @param hurricane that is affecting the zip codes
+     * @return JSONArray of zip codes
+     */
+    private static JSONArray createZipArray(Hurricane hurricane){
+        JSONArray zipArray = new JSONArray();
+        for(String zip : hurricane.getAffectedZipCodes()){
+            zipArray.add(zip);
+        }
+        return zipArray;
     }
     /**
      * Converts all the types of a request to a JSONArray
