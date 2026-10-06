@@ -7,60 +7,31 @@ import java.util.UUID;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-
+/**
+ * @author William Peyton
+ * DataWriter to write from lists to json file.
+ */
 public class DataWriter extends DataConstants {
 
     public static boolean saveUsers(ArrayList<User> users){
 
         JSONArray userArray = new JSONArray();
         for (User user: users) {
-            UUID id = user.getUserId();
-            double[] location = user.getLocation();
-            JSONArray locationArray = new JSONArray();
-            locationArray.add(String.valueOf(location[0]));
-            locationArray.add(String.valueOf(location[1]));
-            String locationZip = user.getLocationZip();
-            String firstName = user.getFirstName();
-            String lastName = user.getLastName();
-            String password = user.getPassword();
-            String phoneNumber = user.getPhoneNumber();
-            ArrayList<Permission> permissions = user.getPermissions();
-            JSONArray permissionArray = new JSONArray();
-            for (Permission permission : permissions) {
-                permissionArray.add(permission.name());
-            }
-            ArrayList<Credential> credentials = user.getCredentials();
-            JSONArray credentialArray = new JSONArray();
-            for (Credential credential : credentials){
-                credentialArray.add(credential.name());
-            }
-            ArrayList<ReliefResource> equipment = user.getEquipment();
-            JSONArray equipmentArray = new JSONArray();
-            for (ReliefResource resource : equipment){
-                JSONArray resourceLocation = new JSONArray();
-                double[] resourceCoordinate = resource.getLocation();
-                resourceLocation.add(String.valueOf(resourceCoordinate[0]));
-                resourceLocation.add(String.valueOf(resourceCoordinate[1]));
-                JSONObject currentResource = new JSONObject();
-                currentResource.put(RESOURCE_TYPE, resource.getType());
-                currentResource.put(RESOURCE_LOCATION, resourceLocation);
-                currentResource.put(RESOURCE_QUANTITY, resource.getQuantity());
-                currentResource.put(RESOURCE_ID, resource.getResourceId().toString());
-
-                equipmentArray.add(currentResource);
-            }
+            JSONArray userLocation = new JSONArray();
+            userLocation.add(user.getLocation()[0]);
+            userLocation.add(user.getLocation()[1]);
             JSONObject currentUser = new JSONObject();
             //Adding all of the items into the user object
-            currentUser.put(USER_ID, id.toString());
-            currentUser.put(USER_LOCATION, locationArray);
-            currentUser.put(USER_LOCATION_ZIP, locationZip);
-            currentUser.put(USER_FIRST_NAME, firstName);
-            currentUser.put(USER_LAST_NAME, lastName);
-            currentUser.put(USER_PASSWORD, password);
-            currentUser.put(USER_PHONE_NUMBER, phoneNumber);
-            currentUser.put(USER_PERMISSIONS, permissionArray);
-            currentUser.put(USER_CREDENTIALS, credentialArray);
-            currentUser.put(USER_EQUIPMENT, equipmentArray);
+            currentUser.put(USER_ID, user.getUserId().toString());
+            currentUser.put(USER_LOCATION, userLocation);
+            currentUser.put(USER_LOCATION_ZIP, user.getLocationZip());
+            currentUser.put(USER_FIRST_NAME, user.getFirstName());
+            currentUser.put(USER_LAST_NAME, user.getLastName());
+            currentUser.put(USER_PASSWORD, user.getPassword());
+            currentUser.put(USER_PHONE_NUMBER, user.getPhoneNumber());
+            currentUser.put(USER_PERMISSIONS, createPermissionArray(user));
+            currentUser.put(USER_CREDENTIALS, createCredentialArray(user));
+            currentUser.put(USER_EQUIPMENT, createEquipmentArray(user));
             //Adding the user object to the user array.
             userArray.add(currentUser);
         }
@@ -84,6 +55,39 @@ public class DataWriter extends DataConstants {
     }
     public static boolean saveHurricane(Hurricane hurricane){
         return true;
+    }
+    private static JSONArray createCredentialArray(User user){
+        JSONArray credentials = new JSONArray();
+        ArrayList<Credential> iterable = user.getCredentials();
+        for(Credential item : iterable){
+            credentials.add(item);
+        }
+        return credentials;
+    }
+    private static JSONArray createPermissionArray(User user){
+        JSONArray permissions = new JSONArray();
+        ArrayList<Permission> iterable = user.getPermissions();
+        for(Permission item : iterable){
+            permissions.add(item);
+        }
+        return permissions;
+    }
+    private static JSONArray createEquipmentArray(User user){
+        JSONArray equipment = new JSONArray();
+        ArrayList<ReliefResource> iterable = user.getEquipment();
+        for(ReliefResource item : iterable){
+            JSONObject currentResource = new JSONObject();
+            JSONArray locationArray = new JSONArray();
+            locationArray.add(item.getLocation()[0]);
+            locationArray.add(item.getLocation()[1]);
+            currentResource.put(RESOURCE_ID, item.getResourceId());
+            currentResource.put(RESOURCE_LOCATION, locationArray);
+            currentResource.put(RESOURCE_QUANTITY, item.getQuantity());
+            currentResource.put(RESOURCE_TYPE, item.getType());
+
+            equipment.add(item);
+        }
+        return equipment;
     }
 }
 
