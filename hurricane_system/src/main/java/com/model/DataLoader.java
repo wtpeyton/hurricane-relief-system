@@ -57,17 +57,7 @@ public class DataLoader extends DataConstants {
                 int capacity = ((Long) shelterJson.get(SHELTER_CAPACITY)).intValue();
                 boolean petAcceptance = (Boolean) shelterJson.get(SHELTER_PET_ACCEPTANCE);
 
-                ArrayList<ReliefResource> supplies = new ArrayList<ReliefResource>();
-                JSONArray suppliesArray = (JSONArray) shelterJson.get(SHELTER_SUPPLIES);
-                for (Object supplyObj : suppliesArray) {
-                    JSONObject supplyJson = (JSONObject) supplyObj;
-                    UUID resourceId = UUID.fromString((String) supplyJson.get(RESOURCE_ID));
-                    String type = (String) supplyJson.get(RESOURCE_TYPE);
-                    int quantity = ((Long) supplyJson.get(RESOURCE_QUANTITY)).intValue();
-                    JSONArray supplyLocationArray = (JSONArray) supplyJson.get(RESOURCE_LOCATION);
-                    double[] supplyLocation = new double[] { (double) supplyLocationArray.get(0), (double) supplyLocationArray.get(1) };
-                    supplies.add(new ReliefResource(resourceId, type, quantity, supplyLocation));
-                }
+                ArrayList<ReliefResource> supplies = getShelterSupplies(shelterJson);
                 
                 MedicalService medicalService = MedicalService.valueOf((String) shelterJson.get(SHELTER_MEDICAL_SERVICE));
                 boolean vetService = (Boolean) shelterJson.get(SHELTER_VET_SERVICE);
@@ -102,5 +92,20 @@ public class DataLoader extends DataConstants {
         for (Shelter shelter : shelters) {
             System.out.println(shelter);
         }
+    }
+
+    private static ArrayList<ReliefResource> getShelterSupplies(JSONObject shelterJson) {
+        ArrayList<ReliefResource> supplies = new ArrayList<ReliefResource>();
+        JSONArray suppliesArray = (JSONArray) shelterJson.get(SHELTER_SUPPLIES);
+        for (Object supplyObj : suppliesArray) {
+            JSONObject supplyJson = (JSONObject) supplyObj;
+            UUID resourceId = UUID.fromString((String) supplyJson.get(RESOURCE_ID));
+            String type = (String) supplyJson.get(RESOURCE_TYPE);
+            int quantity = ((Long) supplyJson.get(RESOURCE_QUANTITY)).intValue();
+            JSONArray supplyLocationArray = (JSONArray) supplyJson.get(RESOURCE_LOCATION);
+            double[] supplyLocation = new double[] { (double) supplyLocationArray.get(0), (double) supplyLocationArray.get(1) };
+            supplies.add(new ReliefResource(resourceId, type, quantity, supplyLocation));
+        }
+        return supplies;
     }
 }
