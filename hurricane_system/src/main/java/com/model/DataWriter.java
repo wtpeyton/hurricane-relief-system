@@ -67,19 +67,20 @@ public class DataWriter extends DataConstants {
         JSONArray shelterArray = new JSONArray();
         for (Shelter shelter : shelters){
             JSONObject currentShelter = new JSONObject();
-            currentShelter.put(SHELTER_ACCESSIBILITY, shelter.getAccessibility());
-            currentShelter.put(SHELTER_ADMIN, shelter.getShelterAdmin().getUserId());
-            currentShelter.put(SHELTER_CAPACITY, String.valueOf(shelter.getCapacity()));
-            currentShelter.put(SHELTER_ID, shelter.getShelterId());
+            currentShelter.put(SHELTER_ACCESSIBILITY, shelter.getAccessibility().name());
+            currentShelter.put(SHELTER_ADMIN, shelter.getShelterAdmin().getUserId().toString());
+            currentShelter.put(SHELTER_CAPACITY, shelter.getCapacity());
+            currentShelter.put(SHELTER_ID, shelter.getShelterId().toString());
             
             JSONArray shelterLocation = new JSONArray();
-            shelterLocation.add(String.valueOf(shelter.getLocation()[0]));
-            shelterLocation.add(String.valueOf(shelter.getLocation()[1]));
+            shelterLocation.add(shelter.getLocation()[0]);
+            shelterLocation.add(shelter.getLocation()[1]);
             currentShelter.put(SHELTER_LOCATION, shelterLocation);
 
             currentShelter.put(SHELTER_MEDICAL_SERVICE, shelter.getMedicalService().name());
             currentShelter.put(SHELTER_NAME, shelter.getName());
             currentShelter.put(SHELTER_PET_ACCEPTANCE, shelter.isPetAcceptance());
+            currentShelter.put(SHELTER_VET_SERVICE, shelter.isVetService());
             currentShelter.put(SHELTER_SUPPLIES, createEquipmentArray(shelter));
             shelterArray.add(currentShelter);
         }
@@ -107,7 +108,7 @@ public class DataWriter extends DataConstants {
             currentRequest.put(REQUEST_CREATED_AT, request.getCreatedAt());
             currentRequest.put(REQUEST_DESCRIPTION, request.getDescription());
             currentRequest.put(REQUEST_FOR_SOMEONE_ELSE, request.isForSomeoneElse());
-            currentRequest.put(REQUEST_ID, request.getId());
+            currentRequest.put(REQUEST_ID, request.getId().toString());
 
             JSONArray requestLocation = new JSONArray();
             requestLocation.add(request.getLocation()[0]);
@@ -115,7 +116,7 @@ public class DataWriter extends DataConstants {
             currentRequest.put(REQUEST_LOCATION, requestLocation);
             
             currentRequest.put(REQUEST_PRIORITY, request.getPriority());
-            currentRequest.put(REQUEST_REQUESTER, request.getRequester().getUserId());
+            currentRequest.put(REQUEST_REQUESTER, request.getRequester().getUserId().toString());
             currentRequest.put(REQUEST_RESPONDERS, createRespondersArray(request));
             currentRequest.put(REQUEST_STATUS, request.getStatus().name());
             currentRequest.put(REQUEST_TYPE, createTypeArray(request));
@@ -176,7 +177,7 @@ public class DataWriter extends DataConstants {
     private static JSONArray createTypeArray(Request request){
         JSONArray requestTypes = new JSONArray();
         for(RequestType type : request.getRequestType()){
-            requestTypes.add(type);
+            requestTypes.add(type.name());
         }
         return requestTypes;
     }
@@ -188,7 +189,7 @@ public class DataWriter extends DataConstants {
     private static JSONArray createRespondersArray(Request request){
         JSONArray requestResponders = new JSONArray();
         for(User responder : request.getResponders()){
-            requestResponders.add(responder.getUserId());
+            requestResponders.add(responder.getUserId().toString());
         }
         return requestResponders;
     }
@@ -202,7 +203,7 @@ public class DataWriter extends DataConstants {
         ArrayList<Credential> iterable = user.getCredentials();
 
         for(Credential item : iterable){
-            credentials.add(item);
+            credentials.add(item.name());
         }
 
         return credentials;
@@ -217,7 +218,7 @@ public class DataWriter extends DataConstants {
         ArrayList<Permission> iterable = user.getPermissions();
 
         for(Permission item : iterable){
-            permissions.add(item);
+            permissions.add(item.name());
         }
 
         return permissions;
@@ -236,12 +237,12 @@ public class DataWriter extends DataConstants {
             JSONArray locationArray = new JSONArray();
             locationArray.add(item.getLocation()[0]);
             locationArray.add(item.getLocation()[1]);
-            currentResource.put(RESOURCE_ID, item.getResourceId());
+            currentResource.put(RESOURCE_ID, item.getResourceId().toString());
             currentResource.put(RESOURCE_LOCATION, locationArray);
             currentResource.put(RESOURCE_QUANTITY, item.getQuantity());
             currentResource.put(RESOURCE_TYPE, item.getType());
 
-            equipment.add(item);
+            equipment.add(currentResource);
         }
         
         return equipment;
@@ -260,12 +261,12 @@ public class DataWriter extends DataConstants {
             JSONArray locationArray = new JSONArray();
             locationArray.add(item.getLocation()[0]);
             locationArray.add(item.getLocation()[1]);
-            currentResource.put(RESOURCE_ID, item.getResourceId());
+            currentResource.put(RESOURCE_ID, item.getResourceId().toString());
             currentResource.put(RESOURCE_LOCATION, locationArray);
             currentResource.put(RESOURCE_QUANTITY, item.getQuantity());
             currentResource.put(RESOURCE_TYPE, item.getType());
 
-            equipment.add(item);
+            equipment.add(currentResource);
         }
         
         return equipment;
