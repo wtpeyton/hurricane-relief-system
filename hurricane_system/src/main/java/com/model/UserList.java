@@ -50,7 +50,7 @@ public class UserList implements Iterable<User> {
      * @param password the user's password
      * @return the user with the matching login information, or null if no user is found
      */
-    public User getUserForLogin(String phoneNumber, String password) {
+    public User getUser(String phoneNumber, String password) {
         for (User user : users) {
             if (user.getPhoneNumber().equals(phoneNumber) && user.getPassword().equals(password)) {
                 return user;
@@ -124,5 +124,37 @@ public class UserList implements Iterable<User> {
     @Override
     public Iterator<User> iterator() {
         return users.iterator();
+    }
+
+    public static void main(String[] args) {
+        UserList userList = UserList.getInstance();
+
+        // Create a user for testing
+        User testUser = new User(
+            "Amy",
+            "Smith",
+            "password123",
+            "8035551234",
+            "29201",
+            new double[]{34.0007, -81.0348}
+        );
+
+        userList.addUser(testUser);
+
+        // Test correct login
+        System.out.println("Correct login:");
+        System.out.println(userList.getUser("8035551234", "password123"));
+
+        // Test incorrect password
+        System.out.println("Incorrect password:");
+        System.out.println(userList.getUser("8035551234", "wrongpassword"));
+
+        // Test unknown phone number
+        System.out.println("Unknown user:");
+        System.out.println(userList.getUser("9999999999", "password123"));
+
+        // Test the other overloaded getUser method
+        System.out.println("Find by ID:");
+        System.out.println(userList.getUser(testUser.getUserId()));
     }
 }
