@@ -67,10 +67,15 @@ public class UserList implements Iterable<User> {
      * @param phoneNumber the user's phone number
      * @param locationZip the user's location zip code
      * @param location the user's location as a double array [latitude, longitude]
-     * @return the newly created user
+     * @return the newly created user, or null if the account information is invalid
      */
     public User addUser(String firstName, String lastName, String password,
                         String phoneNumber, String locationZip, double[] location) {
+
+        if (firstName.isEmpty() || lastName.isEmpty() || password.isEmpty() || phoneNumber.length() != 10 || doesUserExist(phoneNumber)) {
+            return null;
+        }
+        
         User user = new User(firstName, lastName, password, phoneNumber, locationZip, location);
         users.add(user);
         return user;
@@ -156,5 +161,53 @@ public class UserList implements Iterable<User> {
         // Test the other overloaded getUser method
         System.out.println("Find by ID:");
         System.out.println(userList.getUser(testUser.getUserId()));
+
+        // Test adding a new user
+        System.out.println("Add new user:");
+        User newUser = userList.addUser(
+            "John",
+            "Doe",
+            "password456",
+            "8035555678",
+            "29205",
+            new double[]{34.0090, -81.0281}
+        );
+        System.out.println(newUser);
+
+        // Test adding a user with a duplicate phone number
+        System.out.println("Add duplicate phone number:");
+        User duplicateUser = userList.addUser(
+            "Jane",
+            "Doe",
+            "password789",
+            "8035555678",
+            "29208",
+            new double[]{34.0200, -81.0100}
+        );
+        System.out.println(duplicateUser);
+
+        // Test adding a user with an empty first name
+        System.out.println("Add user with empty first name:");
+        User emptyName = userList.addUser(
+                "",
+                "Jones",
+                "password123",
+                "8035559999",
+                "29201",
+            new double[]{34.0007, -81.0348}
+        );
+        System.out.println(emptyName);
+
+        // Test adding a user with an invalid phone number
+        System.out.println("Add user with invalid phone number:");
+        User invalidPhone = userList.addUser(
+            "Sam",
+            "Jones",
+            "password123",
+            "803555",
+            "29201",
+            new double[]{34.0007, -81.0348}
+        );
+        System.out.println(invalidPhone);
     }
 }
