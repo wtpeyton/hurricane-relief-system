@@ -20,6 +20,7 @@ public class DataWriter extends DataConstants {
             JSONArray userLocation = new JSONArray();
             userLocation.add(user.getLocation()[0]);
             userLocation.add(user.getLocation()[1]);
+
             JSONObject currentUser = new JSONObject();
             //Adding all of the items into the user object
             currentUser.put(USER_ID, user.getUserId().toString());
@@ -59,22 +60,27 @@ public class DataWriter extends DataConstants {
     private static JSONArray createCredentialArray(User user){
         JSONArray credentials = new JSONArray();
         ArrayList<Credential> iterable = user.getCredentials();
+
         for(Credential item : iterable){
             credentials.add(item);
         }
+
         return credentials;
     }
     private static JSONArray createPermissionArray(User user){
         JSONArray permissions = new JSONArray();
         ArrayList<Permission> iterable = user.getPermissions();
+
         for(Permission item : iterable){
             permissions.add(item);
         }
+
         return permissions;
     }
     private static JSONArray createEquipmentArray(User user){
         JSONArray equipment = new JSONArray();
         ArrayList<ReliefResource> iterable = user.getEquipment();
+
         for(ReliefResource item : iterable){
             JSONObject currentResource = new JSONObject();
             JSONArray locationArray = new JSONArray();
@@ -87,6 +93,7 @@ public class DataWriter extends DataConstants {
 
             equipment.add(item);
         }
+        
         return equipment;
     }
 }
