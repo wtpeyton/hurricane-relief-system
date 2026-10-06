@@ -75,67 +75,31 @@ public class HurricaneReliefSystem {
     }
 
     /**
-     * Sets the currently logged-in user.
-     * @param currentUser the user to set as current
-     */
-    public void setCurrentUser(User currentUser) {
-        this.currentUser = currentUser;
-    }
-
-    /**
-     * Sets the current hurricane being tracked.
-     * @param currentHurricane the hurricane to set as current
-     */
-    public void setCurrentHurricane(Hurricane currentHurricane) {
-        this.currentHurricane = currentHurricane;
-    }
-
-    /**
-     * Sets the list of users in the system.
-     * @param userList the user list to set
-     */
-    public void setUserList(UserList userList) {
-        this.userList = userList;
-    }
-
-    /**
-     * Sets the list of requests in the system.
-     * @param requestList the request list to set
-     */
-    public void setRequestList(RequestList requestList) {
-        this.requestList = requestList;
-    }
-
-    /**
-     * Sets the list of shelters in the system.
-     * @param shelterList the shelter list to set
-     */
-    public void setShelterList(ShelterList shelterList) {
-        this.shelterList = shelterList;
-    }
-
-    /**
-     * [STUB] Logs in a user with the given phone number and password.
+     * Logs in a user with the given phone number and password.
      * @param phoneNumber the user's phone number
      * @param password the user's password
      * @return true if login is successful, false otherwise
      */
     public boolean login(String phoneNumber, String password) {
-        // [STUB] Implement login logic here
-        return false;
+        currentUser = userList.getUser(phoneNumber, password);
+        return currentUser != null;
     }
 
     /**
-     * [STUB] Logs out the currently logged-in user.
+     * Logs out the currently logged-in user.
      * @return true if logout is successful, false otherwise
      */
     public boolean logout() {
         // [STUB] Implement logout logic here
+        if (currentUser != null) {
+            currentUser = null;
+            return true;
+        }
         return false;
     }
 
     /**
-     * [STUB] Creates a new user account with the given information.
+     * Creates a new user account with the given information.
      * @param firstName the user's first name
      * @param lastName the user's last name
      * @param password the user's password
@@ -147,8 +111,8 @@ public class HurricaneReliefSystem {
     public User createAccount(String firstName, String lastName,
                               String password, String phoneNumber,
                               String locationZip, double[] location) {
-        // [STUB] Implement createAccount logic here
-        return null;
+        return userList.addUser(firstName, lastName, password, phoneNumber, locationZip, location);
+        
     }
 
     /**
