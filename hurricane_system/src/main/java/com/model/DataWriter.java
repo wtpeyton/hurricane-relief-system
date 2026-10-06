@@ -50,7 +50,7 @@ public class DataWriter extends DataConstants {
         try {
             //Writing the userArray to the file
             FileWriter file = new FileWriter(USERS_FILE_PATH);
-            file.write(userArray.toString());
+            file.write(userArray.toJSONString());
             file.flush();
             file.close();
             return true;
@@ -59,12 +59,17 @@ public class DataWriter extends DataConstants {
             return false;
         }
     }
+    /**
+     * Converts the ShelterList to a JSON File 
+     * @param shelters the ArrayList of Shelters in ShelterList
+     * @return boolean if it succeeds or fails
+     */
     public static boolean saveShelters(ArrayList<Shelter> shelters){
         JSONArray shelterArray = new JSONArray();
         for (Shelter shelter : shelters){
             JSONObject currentShelter = new JSONObject();
             currentShelter.put(SHELTER_ACCESSIBILITY, shelter.getAccessibility())
-            currentShelter.put(SHELTER_ADMIN, shelter.getShelterAdmin());
+            currentShelter.put(SHELTER_ADMIN, shelter.getShelterAdmin().getUserId());
             currentShelter.put(SHELTER_CAPACITY, String.valueOf(shelter.getCapacity()));
             currentShelter.put(SHELTER_ID, shelter.getShelterId());
             
@@ -80,8 +85,8 @@ public class DataWriter extends DataConstants {
             shelterArray.add(currentShelter);
         }
         try {
-            FileWriter file = new FileWriter(USERS_FILE_PATH);
-            file.write(shelterArray.toString());
+            FileWriter file = new FileWriter(SHELTERS_FILE_PATH);
+            file.write(shelterArray.toJSONString());
             file.flush();
             file.close();
          return true;   
@@ -91,11 +96,70 @@ public class DataWriter extends DataConstants {
         }
     }
     public static boolean saveRequests(ArrayList<Request> requests){
-        return true;
+        JSONArray requestArray = new JSONArray();
+        for(Request request : requests){
+            JSONObject currentRequest = new JSONObject();
+            currentRequest.put(REQUEST_COMMENT, request.getComment());
+            currentRequest.put(REQUEST_CREATED_AT, request.getCreatedAt());
+            currentRequest.put(REQUEST_DESCRIPTION, request.getDescription());
+            currentRequest.put(REQUEST_FOR_SOMEONE_ELSE, request.isForSomeoneElse());
+            currentRequest.put(REQUEST_ID, request.getId());
+
+            JSONArray requestLocation = new JSONArray();
+            requestLocation.add(request.getLocation()[0]);
+            requestLocation.add(request.getLocation()[1]);
+            currentRequest.put(REQUEST_LOCATION, requestLocation);
+            
+            currentRequest.put(REQUEST_PRIORITY, request.getPriority());
+            currentRequest.put(REQUEST_REQUESTER, request.getRequester().getUserId());
+            currentRequest.put(REQUEST_RESPONDERS, createRespondersArray(request));
+            currentRequest.put(REQUEST_STATUS, request.getStatus().name());
+            currentRequest.put(REQUEST_TYPE, request.getRequestType())
+            
+            requestArray.add(currentRequest);
+        }
+        try {
+            FileWriter file = new FileWriter(REQUESTS_FILE_PATH);
+            file.write(requestArray.toJSONString());
+            file.flush();
+            file.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
     public static boolean saveHurricane(Hurricane hurricane){
         return true;
     }
+    /**
+     * Converts all the types of a request to a JSONArray
+     * @param request the request class that holds the types
+     * @return JSONArray of the request types
+     */
+    private static JSONArray createTypeArray(Request request){
+        JSONArray requestTypes = new JSONArray();
+        for(RequestType type : request.getRequestType()){
+            requestTypes.add(type);
+        }
+        return requestTypes;
+    }
+    /**
+     * Converts all the responders of a request to a JSONArray
+     * @param request the request class that holds the responders
+     * @return JSONArray of the request responders
+     */
+    private static JSONArray createRespondersArray(Request request){
+        JSONArray requestResponders = new JSONArray();
+        for(User responder : request.getResponders()){
+            requestResponders.add(responder.getUserId());
+        }
+        return requestResponders;
+    }
+    /**
+     * Iterates through the credentials of the User and converts them to a JSONArray
+     * @param user The user whose credentials are being iterated
+     * @return A JSONArray of the credentials
+     */
     private static JSONArray createCredentialArray(User user){
         JSONArray credentials = new JSONArray();
         ArrayList<Credential> iterable = user.getCredentials();
@@ -106,6 +170,11 @@ public class DataWriter extends DataConstants {
 
         return credentials;
     }
+    /**
+     * Iterates through the permissions of the User and converts them to a JSONArray
+     * @param user The user whose permissions are being iterated
+     * @return A JSONArray of the permissions
+     */
     private static JSONArray createPermissionArray(User user){
         JSONArray permissions = new JSONArray();
         ArrayList<Permission> iterable = user.getPermissions();
@@ -116,6 +185,11 @@ public class DataWriter extends DataConstants {
 
         return permissions;
     }
+    /**
+     * Iterates through a Users equipment and coverts them to a JSONArray
+     * @param user the current user that we need to convert
+     * @return A JSONArray of the equipment
+     */
     private static JSONArray createEquipmentArray(User user){
         JSONArray equipment = new JSONArray();
         ArrayList<ReliefResource> iterable = user.getEquipment();
