@@ -1,1 +1,36 @@
-[{"accessibility":"VERY_ACCESSIBLE","supplies":[{"quantity":100,"resource_id":"59e37b98-0d52-45a5-a743-b0d74d9767ef","location":[34.01,-81.03],"type":"Blankets"},{"quantity":25,"resource_id":"7d44f4fd-7f82-43fc-be51-815327ec970f","location":[34.01,-81.03],"type":"First aid kits"}],"medical_service":"AVERAGE_SERVICE","name":"Columbia Community Shelter","shelter_admin":"bf349e54-7bc4-4b52-b3cc-e30eed9c381d","location":["34.01","-81.03"],"shelter_id":"d40a8bd4-7ceb-4464-8db8-c20cd6321dd5","pet_acceptance":true,"capacity":"200"}]
+[
+  {
+    "accessibility": "VERY_ACCESSIBLE",
+    "supplies": [
+      {
+        "quantity": 100,
+        "resource_id": "59e37b98-0d52-45a5-a743-b0d74d9767ef",
+        "location": [
+          34.01,
+          -81.03
+        ],
+        "type": "Blankets"
+      },
+      {
+        "quantity": 25,
+        "resource_id": "7d44f4fd-7f82-43fc-be51-815327ec970f",
+        "location": [
+          34.01,
+          -81.03
+        ],
+        "type": "First aid kits"
+      }
+    ],
+    "medical_service": "AVERAGE_SERVICE",
+    "vet_service": true,
+    "name": "Columbia Community Shelter",
+    "shelter_admin": "bf349e54-7bc4-4b52-b3cc-e30eed9c381d",
+    "location": [
+      34.01,
+      -81.03
+    ],
+    "shelter_id": "d40a8bd4-7ceb-4464-8db8-c20cd6321dd5",
+    "pet_acceptance": true,
+    "capacity": 200
+  }
+]
