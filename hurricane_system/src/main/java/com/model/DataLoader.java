@@ -7,6 +7,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import java.io.FileReader;
+import java.time.Instant;
 import java.util.UUID;
 
 /**
@@ -55,11 +56,36 @@ public class DataLoader extends DataConstants {
     }
 
     /**
-     * [STUB] Retrieves the list of requests.
+     * Retrieves the list of requests.
      * @return ArrayList of Request objects.
      */
     public static ArrayList<Request> getRequests() {
-        return new ArrayList<Request>();
+        ArrayList<Request> requests = new ArrayList<Request>();
+        try (FileReader fileReader = new FileReader(REQUESTS_FILE_PATH);) {
+            JSONArray requestsArray = (JSONArray) new JSONParser().parse(fileReader);
+            for (Object obj : requestsArray) {
+                JSONObject requestJson = (JSONObject) obj;
+
+                UUID requestId = UUID.fromString((String) requestJson.get(REQUEST_ID));
+                User requester = UserList.getInstance().getUser(UUID.fromString((String) requestJson.get(REQUEST_REQUESTER)));
+                ArrayList<User> responders = getResponders((JSONArray) requestJson.get(REQUEST_RESPONDERS));
+                Instant createdAt = Instant.parse((String) requestJson.get(REQUEST_CREATED_AT));
+                int priority = ((Long) requestJson.get(REQUEST_PRIORITY)).intValue();
+                ArrayList<RequestType> requestType = getRequestTypes((JSONArray) requestJson.get(REQUEST_TYPE));
+                JSONArray locationArray = (JSONArray) requestJson.get(REQUEST_LOCATION);
+                double[] location = new double[] { (double) locationArray.get(0), (double) locationArray.get(1) };
+                String description = (String) requestJson.get(REQUEST_DESCRIPTION);
+                RequestStatus status = RequestStatus.valueOf((String) requestJson.get(REQUEST_STATUS));
+                String comment = (String) requestJson.get(REQUEST_COMMENT);
+                boolean forSomeoneElse = (Boolean) requestJson.get(REQUEST_FOR_SOMEONE_ELSE);
+
+                Request request = new Request(requestId, requester, responders, createdAt, priority, requestType, location, description, status, comment, forSomeoneElse);
+                requests.add(request);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return requests;
     }
 
     /**
@@ -135,18 +161,38 @@ public class DataLoader extends DataConstants {
         return supplies;
     }
 
+    private static ArrayList<User> getResponders(JSONArray respondersArray) {
+        ArrayList<User> responders = new ArrayList<User>();
+        for (Object responderObj : respondersArray) {
+            User shelterAdmin = UserList.getInstance().getUser(UUID.fromString((String) responderObj));
+            responders.add(shelterAdmin);
+        }
+        return responders;
+    }
+
+    private static ArrayList<RequestType> getRequestTypes(JSONArray requestTypesArray) {
+        ArrayList<RequestType> requestTypes = new ArrayList<RequestType>();
+        for (Object requestType : requestTypesArray) {
+            requestTypes.add(RequestType.valueOf((String) requestType));
+        }
+        return requestTypes;
+    }
+
     /**
      * Main method to test the DataLoader class.
      * @param args Command-line arguments.
      */
     public static void main(String[] args) {
-        // Testing getUsers()
-        ArrayList<User> users = getUsers();
-        for (User user : users) {
-            System.out.println(user);
+        UserList.getInstance();
+
+        // Testing getRequests()
+        ArrayList<Request> requests = getRequests();
+        for (Request request : requests) {
+            System.out.println(request.getId());
+            System.out.println(request.getRequester());
         }
 
-        // Testing saveUsers()
-        DataWriter.saveUsers(users);
+        // Testing saveRequests()
+        DataWriter.saveRequests(requests);
     }
 }
