@@ -204,12 +204,12 @@ public class DataLoader extends DataConstants {
      * @param args Command-line arguments.
      */
     public static void main(String[] args) {
-        Hurricane hurricane = getHurricane();
-        System.out.println(hurricane.getHurricaneId());
-        for (String s : hurricane.getAffectedZipCodes()) {
-            System.out.println(s);
+        // Load, print, save shelters.json
+        UserList.getInstance();
+        ArrayList<Shelter> shelters = getShelters();
+        for (Shelter shelter : shelters) {
+            System.out.println(shelter);
         }
-
-        DataWriter.saveHurricane(hurricane);
+        DataWriter.saveShelters(shelters);
     }
 }
