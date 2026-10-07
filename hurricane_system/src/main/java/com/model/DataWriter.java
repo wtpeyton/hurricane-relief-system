@@ -46,12 +46,9 @@ public class DataWriter extends DataConstants {
             //Adding the user object to the user array.
             userArray.add(currentUser);
         }
-        try {
+        try (FileWriter file = new FileWriter(USERS_FILE_PATH)) {
             //Writing the userArray to the file
-            FileWriter file = new FileWriter(USERS_FILE_PATH);
             file.write(userArray.toJSONString());
-            file.flush();
-            file.close();
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -84,12 +81,9 @@ public class DataWriter extends DataConstants {
             currentShelter.put(SHELTER_SUPPLIES, createEquipmentArray(shelter));
             shelterArray.add(currentShelter);
         }
-        try {
-            FileWriter file = new FileWriter(SHELTERS_FILE_PATH);
+        try (FileWriter file = new FileWriter(SHELTERS_FILE_PATH)) {
             file.write(shelterArray.toJSONString());
-            file.flush();
-            file.close();
-         return true;   
+            return true;   
         } catch (Exception e) {
             e.printStackTrace();
             return false; 
@@ -123,11 +117,8 @@ public class DataWriter extends DataConstants {
             
             requestArray.add(currentRequest);
         }
-        try {
-            FileWriter file = new FileWriter(REQUESTS_FILE_PATH);
+        try (FileWriter file = new FileWriter(REQUESTS_FILE_PATH)) {
             file.write(requestArray.toJSONString());
-            file.flush();
-            file.close();
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -146,11 +137,8 @@ public class DataWriter extends DataConstants {
         hurricaneObject.put(HURRICANE_STATUS, hurricane.getStatus().name());
         hurricaneObject.put(HURRICANE_ACTIVE, hurricane.isActive());
         hurricaneObject.put(HURRICANE_AFFECTED_ZIP_CODES, createZipArray(hurricane));
-        try {
-            FileWriter file = new FileWriter(HURRICANE_FILE_PATH);
+        try (FileWriter file = new FileWriter(HURRICANE_FILE_PATH)) {
             file.write(hurricaneObject.toJSONString());
-            file.flush();
-            file.close();
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -377,4 +365,3 @@ public class DataWriter extends DataConstants {
     System.out.println("Hurricane saved: " + saveHurricane(hurricane));
     }
 }
-
