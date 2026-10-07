@@ -140,16 +140,13 @@ public class DataLoader extends DataConstants {
      * @param args Command-line arguments.
      */
     public static void main(String[] args) {
-        // Testing getShelters()
-        ArrayList<Shelter> shelters = getShelters();
-        for (Shelter shelter : shelters) {
-            System.out.println(shelter);
-        }
-
         // Testing getUsers()
         ArrayList<User> users = getUsers();
         for (User user : users) {
             System.out.println(user);
         }
+
+        // Testing saveUsers()
+        DataWriter.saveUsers(users);
     }
 }

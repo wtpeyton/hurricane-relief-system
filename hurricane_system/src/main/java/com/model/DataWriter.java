@@ -69,17 +69,18 @@ public class DataWriter extends DataConstants {
             JSONObject currentShelter = new JSONObject();
             currentShelter.put(SHELTER_ACCESSIBILITY, shelter.getAccessibility().name());
             currentShelter.put(SHELTER_ADMIN, shelter.getShelterAdmin().getUserId().toString());
-            currentShelter.put(SHELTER_CAPACITY, String.valueOf(shelter.getCapacity()));
+            currentShelter.put(SHELTER_CAPACITY, shelter.getCapacity());
             currentShelter.put(SHELTER_ID, shelter.getShelterId().toString());
             
             JSONArray shelterLocation = new JSONArray();
-            shelterLocation.add(String.valueOf(shelter.getLocation()[0]));
-            shelterLocation.add(String.valueOf(shelter.getLocation()[1]));
+            shelterLocation.add(shelter.getLocation()[0]);
+            shelterLocation.add(shelter.getLocation()[1]);
             currentShelter.put(SHELTER_LOCATION, shelterLocation);
 
             currentShelter.put(SHELTER_MEDICAL_SERVICE, shelter.getMedicalService().name());
             currentShelter.put(SHELTER_NAME, shelter.getName());
             currentShelter.put(SHELTER_PET_ACCEPTANCE, shelter.isPetAcceptance());
+            currentShelter.put(SHELTER_VET_SERVICE, shelter.isVetService());
             currentShelter.put(SHELTER_SUPPLIES, createEquipmentArray(shelter));
             shelterArray.add(currentShelter);
         }
@@ -114,7 +115,7 @@ public class DataWriter extends DataConstants {
             requestLocation.add(String.valueOf(request.getLocation()[1]));
             currentRequest.put(REQUEST_LOCATION, requestLocation);
             
-            currentRequest.put(REQUEST_PRIORITY, String.valueOf(request.getPriority()));
+            currentRequest.put(REQUEST_PRIORITY, request.getPriority());
             currentRequest.put(REQUEST_REQUESTER, request.getRequester().getUserId().toString());
             currentRequest.put(REQUEST_RESPONDERS, createRespondersArray(request));
             currentRequest.put(REQUEST_STATUS, request.getStatus().name());
