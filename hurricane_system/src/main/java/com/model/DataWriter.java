@@ -46,12 +46,9 @@ public class DataWriter extends DataConstants {
             //Adding the user object to the user array.
             userArray.add(currentUser);
         }
-        try {
+        try (FileWriter file = new FileWriter(USERS_FILE_PATH)) {
             //Writing the userArray to the file
-            FileWriter file = new FileWriter(USERS_FILE_PATH);
             file.write(userArray.toJSONString());
-            file.flush();
-            file.close();
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -69,26 +66,24 @@ public class DataWriter extends DataConstants {
             JSONObject currentShelter = new JSONObject();
             currentShelter.put(SHELTER_ACCESSIBILITY, shelter.getAccessibility().name());
             currentShelter.put(SHELTER_ADMIN, shelter.getShelterAdmin().getUserId().toString());
-            currentShelter.put(SHELTER_CAPACITY, String.valueOf(shelter.getCapacity()));
+            currentShelter.put(SHELTER_CAPACITY, shelter.getCapacity());
             currentShelter.put(SHELTER_ID, shelter.getShelterId().toString());
             
             JSONArray shelterLocation = new JSONArray();
-            shelterLocation.add(String.valueOf(shelter.getLocation()[0]));
-            shelterLocation.add(String.valueOf(shelter.getLocation()[1]));
+            shelterLocation.add(shelter.getLocation()[0]);
+            shelterLocation.add(shelter.getLocation()[1]);
             currentShelter.put(SHELTER_LOCATION, shelterLocation);
 
             currentShelter.put(SHELTER_MEDICAL_SERVICE, shelter.getMedicalService().name());
             currentShelter.put(SHELTER_NAME, shelter.getName());
             currentShelter.put(SHELTER_PET_ACCEPTANCE, shelter.isPetAcceptance());
+            currentShelter.put(SHELTER_VET_SERVICE, shelter.isVetService());
             currentShelter.put(SHELTER_SUPPLIES, createEquipmentArray(shelter));
             shelterArray.add(currentShelter);
         }
-        try {
-            FileWriter file = new FileWriter(SHELTERS_FILE_PATH);
+        try (FileWriter file = new FileWriter(SHELTERS_FILE_PATH)) {
             file.write(shelterArray.toJSONString());
-            file.flush();
-            file.close();
-         return true;   
+            return true;   
         } catch (Exception e) {
             e.printStackTrace();
             return false; 
@@ -114,7 +109,7 @@ public class DataWriter extends DataConstants {
             requestLocation.add(String.valueOf(request.getLocation()[1]));
             currentRequest.put(REQUEST_LOCATION, requestLocation);
             
-            currentRequest.put(REQUEST_PRIORITY, String.valueOf(request.getPriority()));
+            currentRequest.put(REQUEST_PRIORITY, request.getPriority());
             currentRequest.put(REQUEST_REQUESTER, request.getRequester().getUserId().toString());
             currentRequest.put(REQUEST_RESPONDERS, createRespondersArray(request));
             currentRequest.put(REQUEST_STATUS, request.getStatus().name());
@@ -122,11 +117,8 @@ public class DataWriter extends DataConstants {
             
             requestArray.add(currentRequest);
         }
-        try {
-            FileWriter file = new FileWriter(REQUESTS_FILE_PATH);
+        try (FileWriter file = new FileWriter(REQUESTS_FILE_PATH)) {
             file.write(requestArray.toJSONString());
-            file.flush();
-            file.close();
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -145,11 +137,8 @@ public class DataWriter extends DataConstants {
         hurricaneObject.put(HURRICANE_STATUS, hurricane.getStatus().name());
         hurricaneObject.put(HURRICANE_ACTIVE, hurricane.isActive());
         hurricaneObject.put(HURRICANE_AFFECTED_ZIP_CODES, createZipArray(hurricane));
-        try {
-            FileWriter file = new FileWriter(HURRICANE_FILE_PATH);
+        try (FileWriter file = new FileWriter(HURRICANE_FILE_PATH)) {
             file.write(hurricaneObject.toJSONString());
-            file.flush();
-            file.close();
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -270,110 +259,4 @@ public class DataWriter extends DataConstants {
         
         return equipment;
     }
-
-    /**
-     * 
-     *      TESTING TESTING TESTING
-     *      MAIN    MAIN    MAIN
-     * 
-     */
-    public static void main(String[] args) {
-    // Test users
-    ArrayList<User> users = new ArrayList<User>();
-
-    User admin = new User(
-        "William",
-        "Peyton",
-        "testPassword123",
-        "8035551234",
-        "29201",
-        new double[] {34.0007, -81.0348}
-    );
-    admin.addPermission(Permission.SHELTER_ADMIN);
-    admin.addPermission(Permission.VOLUNTEER);
-    admin.addCredential(Credential.EMERGENCY_MEDICAL_TECHNICIAN_BASIC);
-    admin.getEquipment().add(new ReliefResource(
-        "Water bottles",
-        50,
-        new double[] {34.0007, -81.0348}
-    ));
-    users.add(admin);
-
-    User responder = new User(
-        "Jane",
-        "Doe",
-        "anotherTestPassword",
-        "8035555678",
-        "29205",
-        new double[] {34.0090, -81.0281}
-    );
-    responder.addPermission(Permission.MEDICAL_VOLUNTEER);
-    responder.addCredential(Credential.REGISTERED_NURSE);
-    users.add(responder);
-
-    // Test shelters
-    ArrayList<Shelter> shelters = new ArrayList<Shelter>();
-    ArrayList<ReliefResource> shelterSupplies = new ArrayList<ReliefResource>();
-    shelterSupplies.add(new ReliefResource(
-        "Blankets",
-        100,
-        new double[] {34.0100, -81.0300}
-    ));
-    shelterSupplies.add(new ReliefResource(
-        "First aid kits",
-        25,
-        new double[] {34.0100, -81.0300}
-    ));
-
-    Shelter shelter = new Shelter(
-        "Columbia Community Shelter",
-        new double[] {34.0100, -81.0300},
-        200,
-        true,
-        shelterSupplies,
-        MedicalService.AVERAGE_SERVICE,
-        true,
-        Accessibility.VERY_ACCESSIBLE,
-        admin
-    );
-    shelters.add(shelter);
-
-    // Test requests
-    ArrayList<Request> requests = new ArrayList<Request>();
-    ArrayList<RequestType> requestTypes = new ArrayList<RequestType>();
-    requestTypes.add(RequestType.MEDICAL_EMERGENCY);
-    requestTypes.add(RequestType.ESSENTIAL_SUPPLIES);
-
-    Request request = new Request(
-        requestTypes,
-        admin,
-        false,
-        new double[] {34.0050, -81.0350},
-        "Family needs medical attention and drinking water."
-    );
-    request.addResponder(responder);
-    request.setComment("Responder assigned and en route.");
-    request.setStatus(RequestStatus.EN_ROUTE);
-    requests.add(request);
-
-    // Test hurricane
-    ArrayList<String> affectedZipCodes = new ArrayList<String>();
-    affectedZipCodes.add("29201");
-    affectedZipCodes.add("29205");
-    affectedZipCodes.add("29208");
-
-    Hurricane hurricane = new Hurricane(
-        "Test Hurricane",
-        affectedZipCodes,
-        HurricaneStatus.CATEGORY_TWO,
-        true
-    );
-
-    // Write each JSON file
-    System.out.println("Users saved: " + saveUsers(users));
-    System.out.println("Shelters saved: " + saveShelters(shelters));
-    System.out.println("Requests saved: " + saveRequests(requests));
-    System.out.println("Hurricane saved: " + saveHurricane(hurricane));
-    }
 }
-

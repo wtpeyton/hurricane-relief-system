@@ -22,11 +22,36 @@ public class DataLoader extends DataConstants {
     }
 
     /**
-     * [STUB] Retrieves the list of users.
+     * Retrieves the list of users.
      * @return ArrayList of User objects.
      */
     public static ArrayList<User> getUsers() {
-        return new ArrayList<User>();
+        ArrayList<User> users = new ArrayList<User>();
+        try (FileReader fileReader = new FileReader(USERS_FILE_PATH);) {
+            JSONArray usersArray = (JSONArray) new JSONParser().parse(fileReader);
+            for (Object obj : usersArray) {
+                JSONObject userJson = (JSONObject) obj;
+
+                UUID userId = UUID.fromString((String) userJson.get(USER_ID));
+                JSONArray locationArray = (JSONArray) userJson.get(USER_LOCATION);
+                double[] location = new double[] { (double) locationArray.get(0), (double) locationArray.get(1) };
+                String locationZip = (String) userJson.get(USER_LOCATION_ZIP);
+                String firstName = (String) userJson.get(USER_FIRST_NAME);
+                String lastName = (String) userJson.get(USER_LAST_NAME);
+                String password = (String) userJson.get(USER_PASSWORD);
+                String phoneNumber = (String) userJson.get(USER_PHONE_NUMBER);
+
+                ArrayList<Permission> permissions = getPermissions((JSONArray) userJson.get(USER_PERMISSIONS));
+                ArrayList<Credential> credentials = getCredentials((JSONArray) userJson.get(USER_CREDENTIALS));
+                ArrayList<ReliefResource> equipment = getSupplies((JSONArray) userJson.get(USER_EQUIPMENT));
+
+                User user = new User(userId, location, locationZip, firstName, lastName, password, phoneNumber, permissions, credentials, equipment);
+                users.add(user);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return users;
     }
 
     /**
@@ -43,9 +68,7 @@ public class DataLoader extends DataConstants {
      */
     public static ArrayList<Shelter> getShelters() {
         ArrayList<Shelter> shelters = new ArrayList<Shelter>();
-        try {
-            FileReader fileReader = new FileReader(SHELTERS_FILE_PATH);
-            // Add code to parse the JSON file and populate the shelters list
+        try (FileReader fileReader = new FileReader(SHELTERS_FILE_PATH);) {
             JSONArray sheltersArray = (JSONArray) new JSONParser().parse(fileReader);
             for (Object obj : sheltersArray) {
                 JSONObject shelterJson = (JSONObject) obj;
@@ -57,7 +80,7 @@ public class DataLoader extends DataConstants {
                 int capacity = ((Long) shelterJson.get(SHELTER_CAPACITY)).intValue();
                 boolean petAcceptance = (Boolean) shelterJson.get(SHELTER_PET_ACCEPTANCE);
 
-                ArrayList<ReliefResource> supplies = getShelterSupplies(shelterJson);
+                ArrayList<ReliefResource> supplies = getSupplies((JSONArray) shelterJson.get(SHELTER_SUPPLIES));
                 
                 MedicalService medicalService = MedicalService.valueOf((String) shelterJson.get(SHELTER_MEDICAL_SERVICE));
                 boolean vetService = (Boolean) shelterJson.get(SHELTER_VET_SERVICE);
@@ -82,21 +105,24 @@ public class DataLoader extends DataConstants {
         return new Hurricane("", new ArrayList<String>(), HurricaneStatus.TROPICAL_STORM, true);
     }
 
-    /**
-     * Main method to test the DataLoader class.
-     * @param args Command-line arguments.
-     */
-    public static void main(String[] args) {
-        // Testing getShelters()
-        ArrayList<Shelter> shelters = getShelters();
-        for (Shelter shelter : shelters) {
-            System.out.println(shelter);
+    private static ArrayList<Permission> getPermissions(JSONArray permissionsArray) {
+        ArrayList<Permission> permissions = new ArrayList<Permission>();
+        for (Object permission : permissionsArray) {
+            permissions.add(Permission.valueOf((String) permission));
         }
+        return permissions;
     }
 
-    private static ArrayList<ReliefResource> getShelterSupplies(JSONObject shelterJson) {
+    private static ArrayList<Credential> getCredentials(JSONArray credentialsArray) {
+        ArrayList<Credential> credentials = new ArrayList<Credential>();
+        for (Object credential : credentialsArray) {
+            credentials.add(Credential.valueOf((String) credential));
+        }
+        return credentials;
+    }
+    
+    private static ArrayList<ReliefResource> getSupplies(JSONArray suppliesArray) {
         ArrayList<ReliefResource> supplies = new ArrayList<ReliefResource>();
-        JSONArray suppliesArray = (JSONArray) shelterJson.get(SHELTER_SUPPLIES);
         for (Object supplyObj : suppliesArray) {
             JSONObject supplyJson = (JSONObject) supplyObj;
             UUID resourceId = UUID.fromString((String) supplyJson.get(RESOURCE_ID));
@@ -107,5 +133,20 @@ public class DataLoader extends DataConstants {
             supplies.add(new ReliefResource(resourceId, type, quantity, supplyLocation));
         }
         return supplies;
+    }
+
+    /**
+     * Main method to test the DataLoader class.
+     * @param args Command-line arguments.
+     */
+    public static void main(String[] args) {
+        // Testing getUsers()
+        ArrayList<User> users = getUsers();
+        for (User user : users) {
+            System.out.println(user);
+        }
+
+        // Testing saveUsers()
+        DataWriter.saveUsers(users);
     }
 }

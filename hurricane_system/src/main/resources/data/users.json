@@ -1,1 +1,47 @@
-[{"password":"testPassword123","user_id":"bf349e54-7bc4-4b52-b3cc-e30eed9c381d","credentials":["EMERGENCY_MEDICAL_TECHNICIAN_BASIC"],"permissions":["SHELTER_ADMIN","VOLUNTEER"],"last_name":"Peyton","equipment":[{"quantity":50,"resource_id":"b2e2fd9f-666a-4159-98f0-87734d790d15","location":[34.0007,-81.0348],"type":"Water bottles"}],"location":["34.0007","-81.0348"],"phone_number":"8035551234","location_zip":"29201","first_name":"William"},{"password":"anotherTestPassword","user_id":"f97fd922-2541-41f0-a74c-753d36dcaf66","credentials":["REGISTERED_NURSE"],"permissions":["MEDICAL_VOLUNTEER"],"last_name":"Doe","equipment":[],"location":["34.009","-81.0281"],"phone_number":"8035555678","location_zip":"29205","first_name":"Jane"}]
+[
+    {
+        "password": "password123",
+        "user_id": "46ec8cfe-c556-4071-b7bd-c8c37a1f82a3",
+        "credentials": [
+            "BASIC_LIFE_SUPPORT"
+        ],
+        "permissions": [
+            "REGISTERED_USER",
+            "VOLUNTEER"
+        ],
+        "last_name": "Lovelace",
+        "equipment": [
+            {
+                "quantity": 2,
+                "resource_id": "a763baa7-2285-4c4e-b990-f880adcbecb7",
+                "location": [
+                    34.001,
+                    -81.035
+                ],
+                "type": "Generator"
+            }
+        ],
+        "location": [
+            34.0007,
+            -81.0348
+        ],
+        "phone_number": "8035550100",
+        "location_zip": "29208",
+        "first_name": "Ada"
+    },
+    {
+        "password": "cobol1906",
+        "user_id": "20560f06-8a86-4aa5-b348-b926a87f71a6",
+        "credentials": [],
+        "permissions": [],
+        "last_name": "Hopper",
+        "equipment": [],
+        "location": [
+            34.005,
+            -81.03
+        ],
+        "phone_number": "8035550101",
+        "location_zip": "29205",
+        "first_name": "Grace"
+    }
+]
