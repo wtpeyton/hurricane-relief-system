@@ -11,7 +11,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 /**
- * [PARTIAL STUB] Loads data from JSON files for the hurricane relief system.
+ * Loads data from JSON files for the hurricane relief system.
  * @author Jack Andrin
  */
 public class DataLoader extends DataConstants {
@@ -124,11 +124,24 @@ public class DataLoader extends DataConstants {
     }
 
     /**
-     * [STUB] Retrieves the hurricane data.
+     * Retrieves the hurricane data.
      * @return Hurricane object.
      */
     public static Hurricane getHurricane() {
-        return new Hurricane("", new ArrayList<String>(), HurricaneStatus.TROPICAL_STORM, true);
+        Hurricane hurricane = null;
+        try (FileReader fileReader = new FileReader(HURRICANE_FILE_PATH);) {
+            JSONObject hurricaneJson = (JSONObject) new JSONParser().parse(fileReader);
+            UUID hurricaneId = UUID.fromString((String) hurricaneJson.get(HURRICANE_ID));
+            String name = (String) hurricaneJson.get(HURRICANE_NAME);
+            ArrayList<String> affectedZipCodes = getAffectedZipCodes((JSONArray) hurricaneJson.get(HURRICANE_AFFECTED_ZIP_CODES));
+            HurricaneStatus currentStatus = HurricaneStatus.valueOf((String) hurricaneJson.get(HURRICANE_STATUS));
+            boolean active = (Boolean) hurricaneJson.get(HURRICANE_ACTIVE);
+
+            hurricane = new Hurricane(hurricaneId, name, affectedZipCodes, currentStatus, active);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return hurricane;
     }
 
     private static ArrayList<Permission> getPermissions(JSONArray permissionsArray) {
@@ -178,21 +191,25 @@ public class DataLoader extends DataConstants {
         return requestTypes;
     }
 
+    private static ArrayList<String> getAffectedZipCodes(JSONArray zipCodesArray) {
+        ArrayList<String> zipCodes = new ArrayList<String>();
+        for (Object zipCode : zipCodesArray) {
+            zipCodes.add((String) zipCode);
+        }
+        return zipCodes;
+    }
+
     /**
      * Main method to test the DataLoader class.
      * @param args Command-line arguments.
      */
     public static void main(String[] args) {
-        UserList.getInstance();
-
-        // Testing getRequests()
-        ArrayList<Request> requests = getRequests();
-        for (Request request : requests) {
-            System.out.println(request.getId());
-            System.out.println(request.getRequester());
+        Hurricane hurricane = getHurricane();
+        System.out.println(hurricane.getHurricaneId());
+        for (String s : hurricane.getAffectedZipCodes()) {
+            System.out.println(s);
         }
 
-        // Testing saveRequests()
-        DataWriter.saveRequests(requests);
+        DataWriter.saveHurricane(hurricane);
     }
 }
