@@ -69,16 +69,57 @@ public class UserList implements Iterable<User> {
      * @param location the user's location as a double array [latitude, longitude]
      * @return the newly created user, or null if the account information is invalid
      */
+
     public User addUser(String firstName, String lastName, String password,
                         String phoneNumber, String locationZip, double[] location) {
-
-        if (firstName.isEmpty() || lastName.isEmpty() || password.isEmpty() || phoneNumber.length() != 10 || doesUserExist(phoneNumber)) {
+        if (firstName.isEmpty() || lastName.isEmpty() || password.isEmpty()
+                || !isValidPhoneNumber(phoneNumber)
+                || !isValidZipCode(locationZip)
+                || doesUserExist(phoneNumber)) {
             return null;
         }
-        
+
         User user = new User(firstName, lastName, password, phoneNumber, locationZip, location);
         users.add(user);
         return user;
+    }
+
+    /**
+     * Checks if a phone number contains exactly 10 digits.
+     * @param phoneNumber the phone number to check
+     * @return true if the phone number is valid, otherwise false
+     */
+    private boolean isValidPhoneNumber(String phoneNumber) {
+        if (phoneNumber.length() != 10) {
+            return false;
+        }
+
+        for (int i = 0; i < phoneNumber.length(); i++) {
+            if (!Character.isDigit(phoneNumber.charAt(i))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Checks if a ZIP code contains exactly 5 digits.
+     * @param locationZip the ZIP code to check
+     * @return true if the ZIP code is valid, otherwise false
+     */
+    private boolean isValidZipCode(String locationZip) {
+        if (locationZip.length() != 5) {
+            return false;
+        }
+
+        for (int i = 0; i < locationZip.length(); i++) {
+            if (!Character.isDigit(locationZip.charAt(i))) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -131,6 +172,10 @@ public class UserList implements Iterable<User> {
         return users.iterator();
     }
 
+    /**
+     * Main method for testing the UserList class.
+     * @param args command line arguements
+     */
     public static void main(String[] args) {
         UserList userList = UserList.getInstance();
 
@@ -209,5 +254,17 @@ public class UserList implements Iterable<User> {
             new double[]{34.0007, -81.0348}
         );
         System.out.println(invalidPhone);
+
+        System.out.println("Add user with letters in phone number:");
+        System.out.println(userList.addUser("Jane", "Doe", "password123",
+                "803ABC5678", "29205", new double[] {34.0007, -81.0348}));
+
+        System.out.println("Add user with letters in ZIP code:");
+        System.out.println(userList.addUser("Jane", "Doe", "password123",
+                "8035559999", "29ABC", new double[] {34.0007, -81.0348}));
+
+        System.out.println("Add user with invalid ZIP code length:");
+        System.out.println(userList.addUser("Jane", "Doe", "password123",
+                "8035559999", "292", new double[] {34.0007, -81.0348}));
     }
 }
