@@ -82,7 +82,14 @@ public class HurricaneReliefSystem {
      */
     public boolean login(String phoneNumber, String password) {
         currentUser = userList.getUser(phoneNumber, password);
-        return currentUser != null;
+        if (currentUser == null) {
+            return false;
+        }
+        currentHurricane = DataLoader.getHurricane();
+        userList = UserList.getInstance();
+        requestList = RequestList.getInstance();
+        shelterList = ShelterList.getInstance();
+        return true;
     }
 
     /**
@@ -90,9 +97,12 @@ public class HurricaneReliefSystem {
      * @return true if logout is successful, false otherwise
      */
     public boolean logout() {
-        // [STUB] Implement logout logic here
         if (currentUser != null) {
             currentUser = null;
+            userList.saveUsers();
+            requestList.saveRequests();
+            shelterList.saveShelters();
+            currentHurricane.saveHurricane();
             return true;
         }
         return false;
