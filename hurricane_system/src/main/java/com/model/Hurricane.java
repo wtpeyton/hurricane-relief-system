@@ -125,4 +125,13 @@ public class Hurricane {
     public boolean isActive() {
         return active;
     }
+
+    /**
+     * Saves the current state of the hurricane to persistent storage.
+     *
+     * @return true if the save operation is successful, false otherwise
+     */
+    public boolean saveHurricane() {
+        return DataWriter.saveHurricane(this);
+    }
 }
