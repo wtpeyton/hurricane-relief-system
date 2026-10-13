@@ -7,10 +7,11 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import java.io.FileReader;
+import java.time.Instant;
 import java.util.UUID;
 
 /**
- * [PARTIAL STUB] Loads data from JSON files for the hurricane relief system.
+ * Loads data from JSON files for the hurricane relief system.
  * @author Jack Andrin
  */
 public class DataLoader extends DataConstants {
@@ -55,11 +56,36 @@ public class DataLoader extends DataConstants {
     }
 
     /**
-     * [STUB] Retrieves the list of requests.
+     * Retrieves the list of requests.
      * @return ArrayList of Request objects.
      */
     public static ArrayList<Request> getRequests() {
-        return new ArrayList<Request>();
+        ArrayList<Request> requests = new ArrayList<Request>();
+        try (FileReader fileReader = new FileReader(REQUESTS_FILE_PATH);) {
+            JSONArray requestsArray = (JSONArray) new JSONParser().parse(fileReader);
+            for (Object obj : requestsArray) {
+                JSONObject requestJson = (JSONObject) obj;
+
+                UUID requestId = UUID.fromString((String) requestJson.get(REQUEST_ID));
+                User requester = UserList.getInstance().getUser(UUID.fromString((String) requestJson.get(REQUEST_REQUESTER)));
+                ArrayList<User> responders = getResponders((JSONArray) requestJson.get(REQUEST_RESPONDERS));
+                Instant createdAt = Instant.parse((String) requestJson.get(REQUEST_CREATED_AT));
+                int priority = ((Long) requestJson.get(REQUEST_PRIORITY)).intValue();
+                ArrayList<RequestType> requestType = getRequestTypes((JSONArray) requestJson.get(REQUEST_TYPE));
+                JSONArray locationArray = (JSONArray) requestJson.get(REQUEST_LOCATION);
+                double[] location = new double[] { (double) locationArray.get(0), (double) locationArray.get(1) };
+                String description = (String) requestJson.get(REQUEST_DESCRIPTION);
+                RequestStatus status = RequestStatus.valueOf((String) requestJson.get(REQUEST_STATUS));
+                String comment = (String) requestJson.get(REQUEST_COMMENT);
+                boolean forSomeoneElse = (Boolean) requestJson.get(REQUEST_FOR_SOMEONE_ELSE);
+
+                Request request = new Request(requestId, requester, responders, createdAt, priority, requestType, location, description, status, comment, forSomeoneElse);
+                requests.add(request);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return requests;
     }
 
     /**
@@ -98,11 +124,24 @@ public class DataLoader extends DataConstants {
     }
 
     /**
-     * [STUB] Retrieves the hurricane data.
+     * Retrieves the hurricane data.
      * @return Hurricane object.
      */
     public static Hurricane getHurricane() {
-        return new Hurricane("", new ArrayList<String>(), HurricaneStatus.TROPICAL_STORM, true);
+        Hurricane hurricane = null;
+        try (FileReader fileReader = new FileReader(HURRICANE_FILE_PATH);) {
+            JSONObject hurricaneJson = (JSONObject) new JSONParser().parse(fileReader);
+            UUID hurricaneId = UUID.fromString((String) hurricaneJson.get(HURRICANE_ID));
+            String name = (String) hurricaneJson.get(HURRICANE_NAME);
+            ArrayList<String> affectedZipCodes = getAffectedZipCodes((JSONArray) hurricaneJson.get(HURRICANE_AFFECTED_ZIP_CODES));
+            HurricaneStatus currentStatus = HurricaneStatus.valueOf((String) hurricaneJson.get(HURRICANE_STATUS));
+            boolean active = (Boolean) hurricaneJson.get(HURRICANE_ACTIVE);
+
+            hurricane = new Hurricane(hurricaneId, name, affectedZipCodes, currentStatus, active);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return hurricane;
     }
 
     private static ArrayList<Permission> getPermissions(JSONArray permissionsArray) {
@@ -135,18 +174,42 @@ public class DataLoader extends DataConstants {
         return supplies;
     }
 
+    private static ArrayList<User> getResponders(JSONArray respondersArray) {
+        ArrayList<User> responders = new ArrayList<User>();
+        for (Object responderObj : respondersArray) {
+            User shelterAdmin = UserList.getInstance().getUser(UUID.fromString((String) responderObj));
+            responders.add(shelterAdmin);
+        }
+        return responders;
+    }
+
+    private static ArrayList<RequestType> getRequestTypes(JSONArray requestTypesArray) {
+        ArrayList<RequestType> requestTypes = new ArrayList<RequestType>();
+        for (Object requestType : requestTypesArray) {
+            requestTypes.add(RequestType.valueOf((String) requestType));
+        }
+        return requestTypes;
+    }
+
+    private static ArrayList<String> getAffectedZipCodes(JSONArray zipCodesArray) {
+        ArrayList<String> zipCodes = new ArrayList<String>();
+        for (Object zipCode : zipCodesArray) {
+            zipCodes.add((String) zipCode);
+        }
+        return zipCodes;
+    }
+
     /**
      * Main method to test the DataLoader class.
      * @param args Command-line arguments.
      */
     public static void main(String[] args) {
-        // Testing getUsers()
-        ArrayList<User> users = getUsers();
-        for (User user : users) {
-            System.out.println(user);
+        // Load, print, save shelters.json
+        UserList.getInstance();
+        ArrayList<Shelter> shelters = getShelters();
+        for (Shelter shelter : shelters) {
+            System.out.println(shelter);
         }
-
-        // Testing saveUsers()
-        DataWriter.saveUsers(users);
+        DataWriter.saveShelters(shelters);
     }
 }

@@ -43,5 +43,22 @@
         "phone_number": "8035550101",
         "location_zip": "29205",
         "first_name": "Grace"
+    },
+    {
+        "password": "testPassword123",
+        "user_id": "bf349e54-7bc4-4b52-b3cc-e30eed9c381d",
+        "credentials": [],
+        "permissions": [
+            "SHELTER_ADMIN"
+        ],
+        "last_name": "Smith",
+        "equipment": [],
+        "location": [
+            34.01,
+            -81.03
+        ],
+        "phone_number": "8035551234",
+        "location_zip": "29201",
+        "first_name": "John"
     }
 ]

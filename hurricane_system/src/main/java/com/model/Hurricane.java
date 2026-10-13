@@ -5,7 +5,7 @@ import java.util.UUID;
 
 /**
  * Represents a hurricane with its details and status.
- * Provides methods to check if the hurricane is active and to notify affected users.
+ * Provides methods to check if the hurricane is active and which areas are affected.
  *
  * @author Jack Andrin
  */
@@ -124,5 +124,14 @@ public class Hurricane {
      */
     public boolean isActive() {
         return active;
+    }
+
+    /**
+     * Saves the current state of the hurricane to persistent storage.
+     *
+     * @return true if the save operation is successful, false otherwise
+     */
+    public boolean saveHurricane() {
+        return DataWriter.saveHurricane(this);
     }
 }

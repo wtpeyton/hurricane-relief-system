@@ -105,8 +105,8 @@ public class DataWriter extends DataConstants {
             currentRequest.put(REQUEST_ID, request.getId().toString());
 
             JSONArray requestLocation = new JSONArray();
-            requestLocation.add(String.valueOf(request.getLocation()[0]));
-            requestLocation.add(String.valueOf(request.getLocation()[1]));
+            requestLocation.add(request.getLocation()[0]);
+            requestLocation.add(request.getLocation()[1]);
             currentRequest.put(REQUEST_LOCATION, requestLocation);
             
             currentRequest.put(REQUEST_PRIORITY, request.getPriority());
