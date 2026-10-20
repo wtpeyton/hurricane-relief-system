@@ -126,94 +126,87 @@ public class HurricaneReliefSystem {
     }
 
     /**
-     * [STUB] Submits a new relief request with the given information.
+     * Submits a new relief request with the given information.
      * @param type the type of the request
      * @param location the location coordinates of the request
      * @param description the description of the request
      * @return the created Request object, or null if submission fails
      */
-    public Request submitReliefRequest(RequestType type, double[] location, String description) {
-        // [STUB] Implement submitReliefRequest logic here
-        return null;
+    public Request submitReliefRequest(ArrayList<RequestType> type, boolean forSomeoneElse,double[] location, String description) {
+        return requestList.addRequest(type, currentUser, forSomeoneElse, location, description);
     }
 
     /**
-     * [STUB] Updates an existing relief request with the given description.
+     * Updates an existing relief request with the given description.
      * @param request the request to update
      * @param description the new description for the request
      * @return true if the update is successful, false otherwise
      */
     public boolean updateReliefRequest(Request request, String description) {
-        // [STUB] Implement updateReliefRequest logic here
-        return false;
+        request.setDescription(description);
+        return requestList.updateRequest(request);
     }
 
     /**
-     * [STUB] Cancels an existing relief request.
+     * Cancels an existing relief request.
      * @param request the request to cancel
      * @return true if the cancellation is successful, false otherwise
      */
     public boolean cancelReliefRequest(Request request) {
-        // [STUB] Implement cancelReliefRequest logic here
-        return false;
+        request.setStatus(RequestStatus.CLOSED);
+        return requestList.updateRequest(request);
     }
 
     /**
-     * [STUB] Finds all relief requests submitted by the current user.
+     * Finds all relief requests submitted by the current user.
      * @return a list of the current user's requests
      */
     public ArrayList<Request> findMyRequests() {
-        // [STUB] Implement findMyRequests logic here
-        return new ArrayList<>();
+        return requestList.findRequestsByUser(currentUser);
     }
 
     /**
-     * [STUB] Finds all relief requests near the current user's location.
+     * Finds all relief requests near the current user's location.
      * @return a list of nearby requests
      */
     public ArrayList<Request> findNearbyRequests() {
-        // [STUB] Implement findNearbyRequests logic here
-        return new ArrayList<>();
+        return requestList.findRequestsByDistance(currentUser.getLocation());
     }
 
     /**
-     * [STUB] Finds all relief requests of the specified type.
+     * Finds all relief requests of the specified type.
      * @param type the type of requests to find
      * @return a list of requests matching the specified type
      */
     public ArrayList<Request> findRequestsByType(RequestType type) {
-        // [STUB] Implement findRequestsByType logic here
-        return new ArrayList<>();
+        return requestList.findRequestsByType(type);
     }
 
     /**
-     * [STUB] Finds all relief requests with the specified status.
+     * Finds all relief requests with the specified status.
      * @param status the status of requests to find
      * @return a list of requests matching the specified status
      */
     public ArrayList<Request> findRequestsByStatus(RequestStatus status) {
-        // [STUB] Implement findRequestsByStatus logic here
-        return new ArrayList<>();
+        return requestList.findRequestsByStatus(status);
     }
 
     /**
-     * [STUB] Responds to an existing relief request.
+     * Responds to an existing relief request.
      * @param request the request to respond to
      * @return true if the response is successful, false otherwise
      */
     public boolean respondToRequest(Request request) {
-        // [STUB] Implement respondToRequest logic here
-        return false;
+        return request.addResponder(currentUser);
     }
     
     /**
-     * [STUB] Withdraws from an existing relief request.
+     * Withdraws from an existing relief request.
      * @param request the request to withdraw from
      * @return true if the withdrawal is successful, false otherwise
      */
     public boolean withdrawFromRequest(Request request) {
-        // [STUB] Implement withdrawFromRequest logic here
-        return false;
+        return request.removeResponder(currentUser);
     }
     
     /**

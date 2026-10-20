@@ -89,24 +89,35 @@ public class Request {
     /**
      * Adds a responder to the request
      * @param responder the user responding to the request
-     * @return the index of the added responder
+     * @return true if the responder was added successfully, false otherwise
      */
-    public int addResponder(User responder) {
-        responders.add(responder);
-        return responders.indexOf(responder);
+    public boolean addResponder(User responder) {
+        if (!responders.contains(responder) && (responder.getPermissions().contains(Permission.VOLUNTEER)
+                || responder.getPermissions().contains(Permission.MEDICAL_VOLUNTEER))) {
+            responders.add(responder);
+            if (status == RequestStatus.SUBMITTED) {
+                status = RequestStatus.EN_ROUTE;
+            }
+            return true;
+        }
+        return false;
     }
 
     /**
      * Removes a responder from the request
      * @param responder the user to remove from the responders list
-     * @return the index of the removed responder
+     * @return true if the responder was removed successfully, false otherwise
      */
-    public int removeResponder(User responder) {
+    public boolean removeResponder(User responder) {
         int index = responders.indexOf(responder);
         if (index != -1) {
             responders.remove(index);
+            if (responders.isEmpty() && status != RequestStatus.CLOSED) {
+                status = RequestStatus.SUBMITTED;
+            }
+            return true;
         }
-        return index;
+        return false;
     }
 
     /**
@@ -115,6 +126,14 @@ public class Request {
      */
     public void setStatus(RequestStatus status) {
         this.status = status;
+    }
+
+    /**
+     * Sets the description for the request.
+     * @param description the new description for the request
+     */
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     /**
