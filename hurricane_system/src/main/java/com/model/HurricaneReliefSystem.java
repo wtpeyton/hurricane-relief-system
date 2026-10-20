@@ -210,14 +210,14 @@ public class HurricaneReliefSystem {
     }
     
     /**
-     * [STUB] Updates the status of an existing relief request.
+     * Updates the status of an existing relief request.
      * @param request the request to update
      * @param status the new status to set
      * @return true if the update is successful, false otherwise
      */
     public boolean updateRequestStatus(Request request, RequestStatus status) {
-        // [STUB] Implement updateRequestStatus logic here
-        return false;
+        request.setStatus(status);
+        return requestList.updateRequest(request);
     }
     
     /**
