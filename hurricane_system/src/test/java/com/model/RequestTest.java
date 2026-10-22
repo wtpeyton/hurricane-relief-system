@@ -22,6 +22,7 @@ public class RequestTest {
                              "603-433-211", "03290", 
                              new double[]{43.1939, -71.5724}
                             );
+        responder.addPermission(Permission.VOLUNTEER);
     
         requestTypes = new ArrayList<RequestType>();
         requestTypes.add(RequestType.MEDICAL_EMERGENCY);
