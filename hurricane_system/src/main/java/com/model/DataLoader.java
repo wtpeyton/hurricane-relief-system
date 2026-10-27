@@ -113,8 +113,11 @@ public class DataLoader extends DataConstants {
                 Accessibility accessibility = Accessibility.valueOf((String) shelterJson.get(SHELTER_ACCESSIBILITY));
                 User shelterAdmin = UserList.getInstance().getUser(UUID.fromString((String) shelterJson.get(SHELTER_ADMIN)));
 
+                ArrayList<Person> occupants = getOccupants((JSONArray) shelterJson.get(SHELTER_OCCUPANTS));
+                ArrayList<String> pets = getPets((JSONArray) shelterJson.get(SHELTER_PETS));
+
                 Shelter shelter = new Shelter(shelterId, name, location, capacity, petAcceptance, 
-                   supplies, medicalService, vetService, accessibility, shelterAdmin);
+                   supplies, medicalService, vetService, accessibility, shelterAdmin, occupants, pets);
                 shelters.add(shelter);
             }
         } catch (Exception e) {
@@ -197,6 +200,25 @@ public class DataLoader extends DataConstants {
             zipCodes.add((String) zipCode);
         }
         return zipCodes;
+    }
+
+    private static ArrayList<Person> getOccupants(JSONArray occupantsArray) {
+        ArrayList<Person> occupants = new ArrayList<Person>();
+        for (Object occupantObj : occupantsArray) {
+            JSONObject occupantJson = (JSONObject) occupantObj;
+            String name = (String) occupantJson.get("name");
+            int age = ((Long) occupantJson.get("age")).intValue();
+            occupants.add(new Person(name, age));
+        }
+        return occupants;
+    }
+
+    private static ArrayList<String> getPets(JSONArray petsArray) {
+        ArrayList<String> pets = new ArrayList<String>();
+        for (Object petObj : petsArray) {
+            pets.add((String) petObj);
+        }
+        return pets;
     }
 
     /**

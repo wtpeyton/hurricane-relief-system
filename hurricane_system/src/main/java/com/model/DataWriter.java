@@ -79,6 +79,9 @@ public class DataWriter extends DataConstants {
             currentShelter.put(SHELTER_PET_ACCEPTANCE, shelter.isPetAcceptance());
             currentShelter.put(SHELTER_VET_SERVICE, shelter.isVetService());
             currentShelter.put(SHELTER_SUPPLIES, createEquipmentArray(shelter));
+            currentShelter.put(SHELTER_OCCUPANTS, createOccupantsArray(shelter));
+            currentShelter.put(SHELTER_PETS, createPetsArray(shelter));
+            
             shelterArray.add(currentShelter);
         }
         try (FileWriter file = new FileWriter(SHELTERS_FILE_PATH)) {
@@ -260,6 +263,31 @@ public class DataWriter extends DataConstants {
         return equipment;
     }
 
+    private static JSONArray createOccupantsArray(Shelter shelter){
+        JSONArray occupantsArray = new JSONArray();
+        ArrayList<Person> occupants = shelter.getOccupants();
+
+        for (Person occupant : occupants) {
+            JSONObject occupantJson = new JSONObject();
+            occupantJson.put("name", occupant.getName());
+            occupantJson.put("age", occupant.getAge());
+            occupantsArray.add(occupantJson);
+        }
+
+        return occupantsArray;
+    }
+
+    private static JSONArray createPetsArray(Shelter shelter){
+        JSONArray petsArray = new JSONArray();
+        ArrayList<String> pets = shelter.getPets();
+
+        for (String pet : pets) {
+            petsArray.add(pet);
+        }
+
+        return petsArray;
+    }
+
     /**
      * 
      *      TESTING TESTING TESTING
@@ -314,6 +342,15 @@ public class DataWriter extends DataConstants {
         new double[] {34.0100, -81.0300}
     ));
 
+    ArrayList<Person> occupants = new ArrayList<Person>();
+    occupants.add(new Person("Alex Johnson", 34));
+    occupants.add(new Person("Maria Garcia", 29));
+    occupants.add(new Person("Sam Wilson", 8));
+
+    ArrayList<String> pets = new ArrayList<String>();
+    pets.add("Buddy Johnson");
+    pets.add("Luna Garcia");
+
     Shelter shelter = new Shelter(
         "Columbia Community Shelter",
         new double[] {34.0100, -81.0300},
@@ -323,7 +360,9 @@ public class DataWriter extends DataConstants {
         MedicalService.AVERAGE_SERVICE,
         true,
         Accessibility.VERY_ACCESSIBLE,
-        admin
+        admin,
+        occupants,
+        pets
     );
     shelters.add(shelter);
 

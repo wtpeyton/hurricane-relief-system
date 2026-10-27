@@ -55,6 +55,8 @@ public abstract class DataConstants {
     protected static final String SHELTER_VET_SERVICE = "vet_service";
     protected static final String SHELTER_ACCESSIBILITY = "accessibility";
     protected static final String SHELTER_ADMIN = "shelter_admin";
+    protected static final String SHELTER_OCCUPANTS = "occupants";
+    protected static final String SHELTER_PETS = "pets";
 
     // Resource JSON keys
     protected static final String RESOURCE_ID = "resource_id";

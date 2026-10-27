@@ -1,10 +1,15 @@
 [
   {
+    "pets": [
+      "Buddy Johnson",
+      "Luna Garcia"
+    ],
+    "vet_service": true,
     "accessibility": "VERY_ACCESSIBLE",
     "supplies": [
       {
         "quantity": 100,
-        "resource_id": "59e37b98-0d52-45a5-a743-b0d74d9767ef",
+        "resource_id": "d0d5d842-ec94-456b-a1ff-84660a93fabc",
         "location": [
           34.01,
           -81.03
@@ -13,7 +18,7 @@
       },
       {
         "quantity": 25,
-        "resource_id": "7d44f4fd-7f82-43fc-be51-815327ec970f",
+        "resource_id": "95fc4188-f87a-478a-bd14-66531e3e4d7c",
         "location": [
           34.01,
           -81.03
@@ -22,7 +27,6 @@
       }
     ],
     "medical_service": "AVERAGE_SERVICE",
-    "vet_service": true,
     "name": "Columbia Community Shelter",
     "shelter_admin": "bf349e54-7bc4-4b52-b3cc-e30eed9c381d",
     "location": [
@@ -31,6 +35,20 @@
     ],
     "shelter_id": "d40a8bd4-7ceb-4464-8db8-c20cd6321dd5",
     "pet_acceptance": true,
+    "occupants": [
+      {
+        "name": "Alex Johnson",
+        "age": 34
+      },
+      {
+        "name": "Maria Garcia",
+        "age": 29
+      },
+      {
+        "name": "Sam Wilson",
+        "age": 8
+      }
+    ],
     "capacity": 200
   }
 ]
