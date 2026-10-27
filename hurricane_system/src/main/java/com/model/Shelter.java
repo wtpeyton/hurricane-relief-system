@@ -16,6 +16,8 @@ public class Shelter {
     private boolean vetService;
     private Accessibility accessibility;
     private User shelterAdmin;
+    private ArrayList<Person> occupants;
+    private ArrayList<String> pets;
 
     /**
      * Creates a shelter using an exisitng shelter ID.
@@ -30,10 +32,13 @@ public class Shelter {
      * @param vetService Indicates if veterinary services are available at the shelter.
      * @param accessibility The accessibility level of the shelter.
      * @param shelterAdmin The user who administers the shelter.
+     * @param occupants The list of people currently staying at the shelter.
+     * @param pets The list of pets currently staying at the shelter.
      */
     public Shelter(UUID shelterId, String name, double[] location, int capacity, boolean petAcceptance, 
                    ArrayList<ReliefResource> supplies, MedicalService medicalService,
-                   boolean vetService, Accessibility accessibility, User shelterAdmin)
+                   boolean vetService, Accessibility accessibility, User shelterAdmin,
+                   ArrayList<Person> occupants, ArrayList<String> pets)
     {
         this.shelterId = shelterId;
         this.name = name;
@@ -45,6 +50,8 @@ public class Shelter {
         this.vetService = vetService;
         this.accessibility = accessibility;
         this.shelterAdmin = shelterAdmin;
+        this.occupants = occupants;
+        this.pets = pets;
     }
     /**
      * Creates a new shelter with a randomly generated ID.
@@ -58,10 +65,13 @@ public class Shelter {
      * @param vetService Indicates if veterinary services are available at the shelter.
      * @param accessibility The accessibility level of the shelter.
      * @param shelterAdmin The user who administers the shelter.
+     * @param occupants The list of people currently staying at the shelter.
+     * @param pets The list of pets currently staying at the shelter.
      */
     public Shelter(String name, double[] location, int capacity, boolean petAcceptance,
                    ArrayList<ReliefResource> supplies, MedicalService medicalService,
-                   boolean vetService, Accessibility accessibility, User shelterAdmin)
+                   boolean vetService, Accessibility accessibility, User shelterAdmin,
+                   ArrayList<Person> occupants, ArrayList<String> pets)
     {
         this.shelterId = UUID.randomUUID();
         this.name = name;
@@ -73,6 +83,8 @@ public class Shelter {
         this.vetService = vetService;
         this.accessibility = accessibility;
         this.shelterAdmin = shelterAdmin;
+        this.occupants = occupants;
+        this.pets = pets;
     }
     /**
      * @return The shelter's unique identifier.
@@ -223,6 +235,78 @@ public class Shelter {
     public void setShelterAdmin(User shelterAdmin)
     {
         this.shelterAdmin = shelterAdmin;
+    }
+    /**
+     * @return The list of occupants at the shelter.
+     */
+    public ArrayList<Person> getOccupants() 
+    {
+        return occupants;
+    }
+    /**
+     * Sets the list of occupants at the shelter.
+     * @param occupants The new list of occupants at the shelter.
+     */
+    public void setOccupants(ArrayList<Person> occupants) {
+        this.occupants = occupants;
+    }
+    /**
+     * @return The current number of occupants at the shelter.
+     */
+    public int getCurrentOccupancy() 
+    {
+        return occupants.size();
+    }
+    /**
+     * @return The number of available spaces at the shelter.
+     */
+    public int getAvailableSpaces() 
+    {
+        return capacity - getCurrentOccupancy();
+    }
+    /**
+     * @return The list of pets at the shelter.
+     */
+    public ArrayList<String> getPets() 
+    {
+        return pets;
+    }
+    /**
+     * Sets the list of pets at the shelter.
+     *
+     * @param pets The new list of pets at the shelter.
+     */
+    public void setPets(ArrayList<String> pets) 
+    {
+        this.pets = pets;
+    }
+    /**
+     * Checks in people and pets at the shelter, ensuring that the shelter has enough available spaces and that pets are allowed.
+     * @param people The list of people to be checked in at the shelter.
+     * @param pets The list of pets to be checked in at the shelter.
+     * @return True if the check-in was successful, false otherwise.
+     */
+    public boolean checkIn(ArrayList<Person> people, 
+                           ArrayList<String> pets)
+    {
+        if (people == null || pets == null) 
+        {
+            return false;
+        }
+
+        if (people.size() > getAvailableSpaces()) 
+        {
+            return false;
+        }
+
+        if (!petAcceptance && !pets.isEmpty()) 
+        {
+            return false;
+        }
+
+        occupants.addAll(people);
+        this.pets.addAll(pets);
+        return true;
     }
     /**
      * @return A string representation of the shelter.
