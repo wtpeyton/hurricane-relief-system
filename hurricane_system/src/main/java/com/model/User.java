@@ -1,6 +1,7 @@
 package com.model;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.UUID;
 
 /**
@@ -15,8 +16,8 @@ public class User {
     private String lastName;
     private String password;
     private String phoneNumber;
-    private ArrayList<Permission> permissions;
-    private ArrayList<Credential> credentials;
+    private EnumSet<Permission> permissions;
+    private EnumSet<Credential> credentials;
     private ArrayList<ReliefResource> equipment;
 
     /**
@@ -37,8 +38,8 @@ public class User {
         this.lastName = lastName;
         this.password = password;
         this.phoneNumber = phoneNumber;
-        this.permissions = new ArrayList<Permission>();
-        this.credentials = new ArrayList<Credential>();
+        this.permissions = EnumSet.noneOf(Permission.class);
+        this.credentials = EnumSet.noneOf(Credential.class);
         this.equipment = new ArrayList<ReliefResource>();
     }
     
@@ -57,8 +58,8 @@ public class User {
      */
     public User(UUID userId, double[] location, String locationZip,
                 String firstName, String lastName, String password,
-                String phoneNumber, ArrayList<Permission> permissions,
-                ArrayList<Credential> credentials,
+                String phoneNumber, EnumSet<Permission> permissions,
+                EnumSet<Credential> credentials,
                 ArrayList<ReliefResource> equipment) {
         this.userId = userId;
         this.location = location;
@@ -177,7 +178,7 @@ public class User {
      * Returns the user's permissions.
      * @return the user's permissions
      */
-    public ArrayList<Permission> getPermissions() {
+    public EnumSet<Permission> getPermissions() {
         return permissions;
     }
 
@@ -185,7 +186,7 @@ public class User {
      * Returns the user's credentials.
      * @return the user's credentials
      */
-    public ArrayList<Credential> getCredentials() {
+    public EnumSet<Credential> getCredentials() {
         return credentials;
     }
 

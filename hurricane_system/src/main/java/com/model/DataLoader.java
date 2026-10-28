@@ -1,6 +1,7 @@
 package com.model;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -42,8 +43,8 @@ public class DataLoader extends DataConstants {
                 String password = (String) userJson.get(USER_PASSWORD);
                 String phoneNumber = (String) userJson.get(USER_PHONE_NUMBER);
 
-                ArrayList<Permission> permissions = getPermissions((JSONArray) userJson.get(USER_PERMISSIONS));
-                ArrayList<Credential> credentials = getCredentials((JSONArray) userJson.get(USER_CREDENTIALS));
+                EnumSet<Permission> permissions = getPermissions((JSONArray) userJson.get(USER_PERMISSIONS));
+                EnumSet<Credential> credentials = getCredentials((JSONArray) userJson.get(USER_CREDENTIALS));
                 ArrayList<ReliefResource> equipment = getSupplies((JSONArray) userJson.get(USER_EQUIPMENT));
 
                 User user = new User(userId, location, locationZip, firstName, lastName, password, phoneNumber, permissions, credentials, equipment);
@@ -147,16 +148,16 @@ public class DataLoader extends DataConstants {
         return hurricane;
     }
 
-    private static ArrayList<Permission> getPermissions(JSONArray permissionsArray) {
-        ArrayList<Permission> permissions = new ArrayList<Permission>();
+    private static EnumSet<Permission> getPermissions(JSONArray permissionsArray) {
+        EnumSet<Permission> permissions = EnumSet.noneOf(Permission.class);
         for (Object permission : permissionsArray) {
             permissions.add(Permission.valueOf((String) permission));
         }
         return permissions;
     }
 
-    private static ArrayList<Credential> getCredentials(JSONArray credentialsArray) {
-        ArrayList<Credential> credentials = new ArrayList<Credential>();
+    private static EnumSet<Credential> getCredentials(JSONArray credentialsArray) {
+        EnumSet<Credential> credentials = EnumSet.noneOf(Credential.class);
         for (Object credential : credentialsArray) {
             credentials.add(Credential.valueOf((String) credential));
         }

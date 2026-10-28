@@ -3,6 +3,7 @@ package com.model;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.EnumSet;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -191,7 +192,7 @@ public class DataWriter extends DataConstants {
      */
     private static JSONArray createCredentialArray(User user){
         JSONArray credentials = new JSONArray();
-        ArrayList<Credential> iterable = user.getCredentials();
+        EnumSet<Credential> iterable = user.getCredentials();
 
         for(Credential item : iterable){
             credentials.add(item.name());
@@ -206,7 +207,7 @@ public class DataWriter extends DataConstants {
      */
     private static JSONArray createPermissionArray(User user){
         JSONArray permissions = new JSONArray();
-        ArrayList<Permission> iterable = user.getPermissions();
+        EnumSet<Permission> iterable = user.getPermissions();
 
         for(Permission item : iterable){
             permissions.add(item.name());
