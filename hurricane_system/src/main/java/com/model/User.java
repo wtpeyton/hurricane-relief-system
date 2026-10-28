@@ -199,6 +199,14 @@ public class User {
     }
 
     /**
+     * Adds a piece of equipment to the user's list of equipment.
+     * @param equipment the equipment to add
+     */
+    public void addEquipment(ReliefResource equipment) {
+        this.equipment.add(equipment);
+    }
+
+    /**
      * Returns the user's information as a string.
      * @return the user's information
      */
