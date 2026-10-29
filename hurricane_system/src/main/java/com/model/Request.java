@@ -2,6 +2,7 @@ package com.model;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.UUID;
 
 /**
@@ -14,7 +15,7 @@ public class Request {
     private ArrayList<User> responders;
     private Instant createdAt;
     private int priority;
-    private ArrayList<RequestType> requestType;
+    private EnumSet<RequestType> requestType;
     private double[] location;
     private String description;
     private RequestStatus status;
@@ -29,7 +30,7 @@ public class Request {
      * @param location the location of the request as a double array [latitude, longitude]
      * @param description a description of the request
      */
-    public Request(ArrayList<RequestType> requestType, User requester, boolean forSomeoneElse, double[] location, String description) {
+    public Request(EnumSet<RequestType> requestType, User requester, boolean forSomeoneElse, double[] location, String description) {
         this.id = UUID.randomUUID();
         this.requester = requester;
         this.responders = new ArrayList<User>();
@@ -40,8 +41,8 @@ public class Request {
         for(RequestType type : requestType) {
             this.priority += type.priority;
         }
-        
-        this.requestType = requestType;
+
+        this.requestType = EnumSet.copyOf(requestType);
         this.location = location;
         this.description = description;
         this.status = RequestStatus.SUBMITTED;
@@ -63,14 +64,14 @@ public class Request {
      * @param comment any additional comments related to the request
      * @param forSomeoneElse whether the request is for someone else
      */
-    public Request(UUID id, User requester, ArrayList<User> responders, Instant createdAt, int  priority, ArrayList<RequestType> requestType, 
+    public Request(UUID id, User requester, ArrayList<User> responders, Instant createdAt, int  priority, EnumSet<RequestType> requestType, 
         double[] location, String description, RequestStatus status, String comment, boolean forSomeoneElse) {  
         this.id = id;
         this.requester = requester;
         this.responders = responders;
         this.createdAt = createdAt;
         this.priority = priority;
-        this.requestType = requestType;
+        this.requestType = EnumSet.copyOf(requestType);
         this.location = location;
         this.description = description;
         this.status = status;
@@ -172,7 +173,7 @@ public class Request {
      * Returns the request types.
      * @return the request types
      */
-    public ArrayList<RequestType> getRequestType() {
+    public EnumSet<RequestType> getRequestType() {
         return requestType;
     }
 

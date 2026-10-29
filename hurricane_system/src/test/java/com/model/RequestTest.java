@@ -1,6 +1,7 @@
 package com.model;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import org.junit.Test;
 import org.junit.Assert;
 import org.junit.Before;
@@ -8,7 +9,7 @@ import org.junit.Before;
 public class RequestTest {
     private User requester;
     private User responder;
-    private ArrayList<RequestType> requestTypes;
+    private EnumSet<RequestType> requestTypes;
     private double[] location;
     private Request request;
 
@@ -24,7 +25,7 @@ public class RequestTest {
                             );
         responder.addPermission(Permission.VOLUNTEER);
     
-        requestTypes = new ArrayList<RequestType>();
+        requestTypes = EnumSet.noneOf(RequestType.class);
         requestTypes.add(RequestType.MEDICAL_EMERGENCY);
         requestTypes.add(RequestType.ESSENTIAL_SUPPLIES);
 

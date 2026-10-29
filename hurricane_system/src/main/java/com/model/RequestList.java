@@ -3,6 +3,7 @@ package com.model;
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.Iterator;
+import java.util.EnumSet;
 
 /**
  * Represents a list of relief requests in the hurricane relief system.
@@ -39,7 +40,7 @@ public class RequestList implements Iterable<Request> {
      * @param description a description of the request
      * @return the newly added request
      */
-    public Request addRequest(ArrayList<RequestType> requestType, User requester, 
+    public Request addRequest(EnumSet<RequestType> requestType, User requester, 
                               boolean forSomeoneElse, double[] location, String description) {
         Request request = new Request(requestType, requester, forSomeoneElse, location, description);
         requests.add(request);

@@ -72,7 +72,7 @@ public class DataLoader extends DataConstants {
                 ArrayList<User> responders = getResponders((JSONArray) requestJson.get(REQUEST_RESPONDERS));
                 Instant createdAt = Instant.parse((String) requestJson.get(REQUEST_CREATED_AT));
                 int priority = ((Long) requestJson.get(REQUEST_PRIORITY)).intValue();
-                ArrayList<RequestType> requestType = getRequestTypes((JSONArray) requestJson.get(REQUEST_TYPE));
+                EnumSet<RequestType> requestType = getRequestTypes((JSONArray) requestJson.get(REQUEST_TYPE));
                 JSONArray locationArray = (JSONArray) requestJson.get(REQUEST_LOCATION);
                 double[] location = new double[] { (double) locationArray.get(0), (double) locationArray.get(1) };
                 String description = (String) requestJson.get(REQUEST_DESCRIPTION);
@@ -187,8 +187,8 @@ public class DataLoader extends DataConstants {
         return responders;
     }
 
-    private static ArrayList<RequestType> getRequestTypes(JSONArray requestTypesArray) {
-        ArrayList<RequestType> requestTypes = new ArrayList<RequestType>();
+    private static EnumSet<RequestType> getRequestTypes(JSONArray requestTypesArray) {
+        EnumSet<RequestType> requestTypes = EnumSet.noneOf(RequestType.class);
         for (Object requestType : requestTypesArray) {
             requestTypes.add(RequestType.valueOf((String) requestType));
         }

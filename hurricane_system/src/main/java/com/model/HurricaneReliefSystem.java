@@ -1,6 +1,7 @@
 package com.model;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 
 /**
  * [PARTIAL STUB] Singleton facade for the Hurricane Relief System.
@@ -132,7 +133,7 @@ public class HurricaneReliefSystem {
      * @param description the description of the request
      * @return the created Request object, or null if submission fails
      */
-    public Request submitReliefRequest(ArrayList<RequestType> type, boolean forSomeoneElse,double[] location, String description) {
+    public Request submitReliefRequest(EnumSet<RequestType> type, boolean forSomeoneElse,double[] location, String description) {
         return requestList.addRequest(type, currentUser, forSomeoneElse, location, description);
     }
 
