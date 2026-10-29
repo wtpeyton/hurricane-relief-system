@@ -29,8 +29,8 @@ public class DataWriter extends DataConstants {
 
         for (User user: users) {
             JSONArray userLocation = new JSONArray();
-            userLocation.add(String.valueOf(user.getLocation()[0]));
-            userLocation.add(String.valueOf(user.getLocation()[1]));
+            userLocation.add(user.getLocation()[0]);
+            userLocation.add(user.getLocation()[1]);
 
             JSONObject currentUser = new JSONObject();
             //Adding all of the items into the user object
