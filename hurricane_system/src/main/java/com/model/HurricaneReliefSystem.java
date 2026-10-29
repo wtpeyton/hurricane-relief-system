@@ -343,6 +343,7 @@ public class HurricaneReliefSystem {
      */
     public boolean addCredential(Credential credential) {
         // [STUB] Implement addCredential logic here
+
         return false;
     }
 
@@ -353,8 +354,11 @@ public class HurricaneReliefSystem {
      * @return true if the addition is successful, false otherwise
      */
     public boolean addCredential(User user, Credential credential) {
-        // [STUB] Implement addCredential logic here
-        return false;
+        if(credential == null || user == null){
+            return false;
+        }
+        user.addCredential(credential);
+        return true;
     }
     
     /**
@@ -374,7 +378,10 @@ public class HurricaneReliefSystem {
      * @return true if the removal is successful, false otherwise
      */
     public boolean removeCredential(User user, Credential credential) {
-        // [STUB] Implement removeCredential logic here
+        if(user == null || credential == null){
+            return false;
+        }
+        
         return false;
     }
 
