@@ -1,6 +1,7 @@
 package com.model;
 
 import java.time.Instant;
+import java.util.Set;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -22,8 +23,8 @@ public class DataLoaderTest {
         assertEquals("8035550100", ada.getPhoneNumber());
         assertEquals("29208", ada.getLocationZip());
         assertArrayEquals(new double[] {34.0007, -81.0348}, ada.getLocation(), 0.000001);
-        assertEquals(Arrays.asList(Permission.REGISTERED_USER, Permission.VOLUNTEER), ada.getPermissions());
-        assertEquals(Arrays.asList(Credential.BASIC_LIFE_SUPPORT), ada.getCredentials());
+        assertEquals(Set.of(Permission.REGISTERED_USER, Permission.VOLUNTEER), ada.getPermissions());
+        assertEquals(Set.of(Credential.BASIC_LIFE_SUPPORT), ada.getCredentials());
         assertEquals(1, ada.getEquipment().size());
         assertEquals("Generator", ada.getEquipment().get(0).getType());
         assertEquals(2, ada.getEquipment().get(0).getQuantity());
