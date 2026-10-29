@@ -42,10 +42,12 @@ public class ShelterList implements Iterable<Shelter>
      */
     public Shelter addShelter(String name, double[] location, int capacity, boolean petAcceptance, 
                               ArrayList<ReliefResource> supplies, MedicalService medicalService, 
-                              boolean vetService, Accessibility accessibility,User shelterAdmin)
+                              boolean vetService, Accessibility accessibility, User shelterAdmin,
+                              ArrayList<Person> occupants, ArrayList<String> pets)
     {
         Shelter shelter = new Shelter(name, location, capacity, petAcceptance, supplies,
-                                      medicalService, vetService, accessibility, shelterAdmin);
+                                      medicalService, vetService, accessibility, shelterAdmin,
+                                      occupants, pets);
         shelters.add(shelter);
         return shelter;
     }
