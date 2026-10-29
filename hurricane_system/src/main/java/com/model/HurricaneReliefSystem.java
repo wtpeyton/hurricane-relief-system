@@ -154,8 +154,11 @@ public class HurricaneReliefSystem {
      * @return true if the cancellation is successful, false otherwise
      */
     public boolean cancelReliefRequest(Request request) {
-        request.setStatus(RequestStatus.CLOSED);
-        return requestList.updateRequest(request);
+        if (request.getRequester().equals(currentUser)) {
+            request.setStatus(RequestStatus.CLOSED);
+            return requestList.updateRequest(request);
+        }
+        return false;
     }
 
     /**
@@ -217,8 +220,11 @@ public class HurricaneReliefSystem {
      * @return true if the update is successful, false otherwise
      */
     public boolean updateRequestStatus(Request request, RequestStatus status) {
-        request.setStatus(status);
-        return requestList.updateRequest(request);
+        if (request.getResponders().contains(currentUser) || currentUser.getPermissions().contains(Permission.APP_ADMINISTRATOR)) {
+            request.setStatus(status);
+            return requestList.updateRequest(request);
+        }
+        return false;
     }
     
     /**
