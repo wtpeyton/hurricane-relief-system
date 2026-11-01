@@ -21,7 +21,6 @@ public class Request {
     private RequestStatus status;
     private String comment;
     private boolean forSomeoneElse;
-    private EnumSet<Credential> requiredCredentials;
 
     /**
      * Creates a new relief request
@@ -65,7 +64,7 @@ public class Request {
      * @param comment any additional comments related to the request
      * @param forSomeoneElse whether the request is for someone else
      */
-    public Request(UUID id, User requester, ArrayList<User> responders, Instant createdAt, int  priority,EnumSet<Credential> requiredCredentials, EnumSet<RequestType> requestType, 
+    public Request(UUID id, User requester, ArrayList<User> responders, Instant createdAt, int  priority, EnumSet<RequestType> requestType, 
         double[] location, String description, RequestStatus status, String comment, boolean forSomeoneElse) {  
         this.id = id;
         this.requester = requester;
