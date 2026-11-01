@@ -265,22 +265,28 @@ public class HurricaneReliefSystem {
     }
     
     /**
-     * [STUB] Approves an existing relief request.
+     * Approves an existing relief request.
      * @param request the request to approve
      * @return true if the approval is successful, false otherwise
      */
     public boolean approveRequest(Request request) {
-        // [STUB] Implement approveRequest logic here
+        if(currentUser.getPermissions().contains(Permission.APP_ADMINISTRATOR)){
+            request.setStatus(RequestStatus.SUBMITTED);
+            return true;
+        }
         return false;
     }
     
     /**
-     * [STUB] Rejects an existing relief request.
+     * Rejects an existing relief request.
      * @param request the request to reject
      * @return true if the rejection is successful, false otherwise
      */
     public boolean rejectRequest(Request request) {
-        // [STUB] Implement rejectRequest logic here
+        if(currentUser.getPermissions().contains(Permission.APP_ADMINISTRATOR)){
+            request.setStatus(RequestStatus.CLOSED);
+            return true;
+        }
         return false;
     }
     
@@ -310,18 +316,27 @@ public class HurricaneReliefSystem {
      * @return true if the modification is successful, false otherwise
      */
     public boolean modifyHurricane(Hurricane hurricane, String name, ArrayList<String> affectedZipCodes, HurricaneStatus status, boolean active) {
-        
-        return false;
+        if(hurricane == null){
+            return false;
+        }
+        hurricane.setName(name);
+        hurricane.setAffectedZipCodes(affectedZipCodes);
+        hurricane.setStatus(status);
+        hurricane.setActive(active);
+        return true;
     }
     
     /**
-     * [STUB] Removes an existing hurricane entry from the system.
+     * Removes an existing hurricane entry from the system.
      * @param hurricane the hurricane to remove
      * @return true if the removal is successful, false otherwise
      */
     public boolean removeHurricane(Hurricane hurricane) {
-        // [STUB] Implement removeHurricane logic here
-        return false;
+        if(hurricane == null){
+            return false; 
+        }
+        hurricane.setActive(false);
+        return true;
     }
     
     /**
