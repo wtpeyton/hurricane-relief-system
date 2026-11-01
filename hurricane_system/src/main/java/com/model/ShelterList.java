@@ -15,7 +15,7 @@ public class ShelterList implements Iterable<Shelter>
      */
     private ShelterList() 
     {
-        shelters = new ArrayList<>();
+        shelters = DataLoader.getShelters();
     }
     /**
      * 
