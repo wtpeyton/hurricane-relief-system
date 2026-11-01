@@ -72,7 +72,6 @@ public class Request {
         this.responders = responders;
         this.createdAt = createdAt;
         this.priority = priority;
-        this.requiredCredentials = EnumSet.copyOf(requiredCredentials);
         this.requestType = EnumSet.copyOf(requestType);
         this.location = location;
         this.description = description;
@@ -122,13 +121,6 @@ public class Request {
         }
         return false;
     }
-    /**
-     * Sets the required Credentials for the request
-     * @param requiredCredentials
-     */
-    public void setRequiredCredentials(EnumSet<Credential> requiredCredentials){
-        this.requiredCredentials = requiredCredentials;
-    }
 
     /**
      * Sets the status of the request
@@ -176,13 +168,6 @@ public class Request {
      */
     public User getRequester() {
         return requester;
-    }
-    /**
-     * Returns the required credentials
-     * @return the required credentials
-     */
-    public EnumSet<Credential> getRequiredCredentials() {
-        return requiredCredentials;
     }
 
     /**
