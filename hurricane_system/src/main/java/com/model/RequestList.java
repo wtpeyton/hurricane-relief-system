@@ -29,6 +29,9 @@ public class RequestList implements Iterable<Request> {
         }
         return instance;
     }
+    public ArrayList<Request> getRequests(){
+        return requests;
+    }
 
     /**
      * Adds a new request to the system

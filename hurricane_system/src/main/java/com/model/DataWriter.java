@@ -263,8 +263,6 @@ public class DataWriter extends DataConstants {
         
         return equipment;
     }
-<<<<<<< HEAD
-=======
 
     private static JSONArray createOccupantsArray(Shelter shelter){
         JSONArray occupantsArray = new JSONArray();
@@ -406,5 +404,4 @@ public class DataWriter extends DataConstants {
     System.out.println("Requests saved: " + saveRequests(requests));
     System.out.println("Hurricane saved: " + saveHurricane(hurricane));
     }
->>>>>>> 156be815e462086ad8dc7f3803452ee49c46e0f9
 }
