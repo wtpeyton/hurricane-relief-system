@@ -21,6 +21,7 @@ public class Request {
     private RequestStatus status;
     private String comment;
     private boolean forSomeoneElse;
+    private EnumSet<Credential> requiredCredentials;
 
     /**
      * Creates a new relief request
@@ -64,13 +65,14 @@ public class Request {
      * @param comment any additional comments related to the request
      * @param forSomeoneElse whether the request is for someone else
      */
-    public Request(UUID id, User requester, ArrayList<User> responders, Instant createdAt, int  priority, EnumSet<RequestType> requestType, 
+    public Request(UUID id, User requester, ArrayList<User> responders, Instant createdAt, int  priority,EnumSet<Credential> requiredCredentials, EnumSet<RequestType> requestType, 
         double[] location, String description, RequestStatus status, String comment, boolean forSomeoneElse) {  
         this.id = id;
         this.requester = requester;
         this.responders = responders;
         this.createdAt = createdAt;
         this.priority = priority;
+        this.requiredCredentials = EnumSet.copyOf(requiredCredentials);
         this.requestType = EnumSet.copyOf(requestType);
         this.location = location;
         this.description = description;
@@ -120,6 +122,13 @@ public class Request {
         }
         return false;
     }
+    /**
+     * Sets the required Credentials for the request
+     * @param requiredCredentials
+     */
+    public void setRequiredCredentials(EnumSet<Credential> requiredCredentials){
+        this.requiredCredentials = requiredCredentials;
+    }
 
     /**
      * Sets the status of the request
@@ -167,6 +176,13 @@ public class Request {
      */
     public User getRequester() {
         return requester;
+    }
+    /**
+     * Returns the required credentials
+     * @return the required credentials
+     */
+    public EnumSet<Credential> getRequiredCredentials() {
+        return requiredCredentials;
     }
 
     /**
