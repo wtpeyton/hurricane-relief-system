@@ -294,7 +294,7 @@ public class DataWriter extends DataConstants {
      *      TESTING TESTING TESTING
      *      MAIN    MAIN    MAIN
      * 
-     */
+     
     public static void main(String[] args) {
     // Test users
     ArrayList<User> users = new ArrayList<User>();
@@ -404,4 +404,5 @@ public class DataWriter extends DataConstants {
     System.out.println("Requests saved: " + saveRequests(requests));
     System.out.println("Hurricane saved: " + saveHurricane(hurricane));
     }
+    */
 }
