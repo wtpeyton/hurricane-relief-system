@@ -236,6 +236,10 @@ public class HurricaneReliefSystem {
         return shelterList.findSheltersByDistance(currentUser.getLocation());
         
     }
+
+    public ArrayList<Shelter> filterNearbyShelters(ArrayList<Shelter> shelters) {
+        
+    }
     
     /**
      * Becomes a volunteer for the relief system.
@@ -252,10 +256,22 @@ public class HurricaneReliefSystem {
     public ArrayList<Request> findVolunteerOpportunities() {
         return requestList.findVolunteerRequests(currentUser, requestList.getRequests());
     }
-
-    public ArrayList<Request> findFilteredOpportunities(UUID requestId, double[] location, RequestType type, User user, RequestStatus status, boolean ascending){
-    }
     
+    /**
+     * Finds all opportunities available based on the search criteria
+     * @param requestId Filters by the RequestId
+     * @param location filters by a set Distance
+     * @param type filters by a set Type
+     * @param user filters by a User 
+     * @param status filters by request status
+     * @param volunteer filters by volunteer ability
+     * @param ascending sorts results based on distance either ascending and decending
+     * @return a Sorted and filtered arrayList of requests
+     */
+    public ArrayList<Request> findFilteredOpportunities(UUID requestId, double[] location, RequestType type, User user, RequestStatus status, User volunteer, boolean ascending) {
+        return requestList.searchRequest(requestId, location, type, user, status, volunteer, ascending);
+    }
+
     /**
      * Removes a user from the relief system.
      * @param user the user to remove

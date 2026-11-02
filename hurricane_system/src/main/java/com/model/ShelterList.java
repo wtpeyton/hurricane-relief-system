@@ -109,6 +109,24 @@ public class ShelterList implements Iterable<Shelter>
         return DataWriter.saveShelters(shelters);
     }
     
+    public ArrayList<Shelter> filterShelters(ArrayList<Shelter> shelters, Request request){
+        ArrayList<Shelter> returnShelters = new ArrayList<Shelter>();
+        for (Shelter shelter : shelters) {
+            if(request.getRequestType().contains(RequestType.MEDICAL_EMERGENCY)&&(shelter.getMedicalService()==MedicalService.MINIMUM_SERVICE)){
+                continue;
+            }else{
+                returnShelters.add(shelter);
+            }
+            if(shelter.getCapacity() - shelter.getCurrentOccupancy() < 1){
+                continue;
+            } else {
+                returnShelters.add(shelter);
+            }
+            
+
+        }
+    }
+
     /**
      * Returns an iterator over the shelters in the system.
      *
