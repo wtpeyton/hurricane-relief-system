@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.UUID;
 
+import com.location.Address;
+
 /**
  * Represents a relief request in the hurricane relief system.
  * @author Olivia Casper, Jack Andrin
@@ -16,7 +18,7 @@ public class Request {
     private Instant createdAt;
     private int priority;
     private EnumSet<RequestType> requestType;
-    private double[] location;
+    private Address address;
     private String description;
     private RequestStatus status;
     private String comment;
@@ -29,10 +31,10 @@ public class Request {
      * @param requestType the type of relief request
      * @param requester the user who submitted the request
      * @param forSomeoneElse whether the request is for someone else
-     * @param location the location of the request as a double array [latitude, longitude]
+     * @param address the address of the request
      * @param description a description of the request
      */
-    public Request(EnumSet<RequestType> requestType, User requester, boolean forSomeoneElse, double[] location, String description) {
+    public Request(EnumSet<RequestType> requestType, User requester, boolean forSomeoneElse, Address address, String description) {
         this.id = UUID.randomUUID();
         this.requester = requester;
         this.responders = new ArrayList<User>();
@@ -45,7 +47,7 @@ public class Request {
         }
 
         this.requestType = EnumSet.copyOf(requestType);
-        this.location = location;
+        this.address = address;
         this.description = description;
         this.status = RequestStatus.SUBMITTED;
         this.comment = "";
@@ -62,21 +64,21 @@ public class Request {
      * @param createdAt the timestamp when the request was created
      * @param priority the priority level of the request
      * @param requestType the type of relief request
-     * @param location the location of the request as a double array [latitude, longitude]
+     * @param address the address of the request
      * @param description a description of the request
      * @param status the current status of the request
      * @param comment any additional comments related to the request
      * @param forSomeoneElse whether the request is for someone else
      */
     public Request(UUID id, User requester, ArrayList<User> responders, Instant createdAt, int  priority, EnumSet<RequestType> requestType, 
-        double[] location, String description, RequestStatus status, String comment, boolean forSomeoneElse) {  
+        Address address, String description, RequestStatus status, String comment, boolean forSomeoneElse) {  
         this.id = id;
         this.requester = requester;
         this.responders = responders;
         this.createdAt = createdAt;
         this.priority = priority;
         this.requestType = EnumSet.copyOf(requestType);
-        this.location = location;
+        this.address = address;
         this.description = description;
         this.status = status;
         this.comment = comment;
@@ -152,11 +154,11 @@ public class Request {
     }
 
     /**
-     * Sets the location for the request.
-     * @param location the new location for the request
+     * Sets the address for the request.
+     * @param address the new address for the request
      */
-    public void setLocation(double[] location) {
-        this.location = location;
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
     /**
@@ -216,11 +218,11 @@ public class Request {
     }
 
     /**
-     * Returns the location of the request.
-     * @return the location of the request
+     * Returns the address of the request.
+     * @return the address of the request
      */
-    public double[] getLocation() {
-        return location;
+    public Address getAddress() {
+        return address;
     }
 
     /**

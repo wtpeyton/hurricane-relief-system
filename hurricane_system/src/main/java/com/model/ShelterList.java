@@ -2,6 +2,9 @@ package com.model;
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.Iterator;
+
+import com.location.Address;
+import com.location.MapTools;
 /**
  * ShelterList manages the list of shelters in the system.
  * @author Ryan Kouchoukos, Jack Andrin
@@ -30,7 +33,7 @@ public class ShelterList implements Iterable<Shelter>
     /**
      * Adds a new shelter to the list of shelters.
      * @param name the name of the shelter
-     * @param location the geographical location of the shelter
+     * @param address the address of the shelter
      * @param capacity the maximum capacity of the shelter
      * @param petAcceptance whether the shelter accepts pets
      * @param supplies the list of relief resources available at the shelter
@@ -40,12 +43,12 @@ public class ShelterList implements Iterable<Shelter>
      * @param shelterAdmin the administrator responsible for the shelter
      * @return the newly added Shelter object
      */
-    public Shelter addShelter(String name, double[] location, int capacity, boolean petAcceptance, 
-                              ArrayList<ReliefResource> supplies, MedicalService medicalService, 
+    public Shelter addShelter(String name, Address address, int capacity, boolean petAcceptance,
+                              ArrayList<ReliefResource> supplies, MedicalService medicalService,
                               boolean vetService, Accessibility accessibility, User shelterAdmin,
                               ArrayList<Person> occupants, ArrayList<String> pets)
     {
-        Shelter shelter = new Shelter(name, location, capacity, petAcceptance, supplies,
+        Shelter shelter = new Shelter(name, address, capacity, petAcceptance, supplies,
                                       medicalService, vetService, accessibility, shelterAdmin,
                                       occupants, pets);
         shelters.add(shelter);
@@ -84,20 +87,46 @@ public class ShelterList implements Iterable<Shelter>
         return null;
     }
     /**
-     * Finds shelters sorted by their distance from a given location.
-     * @param location the geographical location to measure distance from
-     * @return a list of shelters sorted by proximity to the given location
+     * Finds shelters sorted by their distance from a given address.
+     * @param address the address to measure distance from
+     * @return a list of shelters sorted from closest to farthest from the given address
      */
-    public ArrayList<Shelter> findSheltersByDistance(double[] location)
+    public ArrayList<Shelter> findSheltersByDistance(Address address)
     {
-        ArrayList<Shelter> nearbyShelters = new ArrayList<>(shelters);
-        nearbyShelters.sort((shelter1, shelter2) -> 
-            Double.compare
-            (
-                Math.sqrt(Math.pow(shelter1.getLocation()[0] - location[0], 2) + Math.pow(shelter1.getLocation()[1] - location[1], 2)),
-                Math.sqrt(Math.pow(shelter2.getLocation()[0] - location[0], 2) + Math.pow(shelter2.getLocation()[1] - location[1], 2))
-            )
-        );
+        ArrayList<Shelter> remaining = new ArrayList<Shelter>(shelters);
+        ArrayList<Shelter> nearbyShelters = new ArrayList<Shelter>();
+
+        try
+        {
+            while (!remaining.isEmpty())
+            {
+                Address[] addresses = new Address[remaining.size()];
+                for (int i = 0; i < remaining.size(); i++)
+                {
+                    addresses[i] = remaining.get(i).getAddress();
+                }
+
+                Address closest = MapTools.getInstance().findClosestAddress(address, addresses);
+
+                Shelter closestShelter = remaining.get(0);
+                for (Shelter shelter : remaining)
+                {
+                    if (shelter.getAddress() == closest)
+                    {
+                        closestShelter = shelter;
+                    }
+                }
+
+                nearbyShelters.add(closestShelter);
+                remaining.remove(closestShelter);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            nearbyShelters.addAll(remaining);
+        }
+
         return nearbyShelters;
     }
     /**

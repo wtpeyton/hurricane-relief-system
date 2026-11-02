@@ -7,6 +7,8 @@ import java.util.EnumSet;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+
+import com.location.Address;
 /**
  * @author William Peyton
  * DataWriter to write from lists to json file.
@@ -28,15 +30,10 @@ public class DataWriter extends DataConstants {
         JSONArray userArray = new JSONArray();
 
         for (User user: users) {
-            JSONArray userLocation = new JSONArray();
-            userLocation.add(user.getLocation()[0]);
-            userLocation.add(user.getLocation()[1]);
-
             JSONObject currentUser = new JSONObject();
             //Adding all of the items into the user object
             currentUser.put(USER_ID, user.getUserId().toString());
-            currentUser.put(USER_LOCATION, userLocation);
-            currentUser.put(USER_LOCATION_ZIP, user.getLocationZip());
+            currentUser.put(USER_ADDRESS, createAddressObject(user.getAddress()));
             currentUser.put(USER_FIRST_NAME, user.getFirstName());
             currentUser.put(USER_LAST_NAME, user.getLastName());
             currentUser.put(USER_PASSWORD, user.getPassword());
@@ -76,10 +73,7 @@ public static boolean saveShelters(ArrayList<Shelter> shelters,
         currentShelter.put(SHELTER_CAPACITY, shelter.getCapacity());
         currentShelter.put(SHELTER_ID, shelter.getShelterId().toString());
 
-        JSONArray shelterLocation = new JSONArray();
-        shelterLocation.add(shelter.getLocation()[0]);
-        shelterLocation.add(shelter.getLocation()[1]);
-        currentShelter.put(SHELTER_LOCATION, shelterLocation);
+        currentShelter.put(SHELTER_ADDRESS, createAddressObject(shelter.getAddress()));
 
         currentShelter.put(SHELTER_MEDICAL_SERVICE, shelter.getMedicalService().name());
         currentShelter.put(SHELTER_NAME, shelter.getName());
@@ -115,10 +109,7 @@ public static boolean saveShelters(ArrayList<Shelter> shelters,
             currentRequest.put(REQUEST_FOR_SOMEONE_ELSE, request.isForSomeoneElse());
             currentRequest.put(REQUEST_ID, request.getId().toString());
 
-            JSONArray requestLocation = new JSONArray();
-            requestLocation.add(request.getLocation()[0]);
-            requestLocation.add(request.getLocation()[1]);
-            currentRequest.put(REQUEST_LOCATION, requestLocation);
+            currentRequest.put(REQUEST_ADDRESS, createAddressObject(request.getAddress()));
             
             currentRequest.put(REQUEST_PRIORITY, request.getPriority());
             currentRequest.put(REQUEST_REQUESTER, request.getRequester().getUserId().toString());
@@ -155,6 +146,19 @@ public static boolean saveShelters(ArrayList<Shelter> shelters,
             e.printStackTrace();
             return false;
         }
+    }
+    /**
+     * Converts an address into a JSONObject
+     * @param address the address to convert
+     * @return JSONObject of the address street, city, state, and zip
+     */
+    private static JSONObject createAddressObject(Address address){
+        JSONObject addressObject = new JSONObject();
+        addressObject.put(ADDRESS_STREET, address.getStreet());
+        addressObject.put(ADDRESS_CITY, address.getCity());
+        addressObject.put(ADDRESS_STATE, address.getState());
+        addressObject.put(ADDRESS_ZIP, address.getZip());
+        return addressObject;
     }
     /**
      * Converts all the affected zip codes into a JSONArray
@@ -233,11 +237,8 @@ public static boolean saveShelters(ArrayList<Shelter> shelters,
 
         for(ReliefResource item : iterable){
             JSONObject currentResource = new JSONObject();
-            JSONArray locationArray = new JSONArray();
-            locationArray.add(item.getLocation()[0]);
-            locationArray.add(item.getLocation()[1]);
             currentResource.put(RESOURCE_ID, item.getResourceId().toString());
-            currentResource.put(RESOURCE_LOCATION, locationArray);
+            currentResource.put(RESOURCE_ADDRESS, createAddressObject(item.getAddress()));
             currentResource.put(RESOURCE_QUANTITY, item.getQuantity());
             currentResource.put(RESOURCE_TYPE, item.getType());
 
@@ -257,11 +258,8 @@ public static boolean saveShelters(ArrayList<Shelter> shelters,
 
         for(ReliefResource item : iterable){
             JSONObject currentResource = new JSONObject();
-            JSONArray locationArray = new JSONArray();
-            locationArray.add(item.getLocation()[0]);
-            locationArray.add(item.getLocation()[1]);
             currentResource.put(RESOURCE_ID, item.getResourceId().toString());
-            currentResource.put(RESOURCE_LOCATION, locationArray);
+            currentResource.put(RESOURCE_ADDRESS, createAddressObject(item.getAddress()));
             currentResource.put(RESOURCE_QUANTITY, item.getQuantity());
             currentResource.put(RESOURCE_TYPE, item.getType());
 
@@ -311,8 +309,7 @@ public static boolean saveShelters(ArrayList<Shelter> shelters,
         "Peyton",
         "testPassword123",
         "8035551234",
-        "29201",
-        new double[] {34.0007, -81.0348}
+        new Address("1200 Main Street", "Columbia", "SC", "29201")
     );
     admin.addPermission(Permission.SHELTER_ADMIN);
     admin.addPermission(Permission.VOLUNTEER);
@@ -320,7 +317,7 @@ public static boolean saveShelters(ArrayList<Shelter> shelters,
     admin.getEquipment().add(new ReliefResource(
         "Water bottles",
         50,
-        new double[] {34.0007, -81.0348}
+        new Address("1200 Main Street", "Columbia", "SC", "29201")
     ));
     users.add(admin);
 
@@ -329,8 +326,7 @@ public static boolean saveShelters(ArrayList<Shelter> shelters,
         "Doe",
         "anotherTestPassword",
         "8035555678",
-        "29205",
-        new double[] {34.0090, -81.0281}
+        new Address("2700 Devine Street", "Columbia", "SC", "29205")
     );
     responder.addPermission(Permission.MEDICAL_VOLUNTEER);
     responder.addCredential(Credential.REGISTERED_NURSE);
@@ -342,12 +338,12 @@ public static boolean saveShelters(ArrayList<Shelter> shelters,
     shelterSupplies.add(new ReliefResource(
         "Blankets",
         100,
-        new double[] {34.0100, -81.0300}
+        new Address("1100 Elmwood Avenue", "Columbia", "SC", "29201")
     ));
     shelterSupplies.add(new ReliefResource(
         "First aid kits",
         25,
-        new double[] {34.0100, -81.0300}
+        new Address("1100 Elmwood Avenue", "Columbia", "SC", "29201")
     ));
 
     ArrayList<Person> occupants = new ArrayList<Person>();
@@ -361,7 +357,7 @@ public static boolean saveShelters(ArrayList<Shelter> shelters,
 
     Shelter shelter = new Shelter(
         "Columbia Community Shelter",
-        new double[] {34.0100, -81.0300},
+        new Address("1100 Elmwood Avenue", "Columbia", "SC", "29201"),
         200,
         true,
         shelterSupplies,
@@ -384,7 +380,7 @@ public static boolean saveShelters(ArrayList<Shelter> shelters,
         requestTypes,
         admin,
         false,
-        new double[] {34.0050, -81.0350},
+        new Address("2700 Devine Street", "Columbia", "SC", "29205"),
         "Family needs medical attention and drinking water."
     );
     request.addResponder(responder);

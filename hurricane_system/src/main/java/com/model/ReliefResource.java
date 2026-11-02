@@ -1,43 +1,45 @@
 package com.model;
 
 import java.util.UUID;
+
+import com.location.Address;
 /**
  * Represents a relief resource available at a shelter.
  * @author Ryan Kouchoukos
  */
-public class ReliefResource 
+public class ReliefResource
 {
     private UUID resourceId;
     private String type;
     private int quantity;
-    private double[] location;
+    private Address address;
     /**
-     * Constructs a new ReliefResource with the specified type, quantity, and location.
+     * Constructs a new ReliefResource with the specified type, quantity, and address.
      * @param type the type of the relief resource
      * @param quantity the quantity of the relief resource
-     * @param location the location of the relief resource as a double array [latitude, longitude]
+     * @param address the address of the relief resource
      */
-    public ReliefResource(String type, int quantity, double[] location)
+    public ReliefResource(String type, int quantity, Address address)
     {
         this.resourceId = UUID.randomUUID();
         this.type = type;
         this.quantity = quantity;
-        this.location = location;
+        this.address = address;
     }
     /**
-     * Constructs a new ReliefResource with the specified resource ID, type, quantity, and location.
+     * Constructs a new ReliefResource with the specified resource ID, type, quantity, and address.
      * this is used when the resource ID is already known, such as when retrieving resources from a database.
      * @param resourceId the unique identifier of the relief resource
      * @param type the type of the relief resource
      * @param quantity the quantity of the relief resource
-     * @param location the location of the relief resource as a double array [latitude, longitude]
+     * @param address the address of the relief resource
      */
-    public ReliefResource(UUID resourceId, String type, int quantity, double[] location)
+    public ReliefResource(UUID resourceId, String type, int quantity, Address address)
     {
         this.resourceId = resourceId;
         this.type = type;
         this.quantity = quantity;
-        this.location = location;
+        this.address = address;
     }
     /**
      * @return the unique identifier of the relief resource
@@ -77,19 +79,19 @@ public class ReliefResource
         this.quantity = quantity;
     }
     /**
-     * @return the location of the relief resource as a double array [latitude, longitude]
+     * @return the address of the relief resource
      */
-    public double[] getLocation()
+    public Address getAddress()
     {
-        return location;
+        return address;
     }
     /**
-     * Sets the location of the relief resource.
-     * @param location the new location of the relief resource as a double array [latitude, longitude]
+     * Sets the address of the relief resource.
+     * @param address the new address of the relief resource
      */
-    public void setLocation(double[] location)
+    public void setAddress(Address address)
     {
-        this.location = location;
+        this.address = address;
     }
     /**
      * @return a string representation of the relief resource
@@ -100,7 +102,7 @@ public class ReliefResource
                 "resourceId=" + resourceId +
                 ", type='" + type + '\'' +
                 ", quantity=" + quantity +
-                ", location=[" + location[0] + ", " + location[1] + "]" +
+                ", address=" + address +
                 '}';
     }
 }

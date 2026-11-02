@@ -15,6 +15,8 @@ import java.util.UUID;
 import org.junit.Test;
 import org.junit.Assert.*;
 
+import com.location.Address;
+
 public class DataWriterTest {
 
     /**
@@ -26,9 +28,9 @@ public class DataWriterTest {
         ArrayList<User> users = new ArrayList<User>();
         ArrayList<ReliefResource> adaEquipment = new ArrayList<ReliefResource>();
         adaEquipment.add(new ReliefResource(UUID.fromString("a763baa7-2285-4c4e-b990-f880adcbecb7"), "Generator", 2,
-                new double[] { 34.001, -81.035 }));
-        User ada = new User(UUID.fromString("46ec8cfe-c556-4071-b7bd-c8c37a1f82a3"), new double[] { 34.0007, -81.0348 },
-                "29208", "Ada", "Lovelace", "password123", "8035550100",
+                new Address("1600 Hampton Street", "Columbia", "SC", "29208")));
+        User ada = new User(UUID.fromString("46ec8cfe-c556-4071-b7bd-c8c37a1f82a3"), new Address("1600 Hampton Street", "Columbia", "SC", "29208"),
+                "Ada", "Lovelace", "password123", "8035550100",
                 EnumSet.of(Permission.REGISTERED_USER, Permission.VOLUNTEER), EnumSet.of(Credential.BASIC_LIFE_SUPPORT),
                 adaEquipment);
         users.add(ada);
@@ -41,8 +43,8 @@ public class DataWriterTest {
         assertEquals("Ada", adaUser.getFirstName());
         assertEquals("Lovelace", adaUser.getLastName());
         assertEquals("password123", adaUser.getPassword());
-        assertEquals("29208", adaUser.getLocationZip());
-        assertArrayEquals(new double[] { 34.0007, -81.0348 }, adaUser.getLocation(), 0.000001);
+        assertEquals("1600 Hampton Street, Columbia, SC 29208", adaUser.getAddress().toString());
+        assertEquals("29208", adaUser.getAddress().getZip());
         assertEquals(Set.of(Permission.REGISTERED_USER, Permission.VOLUNTEER), adaUser.getPermissions());
         assertEquals(Set.of(Credential.BASIC_LIFE_SUPPORT), adaUser.getCredentials());
         assertEquals(1, adaUser.getEquipment().size());
@@ -58,7 +60,7 @@ public class DataWriterTest {
         ArrayList<Request> temp = DataLoader.getRequests();
         ArrayList<Request> requests = new ArrayList<Request>();
         
-        Request request = new Request(UUID.fromString("05fd8560-49e5-4f6e-ba02-53af591e572e"), UserList.getInstance().getUser(UUID.fromString("20560f06-8a86-4aa5-b348-b926a87f71a6")), new ArrayList<User>(List.of(UserList.getInstance().getUser(UUID.fromString("46ec8cfe-c556-4071-b7bd-c8c37a1f82a3")))), Instant.parse("2026-10-06T21:13:06.125235400Z"), 16, EnumSet.of(RequestType.MEDICAL_EMERGENCY, RequestType.ESSENTIAL_SUPPLIES), new double[] { 34.005, -81.035 }, "Family needs medical attention and drinking water.", RequestStatus.EN_ROUTE, "Responder assigned and en route.", false);
+        Request request = new Request(UUID.fromString("05fd8560-49e5-4f6e-ba02-53af591e572e"), UserList.getInstance().getUser(UUID.fromString("20560f06-8a86-4aa5-b348-b926a87f71a6")), new ArrayList<User>(List.of(UserList.getInstance().getUser(UUID.fromString("46ec8cfe-c556-4071-b7bd-c8c37a1f82a3")))), Instant.parse("2026-10-06T21:13:06.125235400Z"), 16, EnumSet.of(RequestType.MEDICAL_EMERGENCY, RequestType.ESSENTIAL_SUPPLIES), new Address("2700 Devine Street", "Columbia", "SC", "29205"), "Family needs medical attention and drinking water.", RequestStatus.EN_ROUTE, "Responder assigned and en route.", false);
 
         requests.add(request);
         assertTrue(DataWriter.saveRequests(requests));
@@ -71,7 +73,7 @@ public class DataWriterTest {
         assertEquals(Instant.parse("2026-10-06T21:13:06.125235400Z"), request.getCreatedAt());
         assertEquals(16, request.getPriority());
         assertEquals(EnumSet.of(RequestType.MEDICAL_EMERGENCY, RequestType.ESSENTIAL_SUPPLIES), request.getRequestType());
-        assertArrayEquals(new double[] { 34.005, -81.035 }, request.getLocation(), 0.000001);
+        assertEquals("2700 Devine Street, Columbia, SC 29205", request.getAddress().toString());
         assertEquals("Family needs medical attention and drinking water.", request.getDescription());
         assertEquals(RequestStatus.EN_ROUTE, request.getStatus());
         assertEquals("Responder assigned and en route.",request.getComment());
@@ -89,8 +91,8 @@ public class DataWriterTest {
             ArrayList<Shelter> shelters = new ArrayList<Shelter>();
 
             ArrayList<ReliefResource> supplies = new ArrayList<ReliefResource>();
-            supplies.add(new ReliefResource(UUID.fromString("d0d5d842-ec94-456b-a1ff-84660a93fabc"), "Blankets", 100, new double[] { 34.01, -81.03 }));
-            supplies.add(new ReliefResource(UUID.fromString("95fc4188-f87a-478a-bd14-66531e3e4d7c"), "First aid kits", 25, new double[] { 34.01, -81.03 }));
+            supplies.add(new ReliefResource(UUID.fromString("d0d5d842-ec94-456b-a1ff-84660a93fabc"), "Blankets", 100, new Address("1100 Elmwood Avenue", "Columbia", "SC", "29201")));
+            supplies.add(new ReliefResource(UUID.fromString("95fc4188-f87a-478a-bd14-66531e3e4d7c"), "First aid kits", 25, new Address("1100 Elmwood Avenue", "Columbia", "SC", "29201")));
 
             ArrayList<Person> occupants = new ArrayList<Person>();
             occupants.add(new Person("Alex Johnson", 34));
@@ -99,7 +101,7 @@ public class DataWriterTest {
 
             ArrayList<String> pets = new ArrayList<String>(List.of("Buddy Johnson", "Luna Garcia"));
 
-            Shelter shelter = new Shelter(UUID.fromString("d40a8bd4-7ceb-4464-8db8-c20cd6321dd5"), "Columbia Community Shelter", new double[] { 34.01, -81.03 }, 200, true, supplies, MedicalService.AVERAGE_SERVICE, true, Accessibility.VERY_ACCESSIBLE, UserList.getInstance().getUser(UUID.fromString("bf349e54-7bc4-4b52-b3cc-e30eed9c381d")), occupants, pets);
+            Shelter shelter = new Shelter(UUID.fromString("d40a8bd4-7ceb-4464-8db8-c20cd6321dd5"), "Columbia Community Shelter", new Address("1100 Elmwood Avenue", "Columbia", "SC", "29201"), 200, true, supplies, MedicalService.AVERAGE_SERVICE, true, Accessibility.VERY_ACCESSIBLE, UserList.getInstance().getUser(UUID.fromString("bf349e54-7bc4-4b52-b3cc-e30eed9c381d")), occupants, pets);
 
             shelters.add(shelter);
             assertTrue(DataWriter.saveShelters(shelters));
@@ -110,7 +112,7 @@ public class DataWriterTest {
 
             assertEquals(UUID.fromString("d40a8bd4-7ceb-4464-8db8-c20cd6321dd5"), shelter.getShelterId());
             assertEquals("Columbia Community Shelter", shelter.getName());
-            assertArrayEquals(new double[] { 34.01, -81.03 }, shelter.getLocation(), 0.000001);
+            assertEquals("1100 Elmwood Avenue, Columbia, SC 29201", shelter.getAddress().toString());
             assertEquals(200, shelter.getCapacity());
             assertTrue(shelter.isPetAcceptance());
             assertEquals(MedicalService.AVERAGE_SERVICE, shelter.getMedicalService());

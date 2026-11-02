@@ -21,8 +21,8 @@ public class DataLoaderTest {
         assertEquals("Ada", ada.getFirstName());
         assertEquals("Lovelace", ada.getLastName());
         assertEquals("8035550100", ada.getPhoneNumber());
-        assertEquals("29208", ada.getLocationZip());
-        assertArrayEquals(new double[] {34.0007, -81.0348}, ada.getLocation(), 0.000001);
+        assertEquals("1600 Hampton Street, Columbia, SC 29208", ada.getAddress().toString());
+        assertEquals("29208", ada.getAddress().getZip());
         assertEquals(Set.of(Permission.REGISTERED_USER, Permission.VOLUNTEER), ada.getPermissions());
         assertEquals(Set.of(Credential.BASIC_LIFE_SUPPORT), ada.getCredentials());
         assertEquals(1, ada.getEquipment().size());
@@ -49,7 +49,7 @@ public class DataLoaderTest {
         assertEquals(Instant.parse("2026-10-06T21:13:06.125235400Z"), request.getCreatedAt());
         assertEquals(16, request.getPriority());
         assertEquals(Arrays.asList(RequestType.MEDICAL_EMERGENCY, RequestType.ESSENTIAL_SUPPLIES), request.getRequestType());
-        assertArrayEquals(new double[] {34.005, -81.035}, request.getLocation(), 0.000001);
+        assertEquals("2700 Devine Street, Columbia, SC 29205", request.getAddress().toString());
         assertEquals("Family needs medical attention and drinking water.", request.getDescription());
         assertEquals(RequestStatus.EN_ROUTE, request.getStatus());
         assertEquals("Responder assigned and en route.", request.getComment());
@@ -69,7 +69,7 @@ public class DataLoaderTest {
         Shelter shelter = shelters.get(0);
         assertEquals(UUID.fromString("d40a8bd4-7ceb-4464-8db8-c20cd6321dd5"), shelter.getShelterId());
         assertEquals("Columbia Community Shelter", shelter.getName());
-        assertArrayEquals(new double[] {34.01, -81.03}, shelter.getLocation(), 0.000001);
+        assertEquals("1100 Elmwood Avenue, Columbia, SC 29201", shelter.getAddress().toString());
         assertEquals(200, shelter.getCapacity());
         assertTrue(shelter.isPetAcceptance());
         assertEquals(MedicalService.AVERAGE_SERVICE, shelter.getMedicalService());

@@ -1,6 +1,8 @@
 package com.model;
 
 import org.junit.Test;
+
+import com.location.Address;
 import static org.junit.Assert.*;
 import java.util.UUID;
 
@@ -19,8 +21,7 @@ public class UsersTest {
 
         User testUser = new User(
             "Amy", "Smith", "password123",
-            "8035554321", "29201",
-            new double[] {34.0007, -81.0348}
+            "8035554321", new Address("1600 Hampton Street", "Columbia", "SC", "29201")
         );
 
         users.addUser(testUser);
@@ -43,8 +44,7 @@ public class UsersTest {
 
         User testUser = new User(
             "Amy", "Smith", "password123",
-            "8035554321", "29201",
-            new double[] {34.0007, -81.0348}
+            "8035554321", new Address("1600 Hampton Street", "Columbia", "SC", "29201")
         );
 
         users.addUser(testUser);
@@ -79,8 +79,7 @@ public class UsersTest {
 
         User testUser = new User(
             "Amy", "Smith", "password123",
-            "8035554321", "29201",
-            new double[] {34.0007, -81.0348}
+            "8035554321", new Address("1600 Hampton Street", "Columbia", "SC", "29201")
         );
 
         users.addUser(testUser);
@@ -120,8 +119,7 @@ public class UsersTest {
                 "Doe",
                 "password123",
                 "8035559876",
-                "29201",
-                new double[] {34.0007, -81.0348}
+                new Address("1600 Hampton Street", "Columbia", "SC", "29201")
             );
 
             assertNotNull(newUser);
@@ -144,8 +142,7 @@ public class UsersTest {
             "Doe",
             "password123",
             "8035559876",
-            "29201",
-            new double[] {34.0007, -81.0348}
+            new Address("1600 Hampton Street", "Columbia", "SC", "29201")
         );
 
         assertNull(newUser);
@@ -163,8 +160,7 @@ public class UsersTest {
             "",
             "password123",
             "8035559876",
-            "29201",
-            new double[] {34.0007, -81.0348}
+            new Address("1600 Hampton Street", "Columbia", "SC", "29201")
         );
 
         assertNull(newUser);
@@ -182,8 +178,7 @@ public class UsersTest {
             "Doe",
             "",
             "8035559876",
-            "29201",
-            new double[] {34.0007, -81.0348}
+            new Address("1600 Hampton Street", "Columbia", "SC", "29201")
         );
 
         assertNull(newUser);
@@ -201,8 +196,7 @@ public class UsersTest {
             "Doe",
             "password123",
             "803555",
-            "29201",
-            new double[] {34.0007, -81.0348}
+            new Address("1600 Hampton Street", "Columbia", "SC", "29201")
         );
 
         assertNull(newUser);
@@ -220,8 +214,7 @@ public class UsersTest {
             "Doe",
             "password123",
             "8035559876",
-            "292",
-            new double[] {34.0007, -81.0348}
+            new Address("1600 Hampton Street", "Columbia", "SC", "292")
         );
 
         assertNull(newUser);
@@ -236,8 +229,7 @@ public class UsersTest {
 
         User firstUser = new User(
             "Jane", "Doe", "password123",
-            "8035559876", "29201",
-            new double[] {34.0007, -81.0348}
+            "8035559876", new Address("1600 Hampton Street", "Columbia", "SC", "29201")
         );
 
         users.addUser(firstUser);
@@ -248,8 +240,7 @@ public class UsersTest {
                 "Smith",
                 "password456",
                 "8035559876",
-                "29205",
-                new double[] {34.0007, -81.0348}
+                new Address("1600 Hampton Street", "Columbia", "SC", "29205")
             );
 
             assertNull(duplicateUser);
@@ -267,8 +258,7 @@ public class UsersTest {
 
         User testUser = new User(
             "Amy", "Smith", "password123",
-            "8035554321", "29201",
-            new double[] {34.0007, -81.0348}
+            "8035554321", new Address("1600 Hampton Street", "Columbia", "SC", "29201")
         );
 
         users.addUser(testUser);
@@ -292,8 +282,7 @@ public class UsersTest {
             "Doe",
             "password123",
             "803555ABCD",
-            "29201",
-            new double[] {34.0007, -81.0348}
+            new Address("1600 Hampton Street", "Columbia", "SC", "29201")
         );
 
         assertNull(newUser);
@@ -311,8 +300,7 @@ public class UsersTest {
             "Doe",
             "password123",
             "8035559876",
-            "292AB",
-            new double[] {34.0007, -81.0348}
+            new Address("1600 Hampton Street", "Columbia", "SC", "292AB")
         );
 
         assertNull(newUser);
@@ -327,8 +315,7 @@ public class UsersTest {
 
         User testUser = new User(
             "Amy", "Smith", "password123",
-            "8035554321", "29201",
-            new double[] {34.0007, -81.0348}
+            "8035554321", new Address("1600 Hampton Street", "Columbia", "SC", "29201")
         );
 
         users.addUser(testUser);

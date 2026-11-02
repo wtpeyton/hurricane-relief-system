@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.UUID;
 import java.util.Iterator;
 
+import com.location.Address;
+
 /**
  * Represents a list of users in the hurricane relief system.
  * @author Olivia Casper, Jack Andrin
@@ -65,21 +67,21 @@ public class UserList implements Iterable<User> {
      * @param lastName the user's last name
      * @param password the user's password
      * @param phoneNumber the user's phone number
-     * @param locationZip the user's location zip code
-     * @param location the user's location as a double array [latitude, longitude]
+     * @param address the user's address
      * @return the newly created user, or null if the account information is invalid
      */
 
     public User addUser(String firstName, String lastName, String password,
-                        String phoneNumber, String locationZip, double[] location) {
+                        String phoneNumber, Address address) {
         if (firstName.isEmpty() || lastName.isEmpty() || password.isEmpty()
                 || !isValidPhoneNumber(phoneNumber)
-                || !isValidZipCode(locationZip)
+                || address == null
+                || !isValidZipCode(address.getZip())
                 || doesUserExist(phoneNumber)) {
             return null;
         }
 
-        User user = new User(firstName, lastName, password, phoneNumber, locationZip, location);
+        User user = new User(firstName, lastName, password, phoneNumber, address);
         users.add(user);
         return user;
     }
@@ -185,8 +187,7 @@ public class UserList implements Iterable<User> {
             "Smith",
             "password123",
             "8035551234",
-            "29201",
-            new double[]{34.0007, -81.0348}
+            new Address("1600 Hampton Street", "Columbia", "SC", "29201")
         );
 
         userList.addUser(testUser);
@@ -214,8 +215,7 @@ public class UserList implements Iterable<User> {
             "Doe",
             "password456",
             "8035555678",
-            "29205",
-            new double[]{34.0090, -81.0281}
+            new Address("2700 Devine Street", "Columbia", "SC", "29205")
         );
         System.out.println(newUser);
 
@@ -226,8 +226,7 @@ public class UserList implements Iterable<User> {
             "Doe",
             "password789",
             "8035555678",
-            "29208",
-            new double[]{34.0200, -81.0100}
+            new Address("1244 Blossom Street", "Columbia", "SC", "29208")
         );
         System.out.println(duplicateUser);
 
@@ -238,8 +237,7 @@ public class UserList implements Iterable<User> {
                 "Jones",
                 "password123",
                 "8035559999",
-                "29201",
-            new double[]{34.0007, -81.0348}
+            new Address("1600 Hampton Street", "Columbia", "SC", "29201")
         );
         System.out.println(emptyName);
 
@@ -250,21 +248,20 @@ public class UserList implements Iterable<User> {
             "Jones",
             "password123",
             "803555",
-            "29201",
-            new double[]{34.0007, -81.0348}
+            new Address("1600 Hampton Street", "Columbia", "SC", "29201")
         );
         System.out.println(invalidPhone);
 
         System.out.println("Add user with letters in phone number:");
         System.out.println(userList.addUser("Jane", "Doe", "password123",
-                "803ABC5678", "29205", new double[] {34.0007, -81.0348}));
+                "803ABC5678", new Address("2700 Devine Street", "Columbia", "SC", "29205")));
 
         System.out.println("Add user with letters in ZIP code:");
         System.out.println(userList.addUser("Jane", "Doe", "password123",
-                "8035559999", "29ABC", new double[] {34.0007, -81.0348}));
+                "8035559999", new Address("1600 Hampton Street", "Columbia", "SC", "29ABC")));
 
         System.out.println("Add user with invalid ZIP code length:");
         System.out.println(userList.addUser("Jane", "Doe", "password123",
-                "8035559999", "292", new double[] {34.0007, -81.0348}));
+                "8035559999", new Address("1600 Hampton Street", "Columbia", "SC", "292")));
     }
 }

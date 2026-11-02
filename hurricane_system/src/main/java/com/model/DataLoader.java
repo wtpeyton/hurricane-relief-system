@@ -11,6 +11,8 @@ import java.io.FileReader;
 import java.time.Instant;
 import java.util.UUID;
 
+import com.location.Address;
+
 /**
  * Loads data from JSON files for the hurricane relief system.
  * @author Jack Andrin
@@ -35,9 +37,7 @@ public class DataLoader extends DataConstants {
                 JSONObject userJson = (JSONObject) obj;
 
                 UUID userId = UUID.fromString((String) userJson.get(USER_ID));
-                JSONArray locationArray = (JSONArray) userJson.get(USER_LOCATION);
-                double[] location = new double[] { (double) locationArray.get(0), (double) locationArray.get(1) };
-                String locationZip = (String) userJson.get(USER_LOCATION_ZIP);
+                Address address = getAddress((JSONObject) userJson.get(USER_ADDRESS));
                 String firstName = (String) userJson.get(USER_FIRST_NAME);
                 String lastName = (String) userJson.get(USER_LAST_NAME);
                 String password = (String) userJson.get(USER_PASSWORD);
@@ -47,7 +47,7 @@ public class DataLoader extends DataConstants {
                 EnumSet<Credential> credentials = getCredentials((JSONArray) userJson.get(USER_CREDENTIALS));
                 ArrayList<ReliefResource> equipment = getSupplies((JSONArray) userJson.get(USER_EQUIPMENT));
 
-                User user = new User(userId, location, locationZip, firstName, lastName, password, phoneNumber, permissions, credentials, equipment);
+                User user = new User(userId, address, firstName, lastName, password, phoneNumber, permissions, credentials, equipment);
                 users.add(user);
             }
         } catch (Exception e) {
@@ -73,14 +73,13 @@ public class DataLoader extends DataConstants {
                 Instant createdAt = Instant.parse((String) requestJson.get(REQUEST_CREATED_AT));
                 int priority = ((Long) requestJson.get(REQUEST_PRIORITY)).intValue();
                 EnumSet<RequestType> requestType = getRequestTypes((JSONArray) requestJson.get(REQUEST_TYPE));
-                JSONArray locationArray = (JSONArray) requestJson.get(REQUEST_LOCATION);
-                double[] location = new double[] { (double) locationArray.get(0), (double) locationArray.get(1) };
+                Address address = getAddress((JSONObject) requestJson.get(REQUEST_ADDRESS));
                 String description = (String) requestJson.get(REQUEST_DESCRIPTION);
                 RequestStatus status = RequestStatus.valueOf((String) requestJson.get(REQUEST_STATUS));
                 String comment = (String) requestJson.get(REQUEST_COMMENT);
                 boolean forSomeoneElse = (Boolean) requestJson.get(REQUEST_FOR_SOMEONE_ELSE);
 
-                Request request = new Request(requestId, requester, responders, createdAt, priority, requestType, location, description, status, comment, forSomeoneElse);
+                Request request = new Request(requestId, requester, responders, createdAt, priority, requestType, address, description, status, comment, forSomeoneElse);
                 requests.add(request);
             }
         } catch (Exception e) {
@@ -106,8 +105,7 @@ public static ArrayList<Shelter> getShelters(String filePath) {
 
                 UUID shelterId = UUID.fromString((String) shelterJson.get(SHELTER_ID));
                 String name = (String) shelterJson.get(SHELTER_NAME);
-                JSONArray locationArray = (JSONArray) shelterJson.get(SHELTER_LOCATION);
-                double[] location = new double[] { (double) locationArray.get(0), (double) locationArray.get(1) };
+                Address address = getAddress((JSONObject) shelterJson.get(SHELTER_ADDRESS));
                 int capacity = ((Long) shelterJson.get(SHELTER_CAPACITY)).intValue();
                 boolean petAcceptance = (Boolean) shelterJson.get(SHELTER_PET_ACCEPTANCE);
 
@@ -121,7 +119,7 @@ public static ArrayList<Shelter> getShelters(String filePath) {
                 ArrayList<Person> occupants = getOccupants((JSONArray) shelterJson.get(SHELTER_OCCUPANTS));
                 ArrayList<String> pets = getPets((JSONArray) shelterJson.get(SHELTER_PETS));
 
-                Shelter shelter = new Shelter(shelterId, name, location, capacity, petAcceptance, 
+                Shelter shelter = new Shelter(shelterId, name, address, capacity, petAcceptance, 
                    supplies, medicalService, vetService, accessibility, shelterAdmin, occupants, pets);
                 shelters.add(shelter);
             }
@@ -175,11 +173,18 @@ public static ArrayList<Shelter> getShelters(String filePath) {
             UUID resourceId = UUID.fromString((String) supplyJson.get(RESOURCE_ID));
             String type = (String) supplyJson.get(RESOURCE_TYPE);
             int quantity = ((Long) supplyJson.get(RESOURCE_QUANTITY)).intValue();
-            JSONArray supplyLocationArray = (JSONArray) supplyJson.get(RESOURCE_LOCATION);
-            double[] supplyLocation = new double[] { (double) supplyLocationArray.get(0), (double) supplyLocationArray.get(1) };
-            supplies.add(new ReliefResource(resourceId, type, quantity, supplyLocation));
+            Address supplyAddress = getAddress((JSONObject) supplyJson.get(RESOURCE_ADDRESS));
+            supplies.add(new ReliefResource(resourceId, type, quantity, supplyAddress));
         }
         return supplies;
+    }
+
+    private static Address getAddress(JSONObject addressJson) {
+        String street = (String) addressJson.get(ADDRESS_STREET);
+        String city = (String) addressJson.get(ADDRESS_CITY);
+        String state = (String) addressJson.get(ADDRESS_STATE);
+        String zip = (String) addressJson.get(ADDRESS_ZIP);
+        return new Address(street, city, state, zip);
     }
 
     private static ArrayList<User> getResponders(JSONArray respondersArray) {

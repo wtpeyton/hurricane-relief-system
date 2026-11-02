@@ -5,6 +5,8 @@ import org.junit.Test;
 import org.junit.Assert;
 import org.junit.Before;
 
+import com.location.Address;
+
 /**
  * Tests the creation, priority, responders, people, and pets of relief requests.
  * @author Olivia, Ryan
@@ -13,7 +15,7 @@ public class RequestTest {
     private User requester;
     private User responder;
     private EnumSet<RequestType> requestTypes;
-    private double[] location;
+    private Address address;
     private Request request;
 
     /**
@@ -22,12 +24,12 @@ public class RequestTest {
     @Before
     public void setUp() {
         requester = new User("Clark","Coats", "password123",
-                             "6034332110", "03290", 
-                             new double[]{43.1939, -71.5724}
+                             "6034332110", 
+                             new Address("12 Main Street", "Nottingham", "NH", "03290")
                             );
         responder = new User( "Alex", "Krivejko", "password456",
-                             "6034332111", "03290", 
-                             new double[]{43.1939, -71.5724}
+                             "6034332111", 
+                             new Address("12 Main Street", "Nottingham", "NH", "03290")
                             );
         responder.addPermission(Permission.VOLUNTEER);
     
@@ -35,10 +37,10 @@ public class RequestTest {
         requestTypes.add(RequestType.MEDICAL_EMERGENCY);
         requestTypes.add(RequestType.ESSENTIAL_SUPPLIES);
 
-        location = new double[] {32.7800, -79.9400};
+        address = new Address("100 Meeting Street", "Charleston", "SC", "29401");
 
         request = new Request( requestTypes, requester, 
-               false, location,
+               false, address,
                   "Need medical help and supplies.");
     }
 
@@ -85,13 +87,13 @@ public class RequestTest {
     }
 
     /**
-     * Tests updating the location of a request.
+     * Tests updating the address of a request.
      */
     @Test
-    public void testSetLocation() {
-        double[] newLocation = {32.7900, -79.9600};
-        request.setLocation(newLocation);
-        Assert.assertArrayEquals(newLocation, request.getLocation(), 0.0001);
+    public void testSetAddress() {
+        Address newAddress = new Address("200 Meeting Street", "Charleston", "SC", "29401");
+        request.setAddress(newAddress);
+        Assert.assertEquals(newAddress, request.getAddress());
     }
     /**
      * Tests adding a volunteer to a request.
@@ -137,8 +139,8 @@ public class RequestTest {
     public void testAddResponderWithoutPermission() {
         User regularUser = new User(
             "Jane", "Doe", "password123",
-            "8035559876", "29201",
-            new double[] {34.0007, -81.0348}
+            "8035559876",
+            new Address("1600 Hampton Street", "Columbia", "SC", "29201")
         );
 
         boolean wasAdded = request.addResponder(regularUser);
@@ -165,8 +167,8 @@ public class RequestTest {
     public void testAddMedicalVolunteer() {
         User medicalVolunteer = new User(
             "Jane", "Doe", "password123",
-            "8035559876", "29201",
-            new double[] {34.0007, -81.0348}
+            "8035559876",
+            new Address("1600 Hampton Street", "Columbia", "SC", "29201")
         );
 
         medicalVolunteer.addPermission(Permission.MEDICAL_VOLUNTEER);
@@ -204,8 +206,8 @@ public class RequestTest {
     public void testStatusAfterRemovingOneOfTwoResponders() {
         User secondResponder = new User(
             "Jane", "Doe", "password123",
-            "8035559876", "29201",
-            new double[] {34.0007, -81.0348}
+            "8035559876",
+            new Address("1600 Hampton Street", "Columbia", "SC", "29201")
         );
 
         secondResponder.addPermission(Permission.VOLUNTEER);
@@ -238,7 +240,7 @@ public class RequestTest {
             EnumSet.of(RequestType.ESSENTIAL_SUPPLIES);
 
         Request singleRequest = new Request(
-            singleType, requester, false, location,
+            singleType, requester, false, address,
             "Need drinking water."
         );
 
@@ -257,7 +259,7 @@ public class RequestTest {
             request.getCreatedAt(),
             16,
             requestTypes,
-            location,
+            address,
             "Need medical help and supplies.",
             RequestStatus.EN_ROUTE,
             "Responder assigned.",

@@ -2,6 +2,10 @@ package com.model;
 
 import java.util.ArrayList;
 import java.util.UUID;
+
+import com.location.Address;
+import com.location.MapTools;
+
 import java.util.Iterator;
 import java.util.EnumSet;
 
@@ -39,13 +43,13 @@ public class RequestList implements Iterable<Request> {
      * @param requestType the type(s) of relief request
      * @param requester the user who submitted the request
      * @param forSomeoneElse whether the request is for someone else
-     * @param location the location of the request
+     * @param address the address of the request
      * @param description a description of the request
      * @return the newly added request
      */
     public Request addRequest(EnumSet<RequestType> requestType, User requester, 
-                              boolean forSomeoneElse, double[] location, String description) {
-        Request request = new Request(requestType, requester, forSomeoneElse, location, description);
+                              boolean forSomeoneElse, Address address, String description) {
+        Request request = new Request(requestType, requester, forSomeoneElse, address, description);
         requests.add(request);
         return request;
     }
@@ -87,20 +91,20 @@ public class RequestList implements Iterable<Request> {
     /**
      * Gets the ArrayList of Requests based on the search criteria
      * @param requestId searches by the request id
-     * @param location searches by the location
+     * @param address searches by the address
      * @param type search by the type of the request
      * @param user search by the submission of the request or the requests the volunteer can respond to
      * @param status search by the status of the request
      * @param volunter searches the request based on if the volunteer is qualified to assist
      * @return an ArrayList of filtered requests
      */
-    public ArrayList<Request> searchRequest(UUID requestId, double[] location, RequestType type, User user, RequestStatus status, User volunteer, boolean ascending){ //Refer to Tristan for volunteerOrUser explanation it is to avoid same type parameter
+    public ArrayList<Request> searchRequest(UUID requestId, Address address, RequestType type, User user, RequestStatus status, User volunteer, boolean ascending){ //Refer to Tristan for volunteerOrUser explanation it is to avoid same type parameter
         ArrayList<Request> results = new ArrayList<Request>(requests);
         if(volunteer != null){ //Removes the requests that arent submitted status
             results = findVolunteerRequests(volunteer, results);
         }
-        if(location != null){ //Removes the requests based on the locations requirements
-            results = findRequestsByDistance(location, results);
+        if(address != null){ //Removes the requests based on the address requirements
+            results = findRequestsByDistance(address, results);
         }
         if(type != null){ //Removes the requests based on the type
             results = findRequestsByType(type, results);
@@ -139,36 +143,26 @@ public class RequestList implements Iterable<Request> {
     }
 
     /**
-     * Finds requests ordered by distance from a location
-     * @param location the location to search from
+     * Finds requests ordered by distance from a address
+     * @param address the address to search from
      * @return the requests ordered from closest to farthest
      */
-    public ArrayList<Request> findRequestsByDistance(double[] location, ArrayList<Request> requests) {
+    public ArrayList<Request> findRequestsByDistance(Address address, ArrayList<Request> requests) {
         ArrayList<Request> remaining = new ArrayList<Request>(requests);
         ArrayList<Request> results = new ArrayList<Request>();
 
-        // Find the closest remaining request until all requests are ordered
+    try {
         while (!remaining.isEmpty()) {
+            Address[] addresses = new Address[remaining.size()];
+            for (int i = 0; i < remaining.size(); i++) {
+                addresses[i] = remaining.get(i).getAddress();
+            }
+
+            Address closest = MapTools.getInstance().findClosestAddress(address, addresses);
+
             Request closestRequest = remaining.get(0);
-            double[] closestLocation = closestRequest.getLocation();
-
-            // Calculate the distance from the given location
-            double closestDistance = Math.sqrt(
-                Math.pow(closestLocation[0] - location[0], 2)
-                + Math.pow(closestLocation[1] - location[1], 2)
-            );
-
-            // Check the remaining requests for one that is closer
             for (Request request : remaining) {
-                double[] requestLocation = request.getLocation();
-
-                double distance = Math.sqrt(
-                    Math.pow(requestLocation[0] - location[0], 2)
-                    + Math.pow(requestLocation[1] - location[1], 2)
-                );
-
-                if (distance < closestDistance) {
-                    closestDistance = distance;
+                if (request.getAddress() == closest) {
                     closestRequest = request;
                 }
             }
@@ -177,6 +171,10 @@ public class RequestList implements Iterable<Request> {
             results.add(closestRequest);
             remaining.remove(closestRequest);
         }
+    } catch (Exception e) {
+        e.printStackTrace();
+        results.addAll(remaining);
+    }
 
         return results;
     }

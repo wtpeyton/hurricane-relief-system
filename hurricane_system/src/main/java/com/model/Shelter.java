@@ -1,6 +1,8 @@
 package com.model;
 import java.util.ArrayList;
 import java.util.UUID;
+
+import com.location.Address;
 /**
  * @Author Ryan Kouchoukos
  * represents a shelter that can provide housing and resources during a hurricane.
@@ -8,7 +10,7 @@ import java.util.UUID;
 public class Shelter {
     private UUID shelterId;
     private String name;
-    private double[] location;
+    private Address address;
     private int capacity;
     private boolean petAcceptance;
     private ArrayList<ReliefResource> supplies;
@@ -24,7 +26,7 @@ public class Shelter {
      * This constructor is used when loading a previously saved shelter.
      * @param shelterId The unique identifier for the shelter.
      * @param name The name of the shelter.
-     * @param location The geographical location of the shelter.
+     * @param address The address of the shelter.
      * @param capacity The maximum number of occupants the shelter can accommodate.
      * @param petAcceptance Indicates if the shelter accepts pets.
      * @param supplies The list of relief resources available at the shelter.
@@ -35,14 +37,14 @@ public class Shelter {
      * @param occupants The list of people currently staying at the shelter.
      * @param pets The list of pets currently staying at the shelter.
      */
-    public Shelter(UUID shelterId, String name, double[] location, int capacity, boolean petAcceptance, 
+    public Shelter(UUID shelterId, String name, Address address, int capacity, boolean petAcceptance,
                    ArrayList<ReliefResource> supplies, MedicalService medicalService,
                    boolean vetService, Accessibility accessibility, User shelterAdmin,
                    ArrayList<Person> occupants, ArrayList<String> pets)
     {
         this.shelterId = shelterId;
         this.name = name;
-        this.location = location;
+        this.address = address;
         this.capacity = capacity;
         this.petAcceptance = petAcceptance;
         this.supplies = supplies;
@@ -57,7 +59,7 @@ public class Shelter {
      * Creates a new shelter with a randomly generated ID.
      * 
      * @param name The name of the shelter.
-     * @param location The geographical location of the shelter.
+     * @param address The address of the shelter.
      * @param capacity The maximum number of occupants the shelter can accommodate.
      * @param petAcceptance Indicates if the shelter accepts pets.
      * @param supplies The list of relief resources available at the shelter.
@@ -68,14 +70,14 @@ public class Shelter {
      * @param occupants The list of people currently staying at the shelter.
      * @param pets The list of pets currently staying at the shelter.
      */
-    public Shelter(String name, double[] location, int capacity, boolean petAcceptance,
+    public Shelter(String name, Address address, int capacity, boolean petAcceptance,
                    ArrayList<ReliefResource> supplies, MedicalService medicalService,
                    boolean vetService, Accessibility accessibility, User shelterAdmin,
                    ArrayList<Person> occupants, ArrayList<String> pets)
     {
         this.shelterId = UUID.randomUUID();
         this.name = name;
-        this.location = location;
+        this.address = address;
         this.capacity = capacity;
         this.petAcceptance = petAcceptance;
         this.supplies = supplies;
@@ -110,21 +112,21 @@ public class Shelter {
         this.name = name;
     }
     /**
-     * @return The geographical location of the shelter.
+     * @return The address of the shelter.
      */
-    public double[] getLocation()
+    public Address getAddress()
     {
-        return location;
+        return address;
     }
 
     /**
-     * Sets the geographical location of the shelter.
+     * Sets the address of the shelter.
      *
-     * @param location The new location of the shelter.
+     * @param address The new address of the shelter.
      */
-    public void setLocation(double[] location)
+    public void setAddress(Address address)
     {
-        this.location = location;
+        this.address = address;
     }
     /**
      * @return The maximum number of occupants the shelter can accommodate.

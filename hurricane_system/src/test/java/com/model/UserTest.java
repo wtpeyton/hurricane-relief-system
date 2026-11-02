@@ -2,6 +2,8 @@ package com.model;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import com.location.Address;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
@@ -23,8 +25,7 @@ public class UserTest {
     public void setUp() {
         user = new User(
             "Amy", "Smith", "password123",
-            "8035554321", "29201",
-            new double[] {34.0007, -81.0348}
+            "8035554321", new Address("1600 Hampton Street", "Columbia", "SC", "29201")
         );
     }
 
@@ -151,8 +152,7 @@ public class UserTest {
 
         User existingUser = new User(
             id,
-            new double[] {34.0007, -81.0348},
-            "29201",
+            new Address("1600 Hampton Street", "Columbia", "SC", "29201"),
             "Amy",
             "Smith",
             "password123",
@@ -171,7 +171,7 @@ public class UserTest {
     @Test
     public void testToString() {
         String expected = user.getUserId()
-            + ", Amy Smith, 8035554321, 29201";
+            + ", Amy Smith, 8035554321, 1600 Hampton Street, Columbia, SC 29201";
 
         assertEquals(expected, user.toString());
     }

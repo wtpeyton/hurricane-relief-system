@@ -1,6 +1,5 @@
 package com.model;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -11,6 +10,8 @@ import java.util.EnumSet;
 import java.util.UUID;
 
 import org.junit.Test;
+
+import com.location.Address;
 
 public class RequestListTest {
     @Test 
@@ -31,14 +32,14 @@ public class RequestListTest {
         User requester = DataLoader.getUsers().get(0);
         int before = requests.getRequests().size();
 
-        Request added = requests.addRequest(EnumSet.of(RequestType.MEDICAL_EMERGENCY, RequestType.MISSING_PERSON), requester, true, new double[]{34.123,30.123}, "Hurt my leg, and missing my brother");
+        Request added = requests.addRequest(EnumSet.of(RequestType.MEDICAL_EMERGENCY, RequestType.MISSING_PERSON), requester, true, new Address("1600 Hampton Street", "Columbia", "SC", "29208"), "Hurt my leg, and missing my brother");
 
         assertEquals(before + 1, requests.getRequests().size());
         assertTrue(requests.getRequests().contains(added));
         assertEquals(EnumSet.of(RequestType.MEDICAL_EMERGENCY, RequestType.MISSING_PERSON), added.getRequestType());
         assertEquals(requester.getUserId(), added.getRequester().getUserId());
         assertTrue(added.isForSomeoneElse());
-        assertArrayEquals(new double[]{34.123,30.123}, added.getLocation(), 0.00001);
+        assertEquals("1600 Hampton Street, Columbia, SC 29208", added.getAddress().toString());
         assertEquals("Hurt my leg, and missing my brother", added.getDescription());
         assertEquals(RequestStatus.SUBMITTED, added.getStatus());
         assertEquals(19, added.getPriority());
@@ -50,7 +51,7 @@ public class RequestListTest {
     public void testAddRequestSingle(){
         RequestList requests = RequestList.getInstance();
         User ada = UserList.getInstance().getUser(UUID.fromString("46ec8cfe-c556-4071-b7bd-c8c37a1f82a3"));
-        Request request = new Request(EnumSet.of(RequestType.COMMUNITY_CLEANUP), ada, false, new double[]{34.0,-81.0}, "Debris in the road");
+        Request request = new Request(EnumSet.of(RequestType.COMMUNITY_CLEANUP), ada, false, new Address("1600 Hampton Street", "Columbia", "SC", "29208"), "Debris in the road");
         int before = requests.getRequests().size();
 
         assertTrue(requests.addRequest(request));
@@ -64,7 +65,7 @@ public class RequestListTest {
     public void testRemoveRequest(){
         RequestList requests = RequestList.getInstance();
         User ada = UserList.getInstance().getUser(UUID.fromString("46ec8cfe-c556-4071-b7bd-c8c37a1f82a3"));
-        Request request = new Request(EnumSet.of(RequestType.COMMUNITY_CLEANUP), ada, false, new double[]{34.0,-81.0}, "Debris in the road");
+        Request request = new Request(EnumSet.of(RequestType.COMMUNITY_CLEANUP), ada, false, new Address("1600 Hampton Street", "Columbia", "SC", "29208"), "Debris in the road");
         requests.addRequest(request);
         int before = requests.getRequests().size();
 
@@ -78,11 +79,11 @@ public class RequestListTest {
     public void testUpdateRequest(){
         RequestList requests = RequestList.getInstance();
         User ada = UserList.getInstance().getUser(UUID.fromString("46ec8cfe-c556-4071-b7bd-c8c37a1f82a3"));
-        Request original = new Request(EnumSet.of(RequestType.COMMUNITY_CLEANUP), ada, false, new double[]{34.0,-81.0}, "Debris in the road");
+        Request original = new Request(EnumSet.of(RequestType.COMMUNITY_CLEANUP), ada, false, new Address("1600 Hampton Street", "Columbia", "SC", "29208"), "Debris in the road");
         requests.addRequest(original);
         int before = requests.getRequests().size();
 
-        Request replacement = new Request(original.getId(), ada, new ArrayList<User>(), original.getCreatedAt(), original.getPriority(), original.getRequestType(), original.getLocation(), "Road is now blocked", RequestStatus.CLOSED, "Updated", false);
+        Request replacement = new Request(original.getId(), ada, new ArrayList<User>(), original.getCreatedAt(), original.getPriority(), original.getRequestType(), original.getAddress(), "Road is now blocked", RequestStatus.CLOSED, "Updated", false);
         assertTrue(requests.updateRequest(replacement));
         assertEquals(before, requests.getRequests().size());
         Request found = requests.getRequestById(original.getId(), requests.getRequests());
@@ -90,7 +91,7 @@ public class RequestListTest {
         assertEquals(RequestStatus.CLOSED, found.getStatus());
         assertEquals("Updated", found.getComment());
 
-        Request unknown = new Request(EnumSet.of(RequestType.COMMUNITY_CLEANUP), ada, false, new double[]{34.0,-81.0}, "Not in the list");
+        Request unknown = new Request(EnumSet.of(RequestType.COMMUNITY_CLEANUP), ada, false, new Address("1600 Hampton Street", "Columbia", "SC", "29208"), "Not in the list");
         assertFalse(requests.updateRequest(unknown));
 
         requests.removeRequest(replacement);
@@ -102,8 +103,8 @@ public class RequestListTest {
         User ada = UserList.getInstance().getUser(UUID.fromString("46ec8cfe-c556-4071-b7bd-c8c37a1f82a3"));
         User grace = UserList.getInstance().getUser(UUID.fromString("20560f06-8a86-4aa5-b348-b926a87f71a6"));
 
-        Request near = requests.addRequest(EnumSet.of(RequestType.MEDICAL_EMERGENCY), grace, false, new double[]{34.0,-81.0}, "Near request");
-        Request far = requests.addRequest(EnumSet.of(RequestType.COMMUNITY_CLEANUP), ada, false, new double[]{35.0,-82.0}, "Far request");
+        Request near = requests.addRequest(EnumSet.of(RequestType.MEDICAL_EMERGENCY), grace, false, new Address("1600 Hampton Street", "Columbia", "SC", "29208"), "Near request");
+        Request far = requests.addRequest(EnumSet.of(RequestType.COMMUNITY_CLEANUP), ada, false, new Address("100 Meeting Street", "Charleston", "SC", "29401"), "Far request");
         far.setStatus(RequestStatus.CLOSED);
 
         assertEquals(requests.getRequests().size(), requests.searchRequest(null, null, null, null, null, null, true).size());
@@ -124,7 +125,7 @@ public class RequestListTest {
         assertTrue(forVolunteer.contains(near));
         assertFalse(forVolunteer.contains(far));
 
-        double[] here = new double[]{34.0,-81.0};
+        Address here = new Address("1600 Hampton Street", "Columbia", "SC", "29208");
         ArrayList<Request> ascending = requests.searchRequest(null, here, null, null, null, null, true);
         assertTrue(ascending.indexOf(near) < ascending.indexOf(far));
         ArrayList<Request> descending = requests.searchRequest(null, here, null, null, null, null, false);

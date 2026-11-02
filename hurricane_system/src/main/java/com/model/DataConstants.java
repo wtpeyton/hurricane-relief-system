@@ -14,8 +14,7 @@ public abstract class DataConstants {
 
     // User JSON keys
     protected static final String USER_ID = "user_id";
-    protected static final String USER_LOCATION = "location";
-    protected static final String USER_LOCATION_ZIP = "location_zip";
+    protected static final String USER_ADDRESS = "address";
     protected static final String USER_FIRST_NAME = "first_name";
     protected static final String USER_LAST_NAME = "last_name";
     protected static final String USER_PASSWORD = "password";
@@ -38,7 +37,7 @@ public abstract class DataConstants {
     protected static final String REQUEST_CREATED_AT = "created_at";
     protected static final String REQUEST_PRIORITY = "priority";
     protected static final String REQUEST_TYPE = "request_type";
-    protected static final String REQUEST_LOCATION = "location";
+    protected static final String REQUEST_ADDRESS = "address";
     protected static final String REQUEST_DESCRIPTION = "description";
     protected static final String REQUEST_STATUS = "status";
     protected static final String REQUEST_COMMENT = "comment";
@@ -47,7 +46,7 @@ public abstract class DataConstants {
     // Shelter JSON keys
     protected static final String SHELTER_ID = "shelter_id";
     protected static final String SHELTER_NAME = "name";
-    protected static final String SHELTER_LOCATION = "location";
+    protected static final String SHELTER_ADDRESS = "address";
     protected static final String SHELTER_CAPACITY = "capacity";
     protected static final String SHELTER_PET_ACCEPTANCE = "pet_acceptance";
     protected static final String SHELTER_SUPPLIES = "supplies";
@@ -62,5 +61,11 @@ public abstract class DataConstants {
     protected static final String RESOURCE_ID = "resource_id";
     protected static final String RESOURCE_TYPE = "type";
     protected static final String RESOURCE_QUANTITY = "quantity";
-    protected static final String RESOURCE_LOCATION = "location";
+    protected static final String RESOURCE_ADDRESS = "address";
+
+    // Address JSON keys
+    protected static final String ADDRESS_STREET = "street";
+    protected static final String ADDRESS_CITY = "city";
+    protected static final String ADDRESS_STATE = "state";
+    protected static final String ADDRESS_ZIP = "zip";
 }
