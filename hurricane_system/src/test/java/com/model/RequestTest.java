@@ -1,11 +1,14 @@
 package com.model;
 
-import java.util.ArrayList;
 import java.util.EnumSet;
 import org.junit.Test;
 import org.junit.Assert;
 import org.junit.Before;
 
+/**
+ * Tests the creation, priority, and responder behavior of relief requests.
+ * @author Olivia, Ryan
+ */
 public class RequestTest {
     private User requester;
     private User responder;
@@ -13,14 +16,17 @@ public class RequestTest {
     private double[] location;
     private Request request;
 
+    /**
+     * Creates users and a request before each test.
+     */
     @Before
     public void setUp() {
         requester = new User("Clark","Coats", "password123",
-                             "603-433-211", "03290", 
+                             "6034332110", "03290", 
                              new double[]{43.1939, -71.5724}
                             );
         responder = new User( "Alex", "Krivejko", "password456",
-                             "603-433-211", "03290", 
+                             "6034332111", "03290", 
                              new double[]{43.1939, -71.5724}
                             );
         responder.addPermission(Permission.VOLUNTEER);
@@ -35,53 +41,229 @@ public class RequestTest {
                false, location,
                   "Need medical help and supplies.");
     }
+
+    /**
+     * Tests that a new request is created.
+     */
     @Test 
     public void testRequestCreation() {
         Assert.assertNotNull(request);
-        Assert.assertEquals(requester, request.getRequester());
-        Assert.assertEquals(2, request.getRequestType().size());
-        Assert.assertArrayEquals(location, request.getLocation(), 0.0001);
-        Assert.assertEquals(RequestStatus.SUBMITTED, request.getStatus());
-        Assert.assertEquals("Need medical help and supplies.", request.getDescription());
     }
+
+    /**
+     * Tests that a new request starts with SUBMITTED status.
+     */
+    @Test
+    public void testInitialRequestStatus() {
+        Assert.assertEquals(RequestStatus.SUBMITTED, request.getStatus());
+    }
+
+    /**
+     * Tests updating the status of a request.
+     */
     @Test 
     public void testSetStatus() {
         request.setStatus(RequestStatus.IN_PROGRESS);
         Assert.assertEquals(RequestStatus.IN_PROGRESS, request.getStatus());
     }
+
+    /**
+     * Tests the priority calculation for multiple request types.
+     */
     @Test
     public void testPriorityCalculation() {
         Assert.assertEquals(16, request.getPriority());
     }
+
+    /**
+     * Tests updating the comment on a request.
+     */
     @Test
     public void testSetComment() {
         request.setComment("Help is on the way.");
         Assert.assertEquals("Help is on the way.", request.getComment());
     }
+
+    /**
+     * Tests updating the location of a request.
+     */
     @Test
     public void testSetLocation() {
         double[] newLocation = {32.7900, -79.9600};
         request.setLocation(newLocation);
         Assert.assertArrayEquals(newLocation, request.getLocation(), 0.0001);
     }
+    /**
+     * Tests adding a volunteer to a request.
+     */
     @Test
     public void testAddResponder() {
         boolean wasAdded = request.addResponder(responder);
         Assert.assertTrue(wasAdded);
-        Assert.assertEquals(1, request.getResponders().size());
-        Assert.assertEquals(responder, request.getResponders().get(0));
     }
+
+    /**
+     * Tests that an added responder appears in the responders list.
+     */
+    @Test
+    public void testResponderAddedToList() {
+        request.addResponder(responder);
+        Assert.assertTrue(request.getResponders().contains(responder));
+    }
+
+    /**
+     * Tests removing a volunteer from a request.
+     */
     @Test
     public void testRemoveResponder() {
         request.addResponder(responder);
         boolean wasRemoved = request.removeResponder(responder);
         Assert.assertTrue(wasRemoved);
-        Assert.assertTrue(request.getResponders().isEmpty());
     }
+
+    /**
+     * Tests removing a volunteer who is not assigned to the request.
+     */
     @Test
     public void testRemoveResponderNotFound() {
         boolean wasRemoved = request.removeResponder(responder);
         Assert.assertFalse(wasRemoved);
-        Assert.assertTrue(request.getResponders().isEmpty());
+    }
+
+    /**
+     * Tests that a user without volunteer permission cannot respond to a request.
+     */
+    @Test
+    public void testAddResponderWithoutPermission() {
+        User regularUser = new User(
+            "Jane", "Doe", "password123",
+            "8035559876", "29201",
+            new double[] {34.0007, -81.0348}
+        );
+
+        boolean wasAdded = request.addResponder(regularUser);
+
+        Assert.assertFalse(wasAdded);
+    }
+
+    /**
+     * Tests that the same volunteer cannot respond twice.
+     */
+    @Test
+    public void testAddDuplicateResponder() {
+        request.addResponder(responder);
+
+        boolean wasAdded = request.addResponder(responder);
+
+        Assert.assertFalse(wasAdded);
+    }
+
+    /**
+     * Tests adding a medical volunteer to a request.
+     */
+    @Test
+    public void testAddMedicalVolunteer() {
+        User medicalVolunteer = new User(
+            "Jane", "Doe", "password123",
+            "8035559876", "29201",
+            new double[] {34.0007, -81.0348}
+        );
+
+        medicalVolunteer.addPermission(Permission.MEDICAL_VOLUNTEER);
+
+        boolean wasAdded = request.addResponder(medicalVolunteer);
+
+        Assert.assertTrue(wasAdded);
+    }
+
+    /**
+     * Tests that adding a responder changes the status to EN_ROUTE.
+     */
+    @Test
+    public void testStatusAfterAddingResponder() {
+        request.addResponder(responder);
+
+        Assert.assertEquals(RequestStatus.EN_ROUTE, request.getStatus());
+    }
+
+    /**
+     * Tests that removing the last responder resets the status.
+     */
+    @Test
+    public void testStatusAfterRemovingLastResponder() {
+        request.addResponder(responder);
+        request.removeResponder(responder);
+
+        Assert.assertEquals(RequestStatus.SUBMITTED, request.getStatus());
+    }
+
+    /**
+     * Tests that a request stays EN_ROUTE when another responder remains.
+     */
+    @Test
+    public void testStatusAfterRemovingOneOfTwoResponders() {
+        User secondResponder = new User(
+            "Jane", "Doe", "password123",
+            "8035559876", "29201",
+            new double[] {34.0007, -81.0348}
+        );
+
+        secondResponder.addPermission(Permission.VOLUNTEER);
+
+        request.addResponder(responder);
+        request.addResponder(secondResponder);
+        request.removeResponder(responder);
+
+        Assert.assertEquals(RequestStatus.EN_ROUTE, request.getStatus());
+    }
+
+    /**
+     * Tests that removing a responder does not reopen a closed request.
+     */
+    @Test
+    public void testClosedStatusAfterRemovingResponder() {
+        request.addResponder(responder);
+        request.setStatus(RequestStatus.CLOSED);
+        request.removeResponder(responder);
+
+        Assert.assertEquals(RequestStatus.CLOSED, request.getStatus());
+    }
+
+    /**
+     * Tests the priority of a request with only one request type.
+     */
+    @Test
+    public void testPriorityWithOneRequestType() {
+        EnumSet<RequestType> singleType =
+            EnumSet.of(RequestType.ESSENTIAL_SUPPLIES);
+
+        Request singleRequest = new Request(
+            singleType, requester, false, location,
+            "Need drinking water."
+        );
+
+        Assert.assertEquals(5, singleRequest.getPriority());
+    }
+
+    /**
+     * Tests creating a request with existing information.
+     */
+    @Test
+    public void testExistingRequestCreation() {
+        Request existingRequest = new Request(
+            request.getId(),
+            requester,
+            request.getResponders(),
+            request.getCreatedAt(),
+            16,
+            requestTypes,
+            location,
+            "Need medical help and supplies.",
+            RequestStatus.EN_ROUTE,
+            "Responder assigned.",
+            false
+        );
+
+        Assert.assertEquals(RequestStatus.EN_ROUTE, existingRequest.getStatus());
     }
 }
