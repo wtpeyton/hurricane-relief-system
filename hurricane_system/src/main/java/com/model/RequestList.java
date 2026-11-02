@@ -1,5 +1,8 @@
 package com.model;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -258,5 +261,44 @@ public class RequestList implements Iterable<Request> {
     @Override
     public Iterator<Request> iterator() {
         return requests.iterator();
+    }
+
+    public void getRequestPrintOut(User volunteer, Request request, ShelterList shelterList){
+        try {
+            String fileName = volunteer.getFirstName() + volunteer.getLastName() + "output.txt";
+            String[] userToRequest = MapTools.getDrivingDirections(volunteer.getAddress(), request.getAddress());
+            PrintWriter writer = new PrintWriter(new FileWriter(fileName));
+            writer.println(request.getId());
+            writer.println(request.getRequester().getFirstName() + " " + request.getRequester().getLastName());
+            writer.println(request.getRequestType());
+            writer.println(request.getAddress());
+            writer.println(request.getStatus());
+            writer.println(request.getPriority());
+            writer.println(request.getDescription());
+            writer.println(request.getComment());
+            writer.println(request.getCreatedAt());
+            writer.println(request.getPeople().size());
+            writer.println("Directions to Request");
+            for (String string : userToRequest) {
+                writer.println(string);
+            }
+            ArrayList<Shelter> shelters = shelterList.filterShelters(shelterList.findSheltersByDistance(request.getAddress()), request);
+            if(shelters.isEmpty()){
+                writer.println("No suitable shelters");
+            } else {
+                Shelter shelter = shelters.get(0);
+            String[] requestToShelter = MapTools.getInstance().getDrivingDirections(request.getAddress(), shelter.getAddress());
+            writer.println("Shelter: " + shelter.getName());
+            writer.println(shelter.getAddress());
+            writer.println("Directions to Shelter");
+            for (String step : requestToShelter) {
+                writer.println(step);
+            }
+        }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

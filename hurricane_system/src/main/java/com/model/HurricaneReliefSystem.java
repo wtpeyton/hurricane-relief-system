@@ -532,4 +532,8 @@ public class HurricaneReliefSystem {
         }
         return false;
     }
+    
+    public void printRequest(Request request){
+        requestList.getRequestPrintOut(currentUser, request, shelterList);
+    }
 }

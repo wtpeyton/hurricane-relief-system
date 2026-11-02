@@ -139,7 +139,7 @@ public class MapTools {
      * @throws IOException
      * @throws InterruptedException
      */
-    public String[] getDrivingDirections(
+    public static String[] getDrivingDirections(
             Address startingAddress,
             Address endingAddress
     ) throws IOException, InterruptedException {
