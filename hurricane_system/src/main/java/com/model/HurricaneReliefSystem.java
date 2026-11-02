@@ -299,7 +299,7 @@ public class HurricaneReliefSystem {
      * @return true if the creation is successful, false otherwise
      */
     public boolean createHurricane(String name, ArrayList<String> affectedZipCodes, HurricaneStatus status, boolean active) {
-        if(name != null || affectedZipCodes != null || status != null){
+        if(name != null && affectedZipCodes != null && status != null && currentUser.getPermissions().contains(Permission.APP_ADMINISTRATOR)){
             this.currentHurricane = new Hurricane(name, affectedZipCodes, status, active);
             return true;
         }
@@ -316,7 +316,7 @@ public class HurricaneReliefSystem {
      * @return true if the modification is successful, false otherwise
      */
     public boolean modifyHurricane(Hurricane hurricane, String name, ArrayList<String> affectedZipCodes, HurricaneStatus status, boolean active) {
-        if(hurricane == null){
+        if(hurricane == null || !currentUser.getPermissions().contains(Permission.APP_ADMINISTRATOR)){
             return false;
         }
         hurricane.setName(name);
@@ -332,7 +332,7 @@ public class HurricaneReliefSystem {
      * @return true if the removal is successful, false otherwise
      */
     public boolean removeHurricane(Hurricane hurricane) {
-        if(hurricane == null){
+        if(hurricane == null || !currentUser.getPermissions().contains(Permission.APP_ADMINISTRATOR)){
             return false; 
         }
         hurricane.setActive(false);
