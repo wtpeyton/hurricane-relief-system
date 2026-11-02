@@ -6,7 +6,7 @@ import org.junit.Assert;
 import org.junit.Before;
 
 /**
- * Tests the creation, priority, and responder behavior of relief requests.
+ * Tests the creation, priority, responders, people, and pets of relief requests.
  * @author Olivia, Ryan
  */
 public class RequestTest {
@@ -265,5 +265,55 @@ public class RequestTest {
         );
 
         Assert.assertEquals(RequestStatus.EN_ROUTE, existingRequest.getStatus());
+    }
+
+    /**
+     * Tests adding a family member to a relief request.
+     */
+    @Test
+    public void testAddPerson() {
+        Person person = new Person("Sophie Carter", 9);
+
+        request.addPerson(person);
+
+        Assert.assertTrue(request.getPeople().contains(person));
+    }
+
+    /**
+     * Tests adding a pet with its animal type to a relief request.
+     */
+    @Test
+    public void testAddPet() {
+        request.addPet("Buddy (Dog)");
+
+        Assert.assertTrue(request.getPets().contains("Buddy (Dog)"));
+    }
+
+    /**
+     * Tests that a new request starts with no people.
+     */
+    @Test
+    public void testInitialPeople() {
+        Assert.assertTrue(request.getPeople().isEmpty());
+    }
+
+    /**
+     * Tests that a new request starts with no pets.
+     */
+    @Test
+    public void testInitialPets() {
+        Assert.assertTrue(request.getPets().isEmpty());
+    }
+
+    /**
+     * Tests adding multiple family members to one relief request.
+     */
+    @Test
+    public void testAddMultiplePeople() {
+        request.addPerson(new Person("James Carter", 38));
+        request.addPerson(new Person("Emily Carter", 36));
+        request.addPerson(new Person("Sophie Carter", 9));
+
+        Assert.assertEquals(3, request.getPeople().size());
     }
 }
