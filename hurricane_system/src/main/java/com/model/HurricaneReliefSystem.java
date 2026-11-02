@@ -2,6 +2,7 @@ package com.model;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.UUID;
 
 /**
  * [PARTIAL STUB] Singleton facade for the Hurricane Relief System.
@@ -250,6 +251,9 @@ public class HurricaneReliefSystem {
      */
     public ArrayList<Request> findVolunteerOpportunities() {
         return requestList.findVolunteerRequests(currentUser, requestList.getRequests());
+    }
+
+    public ArrayList<Request> findFilteredOpportunities(UUID requestId, double[] location, RequestType type, User user, RequestStatus status, boolean ascending){
     }
     
     /**
