@@ -61,38 +61,45 @@ public class DataWriter extends DataConstants {
      * @param shelters the ArrayList of Shelters in ShelterList
      * @return boolean if it succeeds or fails
      */
-    public static boolean saveShelters(ArrayList<Shelter> shelters){
-        JSONArray shelterArray = new JSONArray();
-        for (Shelter shelter : shelters){
-            JSONObject currentShelter = new JSONObject();
-            currentShelter.put(SHELTER_ACCESSIBILITY, shelter.getAccessibility().name());
-            currentShelter.put(SHELTER_ADMIN, shelter.getShelterAdmin().getUserId().toString());
-            currentShelter.put(SHELTER_CAPACITY, shelter.getCapacity());
-            currentShelter.put(SHELTER_ID, shelter.getShelterId().toString());
-            
-            JSONArray shelterLocation = new JSONArray();
-            shelterLocation.add(shelter.getLocation()[0]);
-            shelterLocation.add(shelter.getLocation()[1]);
-            currentShelter.put(SHELTER_LOCATION, shelterLocation);
+    public static boolean saveShelters(ArrayList<Shelter> shelters) {
+    return saveShelters(shelters, SHELTERS_FILE_PATH);
+}
 
-            currentShelter.put(SHELTER_MEDICAL_SERVICE, shelter.getMedicalService().name());
-            currentShelter.put(SHELTER_NAME, shelter.getName());
-            currentShelter.put(SHELTER_PET_ACCEPTANCE, shelter.isPetAcceptance());
-            currentShelter.put(SHELTER_VET_SERVICE, shelter.isVetService());
-            currentShelter.put(SHELTER_SUPPLIES, createEquipmentArray(shelter));
-            currentShelter.put(SHELTER_OCCUPANTS, createOccupantsArray(shelter));
-            currentShelter.put(SHELTER_PETS, createPetsArray(shelter));
-            
-            shelterArray.add(currentShelter);
-        }
-        try (FileWriter file = new FileWriter(SHELTERS_FILE_PATH)) {
-            file.write(shelterArray.toJSONString());
-            return true;   
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false; 
-        }
+public static boolean saveShelters(ArrayList<Shelter> shelters,
+                                   String filePath) {
+    JSONArray shelterArray = new JSONArray();
+
+    for (Shelter shelter : shelters) {
+        JSONObject currentShelter = new JSONObject();
+        currentShelter.put(SHELTER_ACCESSIBILITY, shelter.getAccessibility().name());
+        currentShelter.put(SHELTER_ADMIN, shelter.getShelterAdmin().getUserId().toString());
+        currentShelter.put(SHELTER_CAPACITY, shelter.getCapacity());
+        currentShelter.put(SHELTER_ID, shelter.getShelterId().toString());
+
+        JSONArray shelterLocation = new JSONArray();
+        shelterLocation.add(shelter.getLocation()[0]);
+        shelterLocation.add(shelter.getLocation()[1]);
+        currentShelter.put(SHELTER_LOCATION, shelterLocation);
+
+        currentShelter.put(SHELTER_MEDICAL_SERVICE, shelter.getMedicalService().name());
+        currentShelter.put(SHELTER_NAME, shelter.getName());
+        currentShelter.put(SHELTER_PET_ACCEPTANCE, shelter.isPetAcceptance());
+        currentShelter.put(SHELTER_VET_SERVICE, shelter.isVetService());
+        currentShelter.put(SHELTER_SUPPLIES, createEquipmentArray(shelter));
+        currentShelter.put(SHELTER_OCCUPANTS, createOccupantsArray(shelter));
+        currentShelter.put(SHELTER_PETS, createPetsArray(shelter));
+
+        shelterArray.add(currentShelter);
     }
+
+    try (FileWriter file = new FileWriter(filePath)) {
+        file.write(shelterArray.toJSONString());
+        return true;
+    } catch (Exception e) {
+        e.printStackTrace();
+        return false;
+    }
+}
     /**
      * Converts the RequestsList to a JSON File
      * @param requests the ArrayList<Request> from Requests
@@ -294,7 +301,7 @@ public class DataWriter extends DataConstants {
      *      TESTING TESTING TESTING
      *      MAIN    MAIN    MAIN
      * 
-     */
+     
     public static void main(String[] args) {
     // Test users
     ArrayList<User> users = new ArrayList<User>();
@@ -404,4 +411,5 @@ public class DataWriter extends DataConstants {
     System.out.println("Requests saved: " + saveRequests(requests));
     System.out.println("Hurricane saved: " + saveHurricane(hurricane));
     }
+    */
 }
