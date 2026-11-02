@@ -30,6 +30,9 @@ public class RequestList implements Iterable<Request> {
         }
         return instance;
     }
+    public ArrayList<Request> getRequests(){
+        return requests;
+    }
 
     /**
      * Adds a new request to the system
@@ -82,11 +85,51 @@ public class RequestList implements Iterable<Request> {
     }
 
     /**
+     * Gets the ArrayList of Requests based on the search criteria
+     * @param requestId searches by the request id
+     * @param location searches by the location
+     * @param type search by the type of the request
+     * @param user search by the submission of the request or the requests the volunteer can respond to
+     * @param status search by the status of the request
+     * @param volunter searches the request based on if the volunteer is qualified to assist
+     * @return an ArrayList of filtered requests
+     */
+    public ArrayList<Request> searchRequest(UUID requestId, double[] location, RequestType type, User user, RequestStatus status, User volunteer, boolean ascending){ //Refer to Tristan for volunteerOrUser explanation it is to avoid same type parameter
+        ArrayList<Request> results = new ArrayList<Request>(requests);
+        if(volunteer != null){ //Removes the requests that arent submitted status
+            results = findVolunteerRequests(volunteer, results);
+        }
+        if(location != null){ //Removes the requests based on the locations requirements
+            results = findRequestsByDistance(location, results);
+        }
+        if(type != null){ //Removes the requests based on the type
+            results = findRequestsByType(type, results);
+        }
+        if(status != null){ //Removes the requests based on status
+            results = findRequestsByStatus(status, results);
+        }
+        if(user != null){ //Removes the requests based on user submission
+            results = findRequestsByUser(user, results);
+        }
+        if(ascending){
+            return results;
+        }
+        else if(!ascending){
+            ArrayList<Request> reversedResults = new ArrayList<Request>();
+            for(int i = results.size() - 1; i >= 0; i--){
+                reversedResults.add(results.get(i));
+            }
+            return reversedResults;
+        }
+        return null;
+    }
+
+    /**
      * Gets a request by its unique identifier
      * @param requestId the unique identifier of the request
      * @return the request with the matching ID
      */
-    public Request getRequestById(UUID requestId) {
+    public Request getRequestById(UUID requestId, ArrayList<Request> requests) {
         for (Request request : requests) {
             if (request.getId().equals(requestId)) {
                 return request;
@@ -100,7 +143,7 @@ public class RequestList implements Iterable<Request> {
      * @param location the location to search from
      * @return the requests ordered from closest to farthest
      */
-    public ArrayList<Request> findRequestsByDistance(double[] location) {
+    public ArrayList<Request> findRequestsByDistance(double[] location, ArrayList<Request> requests) {
         ArrayList<Request> remaining = new ArrayList<Request>(requests);
         ArrayList<Request> results = new ArrayList<Request>();
 
@@ -143,7 +186,7 @@ public class RequestList implements Iterable<Request> {
      * @param type the request type to search for
      * @return the requests containing the specified request type
      */
-    public ArrayList<Request> findRequestsByType(RequestType type) {
+    public ArrayList<Request> findRequestsByType(RequestType type, ArrayList<Request> requests) {
         ArrayList<Request> results = new ArrayList<Request>();
         
         for (Request request : requests) {
@@ -159,7 +202,7 @@ public class RequestList implements Iterable<Request> {
      * @param user the user who submitted the requests
      * @return the requests submitted by the user
      */
-    public ArrayList<Request> findRequestsByUser(User user) {
+    public ArrayList<Request> findRequestsByUser(User user, ArrayList<Request> requests) {
         ArrayList<Request> results = new ArrayList<Request>();
         
         for (Request request : requests) {
@@ -175,7 +218,7 @@ public class RequestList implements Iterable<Request> {
      * @param status the request status to search for
      * @return the requests with the specified status
      */
-    public ArrayList<Request> findRequestsByStatus(RequestStatus status) {
+    public ArrayList<Request> findRequestsByStatus(RequestStatus status, ArrayList<Request> requests) {
         ArrayList<Request> results = new ArrayList<Request>();
         
         for (Request request : requests) {
@@ -191,7 +234,7 @@ public class RequestList implements Iterable<Request> {
      * @param volunteer the volunteer user
      * @return the requests available for the volunteer to respond to
      */
-    public ArrayList<Request> findVolunteerRequests(User volunteer) {
+    public ArrayList<Request> findVolunteerRequests(User volunteer, ArrayList<Request> requests) {
         ArrayList<Request> results = new ArrayList<Request>();
         
         for (Request request : requests) {

@@ -166,7 +166,7 @@ public class HurricaneReliefSystem {
      * @return a list of the current user's requests
      */
     public ArrayList<Request> findMyRequests() {
-        return requestList.findRequestsByUser(currentUser);
+        return requestList.findRequestsByUser(currentUser, requestList.getRequests());
     }
 
     /**
@@ -174,7 +174,7 @@ public class HurricaneReliefSystem {
      * @return a list of nearby requests
      */
     public ArrayList<Request> findNearbyRequests() {
-        return requestList.findRequestsByDistance(currentUser.getLocation());
+        return requestList.findRequestsByDistance(currentUser.getLocation(), requestList.getRequests());
     }
 
     /**
@@ -183,7 +183,7 @@ public class HurricaneReliefSystem {
      * @return a list of requests matching the specified type
      */
     public ArrayList<Request> findRequestsByType(RequestType type) {
-        return requestList.findRequestsByType(type);
+        return requestList.findRequestsByType(type, requestList.getRequests());
     }
 
     /**
@@ -192,7 +192,7 @@ public class HurricaneReliefSystem {
      * @return a list of requests matching the specified status
      */
     public ArrayList<Request> findRequestsByStatus(RequestStatus status) {
-        return requestList.findRequestsByStatus(status);
+        return requestList.findRequestsByStatus(status, requestList.getRequests());
     }
 
     /**
@@ -228,12 +228,12 @@ public class HurricaneReliefSystem {
     }
     
     /**
-     * [STUB] Finds all nearby shelters.
+     * Finds all nearby shelters.
      * @return a list of nearby shelters
      */
     public ArrayList<Shelter> findNearbyShelters() {
-        // [STUB] Implement findNearbyShelters logic here
-        return new ArrayList<>();
+        return shelterList.findSheltersByDistance(currentUser.getLocation());
+        
     }
     
     /**
@@ -245,12 +245,11 @@ public class HurricaneReliefSystem {
     }
 
     /**
-     * [STUB] Finds all volunteer opportunities sorted by location and filtered by credentials.
+     * Finds all volunteer opportunities sorted by location and filtered by credentials.
      * @return a list of volunteer opportunities
      */
     public ArrayList<Request> findVolunteerOpportunities() {
-        // [STUB] Implement findVolunteerOpportunities logic here
-        return new ArrayList<>();
+        return requestList.findVolunteerRequests(currentUser, requestList.getRequests());
     }
     
     /**
@@ -266,27 +265,33 @@ public class HurricaneReliefSystem {
     }
     
     /**
-     * [STUB] Approves an existing relief request.
+     * Approves an existing relief request.
      * @param request the request to approve
      * @return true if the approval is successful, false otherwise
      */
     public boolean approveRequest(Request request) {
-        // [STUB] Implement approveRequest logic here
+        if(currentUser.getPermissions().contains(Permission.APP_ADMINISTRATOR)){
+            request.setStatus(RequestStatus.SUBMITTED);
+            return true;
+        }
         return false;
     }
     
     /**
-     * [STUB] Rejects an existing relief request.
+     * Rejects an existing relief request.
      * @param request the request to reject
      * @return true if the rejection is successful, false otherwise
      */
     public boolean rejectRequest(Request request) {
-        // [STUB] Implement rejectRequest logic here
+        if(currentUser.getPermissions().contains(Permission.APP_ADMINISTRATOR)){
+            request.setStatus(RequestStatus.CLOSED);
+            return true;
+        }
         return false;
     }
     
     /**
-     * [STUB] Creates a new hurricane entry in the system.
+     * Creates a new hurricane entry in the system.
      * @param name the name of the hurricane
      * @param affectedZipCodes the list of affected zip codes
      * @param status the status of the hurricane
@@ -294,12 +299,15 @@ public class HurricaneReliefSystem {
      * @return true if the creation is successful, false otherwise
      */
     public boolean createHurricane(String name, ArrayList<String> affectedZipCodes, HurricaneStatus status, boolean active) {
-        // [STUB] Implement createHurricane logic here
+        if(name != null || affectedZipCodes != null || status != null){
+            this.currentHurricane = new Hurricane(name, affectedZipCodes, status, active);
+            return true;
+        }
         return false;
     }
     
     /**
-     * [STUB] Modifies an existing hurricane entry in the system.
+     * Modifies an existing hurricane entry in the system.
      * @param hurricane the hurricane to modify
      * @param name the new name of the hurricane
      * @param affectedZipCodes the new list of affected zip codes
@@ -308,18 +316,27 @@ public class HurricaneReliefSystem {
      * @return true if the modification is successful, false otherwise
      */
     public boolean modifyHurricane(Hurricane hurricane, String name, ArrayList<String> affectedZipCodes, HurricaneStatus status, boolean active) {
-        // [STUB] Implement modifyHurricane logic here
-        return false;
+        if(hurricane == null){
+            return false;
+        }
+        hurricane.setName(name);
+        hurricane.setAffectedZipCodes(affectedZipCodes);
+        hurricane.setStatus(status);
+        hurricane.setActive(active);
+        return true;
     }
     
     /**
-     * [STUB] Removes an existing hurricane entry from the system.
+     * Removes an existing hurricane entry from the system.
      * @param hurricane the hurricane to remove
      * @return true if the removal is successful, false otherwise
      */
     public boolean removeHurricane(Hurricane hurricane) {
-        // [STUB] Implement removeHurricane logic here
-        return false;
+        if(hurricane == null){
+            return false; 
+        }
+        hurricane.setActive(false);
+        return true;
     }
     
     /**
