@@ -18,17 +18,19 @@ public class UsersTest {
 
         User testUser = new User(
             "Amy", "Smith", "password123",
-            "8035551234", "29201",
+            "8035554321", "29201",
             new double[] {34.0007, -81.0348}
         );
 
         users.addUser(testUser);
 
-        User result = users.getUser("8035551234", "password123");
+        try {
+            User result = users.getUser("8035554321", "password123");
 
-        assertNotNull(result);
-
-        users.removeUser(testUser);
+            assertEquals(testUser, result);
+        } finally {
+            users.removeUser(testUser);
+        }
     }
 
     /**
@@ -40,13 +42,13 @@ public class UsersTest {
 
         User testUser = new User(
             "Amy", "Smith", "password123",
-            "8035551234", "29201",
+            "8035554321", "29201",
             new double[] {34.0007, -81.0348}
         );
 
         users.addUser(testUser);
 
-        User result = users.getUser("8035551234", "wrongpassword");
+        User result = users.getUser("8035554321", "wrongpassword");
 
         users.removeUser(testUser);
 
@@ -74,7 +76,7 @@ public class UsersTest {
 
         User testUser = new User(
             "Amy", "Smith", "password123",
-            "8035551234", "29201",
+            "8035554321", "29201",
             new double[] {34.0007, -81.0348}
         );
 
@@ -234,5 +236,43 @@ public class UsersTest {
         } finally {
             users.removeUser(firstUser);
         }
+    }
+
+    /**
+     * Tests creating an account with letters in the phone number.
+     */
+    @Test
+    public void testNonNumericPhoneNumber() {
+        UserList users = UserList.getInstance();
+
+        User newUser = users.addUser(
+            "Jane",
+            "Doe",
+            "password123",
+            "803555ABCD",
+            "29201",
+            new double[] {34.0007, -81.0348}
+        );
+
+        assertNull(newUser);
+    }
+
+    /**
+     * Tests creating an account with letters in the ZIP code.
+     */
+    @Test
+    public void testNonNumericZipCode() {
+        UserList users = UserList.getInstance();
+
+        User newUser = users.addUser(
+            "Jane",
+            "Doe",
+            "password123",
+            "8035559876",
+            "292AB",
+            new double[] {34.0007, -81.0348}
+        );
+
+        assertNull(newUser);
     }
 }

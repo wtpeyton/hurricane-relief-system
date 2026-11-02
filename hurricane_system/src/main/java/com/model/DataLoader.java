@@ -94,8 +94,12 @@ public class DataLoader extends DataConstants {
      * @return ArrayList of Shelter objects.
      */
     public static ArrayList<Shelter> getShelters() {
+    return getShelters(SHELTERS_FILE_PATH);
+    }
+
+public static ArrayList<Shelter> getShelters(String filePath) {
         ArrayList<Shelter> shelters = new ArrayList<Shelter>();
-        try (FileReader fileReader = new FileReader(SHELTERS_FILE_PATH);) {
+        try (FileReader fileReader = new FileReader(filePath);) {
             JSONArray sheltersArray = (JSONArray) new JSONParser().parse(fileReader);
             for (Object obj : sheltersArray) {
                 JSONObject shelterJson = (JSONObject) obj;
