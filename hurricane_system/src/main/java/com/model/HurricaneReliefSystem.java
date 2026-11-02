@@ -237,8 +237,8 @@ public class HurricaneReliefSystem {
         
     }
 
-    public ArrayList<Shelter> filterNearbyShelters(ArrayList<Shelter> shelters) {
-        
+    public ArrayList<Shelter> filterNearbyShelters(ArrayList<Shelter> shelters, Request request) {
+        return shelterList.filterShelters(shelterList.findSheltersByDistance(currentUser.getLocation()),request);
     }
     
     /**

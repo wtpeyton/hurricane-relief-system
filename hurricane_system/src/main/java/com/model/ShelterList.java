@@ -117,14 +117,18 @@ public class ShelterList implements Iterable<Shelter>
             }else{
                 returnShelters.add(shelter);
             }
-            if(shelter.getCapacity() - shelter.getCurrentOccupancy() < 1){
+            if(shelter.getCapacity() - shelter.getCurrentOccupancy() < (request.getPeople().size()+request.getPets().size())){
                 continue;
             } else {
                 returnShelters.add(shelter);
             }
-            
-
+            if(request.getPets().size()>0 && !(shelter.isPetAcceptance())){
+                continue;
+            } else {
+                returnShelters.add(shelter);
+            }
         }
+        return returnShelters;
     }
 
     /**
