@@ -1,9 +1,10 @@
 package com.model;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 
 /**
- * [STUB] Singleton facade for the Hurricane Relief System.
+ * [PARTIAL STUB] Singleton facade for the Hurricane Relief System.
  * @author Jack Andrin
  */
 public class HurricaneReliefSystem {
@@ -82,7 +83,14 @@ public class HurricaneReliefSystem {
      */
     public boolean login(String phoneNumber, String password) {
         currentUser = userList.getUser(phoneNumber, password);
-        return currentUser != null;
+        if (currentUser == null) {
+            return false;
+        }
+        currentHurricane = DataLoader.getHurricane();
+        userList = UserList.getInstance();
+        requestList = RequestList.getInstance();
+        shelterList = ShelterList.getInstance();
+        return true;
     }
 
     /**
@@ -90,9 +98,12 @@ public class HurricaneReliefSystem {
      * @return true if logout is successful, false otherwise
      */
     public boolean logout() {
-        // [STUB] Implement logout logic here
         if (currentUser != null) {
             currentUser = null;
+            userList.saveUsers();
+            requestList.saveRequests();
+            shelterList.saveShelters();
+            currentHurricane.saveHurricane();
             return true;
         }
         return false;
@@ -116,104 +127,103 @@ public class HurricaneReliefSystem {
     }
 
     /**
-     * [STUB] Submits a new relief request with the given information.
+     * Submits a new relief request with the given information.
      * @param type the type of the request
      * @param location the location coordinates of the request
      * @param description the description of the request
      * @return the created Request object, or null if submission fails
      */
-    public Request submitReliefRequest(RequestType type, double[] location, String description) {
-        // [STUB] Implement submitReliefRequest logic here
-        return null;
+    public Request submitReliefRequest(EnumSet<RequestType> type, boolean forSomeoneElse,double[] location, String description) {
+        return requestList.addRequest(type, currentUser, forSomeoneElse, location, description);
     }
 
     /**
-     * [STUB] Updates an existing relief request with the given description.
+     * Updates an existing relief request with the given description.
      * @param request the request to update
      * @param description the new description for the request
      * @return true if the update is successful, false otherwise
      */
     public boolean updateReliefRequest(Request request, String description) {
-        // [STUB] Implement updateReliefRequest logic here
-        return false;
+        request.setDescription(description);
+        return requestList.updateRequest(request);
     }
 
     /**
-     * [STUB] Cancels an existing relief request.
+     * Cancels an existing relief request.
      * @param request the request to cancel
      * @return true if the cancellation is successful, false otherwise
      */
     public boolean cancelReliefRequest(Request request) {
-        // [STUB] Implement cancelReliefRequest logic here
+        if (request.getRequester().equals(currentUser)) {
+            request.setStatus(RequestStatus.CLOSED);
+            return requestList.updateRequest(request);
+        }
         return false;
     }
 
     /**
-     * [STUB] Finds all relief requests submitted by the current user.
+     * Finds all relief requests submitted by the current user.
      * @return a list of the current user's requests
      */
     public ArrayList<Request> findMyRequests() {
-        // [STUB] Implement findMyRequests logic here
-        return new ArrayList<>();
+        return requestList.findRequestsByUser(currentUser);
     }
 
     /**
-     * [STUB] Finds all relief requests near the current user's location.
+     * Finds all relief requests near the current user's location.
      * @return a list of nearby requests
      */
     public ArrayList<Request> findNearbyRequests() {
-        // [STUB] Implement findNearbyRequests logic here
-        return new ArrayList<>();
+        return requestList.findRequestsByDistance(currentUser.getLocation());
     }
 
     /**
-     * [STUB] Finds all relief requests of the specified type.
+     * Finds all relief requests of the specified type.
      * @param type the type of requests to find
      * @return a list of requests matching the specified type
      */
     public ArrayList<Request> findRequestsByType(RequestType type) {
-        // [STUB] Implement findRequestsByType logic here
-        return new ArrayList<>();
+        return requestList.findRequestsByType(type);
     }
 
     /**
-     * [STUB] Finds all relief requests with the specified status.
+     * Finds all relief requests with the specified status.
      * @param status the status of requests to find
      * @return a list of requests matching the specified status
      */
     public ArrayList<Request> findRequestsByStatus(RequestStatus status) {
-        // [STUB] Implement findRequestsByStatus logic here
-        return new ArrayList<>();
+        return requestList.findRequestsByStatus(status);
     }
 
     /**
-     * [STUB] Responds to an existing relief request.
+     * Responds to an existing relief request.
      * @param request the request to respond to
      * @return true if the response is successful, false otherwise
      */
     public boolean respondToRequest(Request request) {
-        // [STUB] Implement respondToRequest logic here
-        return false;
+        return request.addResponder(currentUser);
     }
     
     /**
-     * [STUB] Withdraws from an existing relief request.
+     * Withdraws from an existing relief request.
      * @param request the request to withdraw from
      * @return true if the withdrawal is successful, false otherwise
      */
     public boolean withdrawFromRequest(Request request) {
-        // [STUB] Implement withdrawFromRequest logic here
-        return false;
+        return request.removeResponder(currentUser);
     }
     
     /**
-     * [STUB] Updates the status of an existing relief request.
+     * Updates the status of an existing relief request.
      * @param request the request to update
      * @param status the new status to set
      * @return true if the update is successful, false otherwise
      */
     public boolean updateRequestStatus(Request request, RequestStatus status) {
-        // [STUB] Implement updateRequestStatus logic here
+        if (request.getResponders().contains(currentUser) || currentUser.getPermissions().contains(Permission.APP_ADMINISTRATOR)) {
+            request.setStatus(status);
+            return requestList.updateRequest(request);
+        }
         return false;
     }
     
@@ -227,12 +237,11 @@ public class HurricaneReliefSystem {
     }
     
     /**
-     * [STUB] Becomes a volunteer for the relief system.
+     * Becomes a volunteer for the relief system.
      * @return true if the operation is successful, false otherwise
      */
     public boolean becomeVolunteer() {
-        // [STUB] Implement becomeVolunteer logic here
-        return false;
+        return currentUser.addPermission(Permission.VOLUNTEER);
     }
 
     /**
@@ -245,12 +254,14 @@ public class HurricaneReliefSystem {
     }
     
     /**
-     * [STUB] Removes a user from the relief system.
+     * Removes a user from the relief system.
      * @param user the user to remove
      * @return true if the removal is successful, false otherwise
      */
     public boolean removeUser(User user) {
-        // [STUB] Implement removeUser logic here
+        if (currentUser.getPermissions().contains(Permission.APP_ADMINISTRATOR)) {
+            return userList.removeUser(user);
+        }
         return false;
     }
     
@@ -312,71 +323,77 @@ public class HurricaneReliefSystem {
     }
     
     /**
-     * [STUB] Adds a permission to a user.
+     * Adds a permission to a user.
      * @param user the user to add the permission to
      * @param permission the permission to add
      * @return true if the addition is successful, false otherwise
      */
     public boolean addPermission(User user, Permission permission) {
-        // [STUB] Implement addPermission logic here
+        if (currentUser.getPermissions().contains(Permission.APP_ADMINISTRATOR)) {
+            return user.addPermission(permission);
+        }
         return false;
     }
     
     /**
-     * [STUB] Removes a permission from a user.
+     * Removes a permission from a user.
      * @param user the user to remove the permission from
      * @param permission the permission to remove
      * @return true if the removal is successful, false otherwise
      */
     public boolean removePermission(User user, Permission permission) {
-        // [STUB] Implement removePermission logic here
+        if (currentUser.getPermissions().contains(Permission.APP_ADMINISTRATOR)) {
+            return user.removePermission(permission);
+        }
         return false;
     }
     
     /**
-     * [STUB] Adds a credential to the current user.
+     * Adds a credential to the current user.
      * @param credential the credential to add
      * @return true if the addition is successful, false otherwise
      */
     public boolean addCredential(Credential credential) {
-        // [STUB] Implement addCredential logic here
-        return false;
+        return currentUser.addCredential(credential);
     }
 
     /**
-     * [STUB] Adds a credential to a specified user.
+     * Adds a credential to a specified user.
      * @param user the user to add the credential to
      * @param credential the credential to add
      * @return true if the addition is successful, false otherwise
      */
     public boolean addCredential(User user, Credential credential) {
-        // [STUB] Implement addCredential logic here
+        if (currentUser.getPermissions().contains(Permission.APP_ADMINISTRATOR)) {
+            return user.addCredential(credential);
+        }
         return false;
     }
     
     /**
-     * [STUB] Removes a credential from the current user.
+     * Removes a credential from the current user.
      * @param credential the credential to remove
      * @return true if the removal is successful, false otherwise
      */
     public boolean removeCredential(Credential credential) {
-        // [STUB] Implement removeCredential logic here
-        return false;
+        return currentUser.removeCredential(credential);
     }
     
     /**
-     * [STUB] Removes a credential from a specified user.
+     * Removes a credential from a specified user.
      * @param user the user to remove the credential from
      * @param credential the credential to remove
      * @return true if the removal is successful, false otherwise
      */
     public boolean removeCredential(User user, Credential credential) {
-        // [STUB] Implement removeCredential logic here
+        if (currentUser.getPermissions().contains(Permission.APP_ADMINISTRATOR)) {
+            return user.removeCredential(credential);
+        }
         return false;
     }
 
     /**
-     * [STUB] Creates a new shelter.
+     * Creates a new shelter.
      * @param name the name of the shelter
      * @param location the location of the shelter as a double array [latitude, longitude]
      * @param capacity the capacity of the shelter
@@ -388,12 +405,14 @@ public class HurricaneReliefSystem {
      * @return true if the creation is successful, false otherwise
      */
     public boolean createShelter(String name, double[] location, int capacity, boolean petAcceptance, ArrayList<ReliefResource> supplies, MedicalService medicalService, boolean vetService, Accessibility accessibility) {
-        // [STUB] Implement createShelter logic here
+        if (currentUser.getPermissions().contains(Permission.APP_ADMINISTRATOR) || currentUser.getPermissions().contains(Permission.SHELTER_ADMIN)) {
+            return shelterList.addShelter(name, location, capacity, petAcceptance, supplies, medicalService, vetService, accessibility, currentUser, new ArrayList<Person>(), new ArrayList<String>()) != null;
+        }
         return false;
     }
 
     /**
-     * [STUB] Edits an existing shelter.
+     * Edits an existing shelter.
      * @param shelter the shelter to edit
      * @param name the new name of the shelter
      * @param location the new location of the shelter as a double array [latitude, longitude]
@@ -406,48 +425,68 @@ public class HurricaneReliefSystem {
      * @return true if the edit is successful, false otherwise
      */
     public boolean editShelter(Shelter shelter, String name, double[] location, int capacity, boolean petAcceptance, ArrayList<ReliefResource> supplies, MedicalService medicalService, boolean vetService, Accessibility accessibility) {
-        // [STUB] Implement editShelter logic here
+        if (currentUser.getPermissions().contains(Permission.APP_ADMINISTRATOR) || shelter.getShelterAdmin().equals(currentUser)) {
+            shelter.setName(name);
+            shelter.setLocation(location);
+            shelter.setCapacity(capacity);
+            shelter.setPetAcceptance(petAcceptance);
+            shelter.setSupplies(supplies);
+            shelter.setMedicalService(medicalService);
+            shelter.setVetService(vetService);
+            shelter.setAccessibility(accessibility);
+            return true;
+        }
         return false;
     }
 
     /**
-     * [STUB] Deletes an existing shelter.
+     * Deletes an existing shelter.
      * @param shelter the shelter to delete
      * @return true if the deletion is successful, false otherwise
      */
     public boolean deleteShelter(Shelter shelter) {
-        // [STUB] Implement deleteShelter logic here
+        if (currentUser.getPermissions().contains(Permission.APP_ADMINISTRATOR) || shelter.getShelterAdmin().equals(currentUser)) {
+            return shelterList.removeShelter(shelter);
+        }
         return false;
     }
 
     /**
-     * [STUB] Adds a new piece of equipment to the current user.
+     * Adds a new piece of equipment to the current user.
      * @param type the type of equipment
      * @param quantity the quantity of equipment
      * @param location the location of the equipment as a double array [latitude, longitude]
      * @return true if the addition is successful, false otherwise
      */
     public boolean addEquipment(String type, int quantity, double[] location) {
-        // [STUB] Implement addEquipment logic here
+        if (currentUser != null) {
+            ReliefResource equipment = new ReliefResource(type, quantity, location);
+            currentUser.addEquipment(equipment);
+            return true;
+        }
         return false;
     }
 
     /**
-     * [STUB] Views all equipment of the current user.
+     * Views all equipment of the current user.
      * @return an ArrayList of ReliefResource representing the equipment
      */
     public ArrayList<ReliefResource> viewEquipment() {
-        // [STUB] Implement viewEquipment logic here
+        if (currentUser != null) {
+            return currentUser.getEquipment();
+        }
         return new ArrayList<>();
     }
 
     /**
-     * [STUB] Removes a piece of equipment from the current user.
+     * Removes a piece of equipment from the current user.
      * @param equipment the equipment to remove
      * @return true if the removal is successful, false otherwise
      */
     public boolean removeEquipment(ReliefResource equipment) {
-        // [STUB] Implement removeEquipment logic here
+        if (currentUser != null) {
+            return currentUser.getEquipment().remove(equipment);
+        }
         return false;
     }
 }

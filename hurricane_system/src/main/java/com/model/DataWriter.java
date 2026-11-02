@@ -3,6 +3,7 @@ package com.model;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.EnumSet;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -28,8 +29,8 @@ public class DataWriter extends DataConstants {
 
         for (User user: users) {
             JSONArray userLocation = new JSONArray();
-            userLocation.add(String.valueOf(user.getLocation()[0]));
-            userLocation.add(String.valueOf(user.getLocation()[1]));
+            userLocation.add(user.getLocation()[0]);
+            userLocation.add(user.getLocation()[1]);
 
             JSONObject currentUser = new JSONObject();
             //Adding all of the items into the user object
@@ -79,6 +80,9 @@ public class DataWriter extends DataConstants {
             currentShelter.put(SHELTER_PET_ACCEPTANCE, shelter.isPetAcceptance());
             currentShelter.put(SHELTER_VET_SERVICE, shelter.isVetService());
             currentShelter.put(SHELTER_SUPPLIES, createEquipmentArray(shelter));
+            currentShelter.put(SHELTER_OCCUPANTS, createOccupantsArray(shelter));
+            currentShelter.put(SHELTER_PETS, createPetsArray(shelter));
+            
             shelterArray.add(currentShelter);
         }
         try (FileWriter file = new FileWriter(SHELTERS_FILE_PATH)) {
@@ -105,8 +109,8 @@ public class DataWriter extends DataConstants {
             currentRequest.put(REQUEST_ID, request.getId().toString());
 
             JSONArray requestLocation = new JSONArray();
-            requestLocation.add(String.valueOf(request.getLocation()[0]));
-            requestLocation.add(String.valueOf(request.getLocation()[1]));
+            requestLocation.add(request.getLocation()[0]);
+            requestLocation.add(request.getLocation()[1]);
             currentRequest.put(REQUEST_LOCATION, requestLocation);
             
             currentRequest.put(REQUEST_PRIORITY, request.getPriority());
@@ -188,7 +192,7 @@ public class DataWriter extends DataConstants {
      */
     private static JSONArray createCredentialArray(User user){
         JSONArray credentials = new JSONArray();
-        ArrayList<Credential> iterable = user.getCredentials();
+        EnumSet<Credential> iterable = user.getCredentials();
 
         for(Credential item : iterable){
             credentials.add(item.name());
@@ -203,7 +207,7 @@ public class DataWriter extends DataConstants {
      */
     private static JSONArray createPermissionArray(User user){
         JSONArray permissions = new JSONArray();
-        ArrayList<Permission> iterable = user.getPermissions();
+        EnumSet<Permission> iterable = user.getPermissions();
 
         for(Permission item : iterable){
             permissions.add(item.name());
@@ -258,5 +262,146 @@ public class DataWriter extends DataConstants {
         }
         
         return equipment;
+    }
+
+    private static JSONArray createOccupantsArray(Shelter shelter){
+        JSONArray occupantsArray = new JSONArray();
+        ArrayList<Person> occupants = shelter.getOccupants();
+
+        for (Person occupant : occupants) {
+            JSONObject occupantJson = new JSONObject();
+            occupantJson.put("name", occupant.getName());
+            occupantJson.put("age", occupant.getAge());
+            occupantsArray.add(occupantJson);
+        }
+
+        return occupantsArray;
+    }
+
+    private static JSONArray createPetsArray(Shelter shelter){
+        JSONArray petsArray = new JSONArray();
+        ArrayList<String> pets = shelter.getPets();
+
+        for (String pet : pets) {
+            petsArray.add(pet);
+        }
+
+        return petsArray;
+    }
+
+    /**
+     * 
+     *      TESTING TESTING TESTING
+     *      MAIN    MAIN    MAIN
+     * 
+     */
+    public static void main(String[] args) {
+    // Test users
+    ArrayList<User> users = new ArrayList<User>();
+
+    User admin = new User(
+        "William",
+        "Peyton",
+        "testPassword123",
+        "8035551234",
+        "29201",
+        new double[] {34.0007, -81.0348}
+    );
+    admin.addPermission(Permission.SHELTER_ADMIN);
+    admin.addPermission(Permission.VOLUNTEER);
+    admin.addCredential(Credential.EMERGENCY_MEDICAL_TECHNICIAN_BASIC);
+    admin.getEquipment().add(new ReliefResource(
+        "Water bottles",
+        50,
+        new double[] {34.0007, -81.0348}
+    ));
+    users.add(admin);
+
+    User responder = new User(
+        "Jane",
+        "Doe",
+        "anotherTestPassword",
+        "8035555678",
+        "29205",
+        new double[] {34.0090, -81.0281}
+    );
+    responder.addPermission(Permission.MEDICAL_VOLUNTEER);
+    responder.addCredential(Credential.REGISTERED_NURSE);
+    users.add(responder);
+
+    // Test shelters
+    ArrayList<Shelter> shelters = new ArrayList<Shelter>();
+    ArrayList<ReliefResource> shelterSupplies = new ArrayList<ReliefResource>();
+    shelterSupplies.add(new ReliefResource(
+        "Blankets",
+        100,
+        new double[] {34.0100, -81.0300}
+    ));
+    shelterSupplies.add(new ReliefResource(
+        "First aid kits",
+        25,
+        new double[] {34.0100, -81.0300}
+    ));
+
+    ArrayList<Person> occupants = new ArrayList<Person>();
+    occupants.add(new Person("Alex Johnson", 34));
+    occupants.add(new Person("Maria Garcia", 29));
+    occupants.add(new Person("Sam Wilson", 8));
+
+    ArrayList<String> pets = new ArrayList<String>();
+    pets.add("Buddy Johnson");
+    pets.add("Luna Garcia");
+
+    Shelter shelter = new Shelter(
+        "Columbia Community Shelter",
+        new double[] {34.0100, -81.0300},
+        200,
+        true,
+        shelterSupplies,
+        MedicalService.AVERAGE_SERVICE,
+        true,
+        Accessibility.VERY_ACCESSIBLE,
+        admin,
+        occupants,
+        pets
+    );
+    shelters.add(shelter);
+
+    // Test requests
+    ArrayList<Request> requests = new ArrayList<Request>();
+    EnumSet<RequestType> requestTypes = EnumSet.noneOf(RequestType.class);
+    requestTypes.add(RequestType.MEDICAL_EMERGENCY);
+    requestTypes.add(RequestType.ESSENTIAL_SUPPLIES);
+
+    Request request = new Request(
+        requestTypes,
+        admin,
+        false,
+        new double[] {34.0050, -81.0350},
+        "Family needs medical attention and drinking water."
+    );
+    request.addResponder(responder);
+    request.setComment("Responder assigned and en route.");
+    request.setStatus(RequestStatus.EN_ROUTE);
+    requests.add(request);
+
+    // Test hurricane
+    ArrayList<String> affectedZipCodes = new ArrayList<String>();
+    affectedZipCodes.add("29201");
+    affectedZipCodes.add("29205");
+    affectedZipCodes.add("29208");
+
+    Hurricane hurricane = new Hurricane(
+        "Test Hurricane",
+        affectedZipCodes,
+        HurricaneStatus.CATEGORY_TWO,
+        true
+    );
+
+    // Write each JSON file
+    System.out.println("Users saved: " + saveUsers(users));
+    System.out.println("Shelters saved: " + saveShelters(shelters));
+    System.out.println("Requests saved: " + saveRequests(requests));
+    System.out.println("Hurricane saved: " + saveHurricane(hurricane));
     }
 }
