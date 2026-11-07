@@ -94,19 +94,29 @@ public class HurricaneReliefSystem {
     }
 
     /**
+     * Logs out the currently logged-in user, optionally saving data if specified.
+     * @return true if logout is successful, false otherwise
+     */
+    public boolean logout(boolean saveData) {
+        if (currentUser != null) {
+            currentUser = null;
+            if (saveData) {
+                userList.saveUsers();
+                requestList.saveRequests();
+                shelterList.saveShelters();
+                currentHurricane.saveHurricane();
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Logs out the currently logged-in user.
      * @return true if logout is successful, false otherwise
      */
     public boolean logout() {
-        if (currentUser != null) {
-            currentUser = null;
-            userList.saveUsers();
-            requestList.saveRequests();
-            shelterList.saveShelters();
-            currentHurricane.saveHurricane();
-            return true;
-        }
-        return false;
+        return logout(true);
     }
 
     /**
@@ -144,6 +154,9 @@ public class HurricaneReliefSystem {
      * @return true if the update is successful, false otherwise
      */
     public boolean updateReliefRequest(Request request, String description) {
+        if (!request.getRequester().equals(currentUser)) {
+            return false;
+        }
         request.setDescription(description);
         return requestList.updateRequest(request);
     }
