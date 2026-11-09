@@ -5,7 +5,6 @@ package com.model;
  * @author Olivia Casper
  */
 public enum Permission {
-    UNREGISTERED_USER,
     REGISTERED_USER,
     SHELTER_ADMIN,
     APP_ADMINISTRATOR,

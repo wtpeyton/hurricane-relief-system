@@ -59,6 +59,12 @@ public class UserList implements Iterable<User> {
         return null;
     }
 
+    public User addGuest() {
+        User user = new User();
+        users.add(user);
+        return user;
+    }
+
     /**
      * Adds a new user to the list/system.
      * @param firstName the user's first name

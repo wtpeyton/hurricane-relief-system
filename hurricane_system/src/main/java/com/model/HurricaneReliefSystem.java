@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 
 /**
- * [PARTIAL STUB] Singleton facade for the Hurricane Relief System.
+ * Singleton facade for the Hurricane Relief System.
  * @author Jack Andrin
  */
 public class HurricaneReliefSystem {
@@ -82,15 +82,24 @@ public class HurricaneReliefSystem {
      * @return true if login is successful, false otherwise
      */
     public boolean login(String phoneNumber, String password) {
+        if (currentUser != null) return false;
+
         currentUser = userList.getUser(phoneNumber, password);
-        if (currentUser == null) {
-            return false;
-        }
+        if (currentUser == null) return false;
+
         currentHurricane = DataLoader.getHurricane();
         userList = UserList.getInstance();
         requestList = RequestList.getInstance();
         shelterList = ShelterList.getInstance();
         return true;
+    }
+
+    public boolean loginAsGuest() {
+        if (currentUser != null) return false;
+
+        userList = UserList.getInstance();
+        currentUser = userList.addGuest();
+        return currentUser != null;
     }
 
     /**
@@ -132,6 +141,8 @@ public class HurricaneReliefSystem {
     public User createAccount(String firstName, String lastName,
                               String password, String phoneNumber,
                               String locationZip, double[] location) {
+        if (currentUser != null) return null;
+        userList = UserList.getInstance();
         return userList.addUser(firstName, lastName, password, phoneNumber, locationZip, location);
         
     }
