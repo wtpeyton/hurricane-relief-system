@@ -117,6 +117,7 @@ public class HurricaneReliefSystemTest {
     @Test
     public void testFindRequestsByTypeStatusAndDistance() {
         loginTestUser();
+        facade.becomeVolunteer();
         Request nearbyRequest = facade.submitReliefRequest(
             EnumSet.of(RequestType.ESSENTIAL_SUPPLIES),
             false,
@@ -316,6 +317,7 @@ public class HurricaneReliefSystemTest {
     @Test
     public void testManageOwnCredentials() {
         loginTestUser();
+        facade.becomeVolunteer();
         assertTrue(facade.addCredential(Credential.PARAMEDIC));
         assertTrue(testUser.getCredentials().contains(Credential.PARAMEDIC));
         assertFalse(facade.addCredential(Credential.PARAMEDIC));
