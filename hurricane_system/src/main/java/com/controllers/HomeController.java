@@ -11,6 +11,6 @@ public class HomeController {
 
     @FXML
     private void switchToSecondary() throws IOException {
-        App.setRoot("login");
+        App.setRoot("login_options");
     }
 }

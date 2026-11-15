@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+
+<VBox alignment="CENTER" prefHeight="600.0" prefWidth="300.0" spacing="20.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/13" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.controllers.LoadingController">
+   <children>
+      <ImageView fitHeight="220.0" fitWidth="250.0" preserveRatio="true" smooth="true">
+         <image>
+            <Image url="@../../images/logo_big.png" />
+         </image>
+      </ImageView>
+      <HBox alignment="CENTER" spacing="8.0">
+         <children>
+            <Circle fx:id="dotOne" fill="#f2f2f2" opacity="0.35" radius="5.0" />
+            <Circle fx:id="dotTwo" fill="#f2f2f2" opacity="0.35" radius="5.0" />
+            <Circle fx:id="dotThree" fill="#f2f2f2" opacity="0.35" radius="5.0" />
+         </children>
+      </HBox>
+   </children>
+</VBox>
