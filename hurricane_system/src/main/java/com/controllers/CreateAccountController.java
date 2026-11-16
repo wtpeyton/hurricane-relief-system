@@ -8,7 +8,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.Alert;
 import com.model.*;
+import com.location.Address;
+import com.location.Coordinates;
+import com.location.MapTools;
 
 
 public class CreateAccountController {
@@ -20,6 +24,9 @@ public class CreateAccountController {
 
     @FXML
     private TextField phoneNumberField;
+
+    @FXML
+    private TextField zipCodeField;
 
     @FXML
     private PasswordField passwordField;
@@ -56,13 +63,56 @@ public class CreateAccountController {
 
     @FXML
     void createAccount(ActionEvent event) throws IOException {
+        String firstName = firstNameField.getText();
+        String lastName = lastNameField.getText();
         String phoneNumber = phoneNumberField.getText();
         String password = passwordField.getText();
-        System.out.println("First Name: " + firstNameField.getText());
-        System.out.println("Last Name: " + lastNameField.getText());
-        System.out.println("Phone Number: " + phoneNumber);
-        System.out.println("Password: " + password);
-        App.setRoot("home");
+        String zipCode = zipCodeField.getText().trim();
+        HurricaneReliefSystem system = HurricaneReliefSystem.getInstance();
+
+        try {
+            Coordinates coordinates = MapTools.getInstance().getCoordinates(
+                    new Address("", "", "", zipCode));
+            User user = system.createAccount(firstName, lastName, password,
+                    phoneNumber, zipCode,
+                    new double[] {coordinates.getLatitude(), coordinates.getLongitude()});
+
+            if (user == null) {
+                showError("Account could not be created. Check your information and try again.");
+                return;
+            }
+
+            if (!system.getUserList().saveUsers()) {
+                showWarning("Your account was created for this session but could not be saved. "
+                        + "It may not be available after the application closes.");
+            }
+
+            if (system.login(phoneNumber, password)) {
+                App.setRoot("home");
+            } else {
+                showError("Account was created, but automatic sign-in failed. Please log in.");
+                App.setRoot("login");
+            }
+        } catch (IOException | IllegalStateException e) {
+            showError("Unable to determine a location from that ZIP code: " + e.getMessage());
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            showError("Location lookup was interrupted. Please try again.");
+        }
+    }
+
+    private void showError(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setHeaderText("Could not create account");
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    private void showWarning(String message) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setHeaderText("Account created but not saved");
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     @FXML
@@ -72,6 +122,9 @@ public class CreateAccountController {
 
     @FXML
     void continueAsGuest(ActionEvent event) throws IOException {
-        App.setRoot("home");
+        HurricaneReliefSystem system = HurricaneReliefSystem.getInstance();
+
+        if(system.loginAsGuest())
+            App.setRoot("home");
     }
 }

@@ -14,7 +14,7 @@
       "request": "launch",
       "mainClass": "com.relief/com.model.UI",
       "projectName": "hurricane_system",
-      "envFile": "${workspaceFolder}/.env"
+      "envFile": "${workspaceFolder}/hurricane_system/.env"
     },
     {
       "type": "java",
@@ -22,7 +22,7 @@
       "request": "launch",
       "mainClass": "com.relief/com.relief.App",
       "projectName": "hurricane_system",
-      "envFile": "${workspaceFolder}/.env"
+      "envFile": "${workspaceFolder}/hurricane_system/.env"
     }
   ]
 }

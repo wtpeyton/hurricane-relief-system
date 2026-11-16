@@ -77,6 +77,16 @@
             </ImageView>
          </children>
       </StackPane>
+      <Label prefWidth="324.0" styleClass="form-label" text="ZIP Code" />
+      <StackPane>
+         <children>
+            <TextField fx:id="zipCodeField" styleClass="icon-input">
+               <padding>
+                  <Insets left="32.0" />
+               </padding>
+            </TextField>
+         </children>
+      </StackPane>
       <Label prefWidth="324.0" styleClass="form-label" text="Enter Password" />
       <StackPane>
          <children>

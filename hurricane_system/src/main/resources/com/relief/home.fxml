@@ -14,7 +14,7 @@
    <children>
       <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="272.0">
          <children>
-            <Label minWidth="-Infinity" prefWidth="150.0" styleClass="home-title" text="Hello, User" />
+            <Label fx:id="greetingLabel" minWidth="-Infinity" prefWidth="150.0" styleClass="home-title" text="Hello, User" />
             <Region minWidth="0.0" prefHeight="200.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
             <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                <image>
