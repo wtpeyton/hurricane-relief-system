@@ -21,6 +21,22 @@ public class User {
     private ArrayList<ReliefResource> equipment;
 
     /**
+     * Creates a new guest user
+     */
+    public User() {
+        this.userId = UUID.randomUUID();
+        this.location = new double[]{0.0, 0.0};
+        this.locationZip = "";
+        this.firstName = "";
+        this.lastName = "";
+        this.password = "";
+        this.phoneNumber = "";
+        this.permissions = EnumSet.noneOf(Permission.class);
+        this.credentials = EnumSet.noneOf(Credential.class);
+        this.equipment = new ArrayList<ReliefResource>();
+    }
+
+    /**
      * Creates a new user
      * @param firstName the user's first name
      * @param lastName the user's last name
@@ -38,7 +54,7 @@ public class User {
         this.lastName = lastName;
         this.password = password;
         this.phoneNumber = phoneNumber;
-        this.permissions = EnumSet.noneOf(Permission.class);
+        this.permissions = EnumSet.of(Permission.REGISTERED_USER);
         this.credentials = EnumSet.noneOf(Credential.class);
         this.equipment = new ArrayList<ReliefResource>();
     }

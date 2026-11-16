@@ -36,6 +36,10 @@ Users can submit requests for help, volunteers can see and respond to requests i
 
 ## Documents
 
+[Hurricane Relief System Figma Prototype](docs/hurricane-relief-system-prototype.pdf)
+
+[Hurricane Relief System Prototype Checklist](docs/prototype-checklist.pdf)
+
 [Software Requirements Specification Document](docs/requirements.pdf)
 
 [Hurricane Relief System UML Class Diagram](docs/uml-class-diagram.pdf)

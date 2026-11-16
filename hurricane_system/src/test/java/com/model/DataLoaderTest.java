@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.util.Set;
 import java.util.Arrays;
 import java.util.UUID;
+import java.util.EnumSet;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -48,7 +49,7 @@ public class DataLoaderTest {
         assertEquals(users.getUser(UUID.fromString("20560f06-8a86-4aa5-b348-b926a87f71a6")), request.getRequester());
         assertEquals(Instant.parse("2026-10-06T21:13:06.125235400Z"), request.getCreatedAt());
         assertEquals(16, request.getPriority());
-        assertEquals(Arrays.asList(RequestType.MEDICAL_EMERGENCY, RequestType.ESSENTIAL_SUPPLIES), request.getRequestType());
+        assertEquals(EnumSet.of(RequestType.MEDICAL_EMERGENCY, RequestType.ESSENTIAL_SUPPLIES), request.getRequestType());
         assertArrayEquals(new double[] {34.005, -81.035}, request.getLocation(), 0.000001);
         assertEquals("Family needs medical attention and drinking water.", request.getDescription());
         assertEquals(RequestStatus.EN_ROUTE, request.getStatus());

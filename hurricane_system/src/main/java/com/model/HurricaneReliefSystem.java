@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 
 /**
- * [PARTIAL STUB] Singleton facade for the Hurricane Relief System.
+ * Singleton facade for the Hurricane Relief System.
  * @author Jack Andrin
  */
 public class HurricaneReliefSystem {
@@ -82,10 +82,11 @@ public class HurricaneReliefSystem {
      * @return true if login is successful, false otherwise
      */
     public boolean login(String phoneNumber, String password) {
+        if (currentUser != null) return false;
+
         currentUser = userList.getUser(phoneNumber, password);
-        if (currentUser == null) {
-            return false;
-        }
+        if (currentUser == null) return false;
+
         currentHurricane = DataLoader.getHurricane();
         userList = UserList.getInstance();
         requestList = RequestList.getInstance();
@@ -93,20 +94,50 @@ public class HurricaneReliefSystem {
         return true;
     }
 
+    public boolean loginAsGuest() {
+        if (currentUser != null) return false;
+
+        userList = UserList.getInstance();
+        currentUser = userList.addGuest();
+        return currentUser != null;
+    }
+
+    /**
+     * Logs out the currently logged-in user, optionally saving data if specified.
+     * @return true if logout is successful, false otherwise
+     */
+    public boolean logout(boolean saveData) {
+        if (currentUser != null) {
+            currentUser = null;
+            if (saveData) {
+                userList.saveUsers();
+                requestList.saveRequests();
+                shelterList.saveShelters();
+                currentHurricane.saveHurricane();
+            }
+            return true;
+        }
+        return false;
+    }
+
     /**
      * Logs out the currently logged-in user.
      * @return true if logout is successful, false otherwise
      */
     public boolean logout() {
-        if (currentUser != null) {
-            currentUser = null;
-            userList.saveUsers();
-            requestList.saveRequests();
-            shelterList.saveShelters();
-            currentHurricane.saveHurricane();
-            return true;
+        return logout(true);
+    }
+
+    /**
+     * Finds a user's password with their phone number
+     * @param phoneNumber the phone number of the user
+     * @return  string of the user's password 
+     */
+    public String findPassword(String phoneNumber){
+        if(phoneNumber == null){
+            return null;
         }
-        return false;
+        return userList.findUserByPhone(phoneNumber).getPassword();
     }
 
     /**
@@ -122,6 +153,8 @@ public class HurricaneReliefSystem {
     public User createAccount(String firstName, String lastName,
                               String password, String phoneNumber,
                               String locationZip, double[] location) {
+        if (currentUser != null) return null;
+        userList = UserList.getInstance();
         return userList.addUser(firstName, lastName, password, phoneNumber, locationZip, location);
         
     }
@@ -134,6 +167,7 @@ public class HurricaneReliefSystem {
      * @return the created Request object, or null if submission fails
      */
     public Request submitReliefRequest(EnumSet<RequestType> type, boolean forSomeoneElse,double[] location, String description) {
+        if (currentUser == null) return null;
         return requestList.addRequest(type, currentUser, forSomeoneElse, location, description);
     }
 
@@ -144,6 +178,9 @@ public class HurricaneReliefSystem {
      * @return true if the update is successful, false otherwise
      */
     public boolean updateReliefRequest(Request request, String description) {
+        if (currentUser == null || !request.getRequester().equals(currentUser)) {
+            return false;
+        }
         request.setDescription(description);
         return requestList.updateRequest(request);
     }
@@ -154,6 +191,7 @@ public class HurricaneReliefSystem {
      * @return true if the cancellation is successful, false otherwise
      */
     public boolean cancelReliefRequest(Request request) {
+        if (currentUser == null) return false;
         if (request.getRequester().equals(currentUser)) {
             request.setStatus(RequestStatus.CLOSED);
             return requestList.updateRequest(request);
@@ -166,6 +204,7 @@ public class HurricaneReliefSystem {
      * @return a list of the current user's requests
      */
     public ArrayList<Request> findMyRequests() {
+        if (currentUser == null) return new ArrayList<>();
         return requestList.findRequestsByUser(currentUser, requestList.getRequests());
     }
 
@@ -174,6 +213,7 @@ public class HurricaneReliefSystem {
      * @return a list of nearby requests
      */
     public ArrayList<Request> findNearbyRequests() {
+        if (!hasAnyPermission(Permission.VOLUNTEER, Permission.APP_ADMINISTRATOR)) return new ArrayList<>();
         return requestList.findRequestsByDistance(currentUser.getLocation(), requestList.getRequests());
     }
 
@@ -183,6 +223,7 @@ public class HurricaneReliefSystem {
      * @return a list of requests matching the specified type
      */
     public ArrayList<Request> findRequestsByType(RequestType type) {
+        if (!hasAnyPermission(Permission.VOLUNTEER, Permission.APP_ADMINISTRATOR)) return new ArrayList<>();
         return requestList.findRequestsByType(type, requestList.getRequests());
     }
 
@@ -192,6 +233,7 @@ public class HurricaneReliefSystem {
      * @return a list of requests matching the specified status
      */
     public ArrayList<Request> findRequestsByStatus(RequestStatus status) {
+        if (!hasAnyPermission(Permission.VOLUNTEER, Permission.APP_ADMINISTRATOR)) return new ArrayList<>();
         return requestList.findRequestsByStatus(status, requestList.getRequests());
     }
 
@@ -201,6 +243,7 @@ public class HurricaneReliefSystem {
      * @return true if the response is successful, false otherwise
      */
     public boolean respondToRequest(Request request) {
+        if (!hasAnyPermission(Permission.VOLUNTEER)) return false;
         return request.addResponder(currentUser);
     }
     
@@ -220,7 +263,7 @@ public class HurricaneReliefSystem {
      * @return true if the update is successful, false otherwise
      */
     public boolean updateRequestStatus(Request request, RequestStatus status) {
-        if (request.getResponders().contains(currentUser) || currentUser.getPermissions().contains(Permission.APP_ADMINISTRATOR)) {
+        if (request.getResponders().contains(currentUser) || hasAnyPermission(Permission.APP_ADMINISTRATOR)) {
             request.setStatus(status);
             return requestList.updateRequest(request);
         }
@@ -241,6 +284,7 @@ public class HurricaneReliefSystem {
      * @return true if the operation is successful, false otherwise
      */
     public boolean becomeVolunteer() {
+        if (!hasAnyPermission(Permission.REGISTERED_USER)) return false;
         return currentUser.addPermission(Permission.VOLUNTEER);
     }
 
@@ -249,6 +293,7 @@ public class HurricaneReliefSystem {
      * @return a list of volunteer opportunities
      */
     public ArrayList<Request> findVolunteerOpportunities() {
+        if (!hasAnyPermission(Permission.VOLUNTEER)) return new ArrayList<>();
         return requestList.findVolunteerRequests(currentUser, requestList.getRequests());
     }
     
@@ -258,7 +303,7 @@ public class HurricaneReliefSystem {
      * @return true if the removal is successful, false otherwise
      */
     public boolean removeUser(User user) {
-        if (currentUser.getPermissions().contains(Permission.APP_ADMINISTRATOR)) {
+        if (hasAnyPermission(Permission.APP_ADMINISTRATOR)) {
             return userList.removeUser(user);
         }
         return false;
@@ -270,7 +315,7 @@ public class HurricaneReliefSystem {
      * @return true if the approval is successful, false otherwise
      */
     public boolean approveRequest(Request request) {
-        if(currentUser.getPermissions().contains(Permission.APP_ADMINISTRATOR)){
+        if(hasAnyPermission(Permission.APP_ADMINISTRATOR)){
             request.setStatus(RequestStatus.SUBMITTED);
             return true;
         }
@@ -283,7 +328,7 @@ public class HurricaneReliefSystem {
      * @return true if the rejection is successful, false otherwise
      */
     public boolean rejectRequest(Request request) {
-        if(currentUser.getPermissions().contains(Permission.APP_ADMINISTRATOR)){
+        if(hasAnyPermission(Permission.APP_ADMINISTRATOR)){
             request.setStatus(RequestStatus.CLOSED);
             return true;
         }
@@ -299,7 +344,7 @@ public class HurricaneReliefSystem {
      * @return true if the creation is successful, false otherwise
      */
     public boolean createHurricane(String name, ArrayList<String> affectedZipCodes, HurricaneStatus status, boolean active) {
-        if(name != null || affectedZipCodes != null || status != null){
+        if(name != null && affectedZipCodes != null && status != null && hasAnyPermission(Permission.APP_ADMINISTRATOR)){
             this.currentHurricane = new Hurricane(name, affectedZipCodes, status, active);
             return true;
         }
@@ -316,7 +361,7 @@ public class HurricaneReliefSystem {
      * @return true if the modification is successful, false otherwise
      */
     public boolean modifyHurricane(Hurricane hurricane, String name, ArrayList<String> affectedZipCodes, HurricaneStatus status, boolean active) {
-        if(hurricane == null){
+        if(hurricane == null || !hasAnyPermission(Permission.APP_ADMINISTRATOR)){
             return false;
         }
         hurricane.setName(name);
@@ -332,7 +377,7 @@ public class HurricaneReliefSystem {
      * @return true if the removal is successful, false otherwise
      */
     public boolean removeHurricane(Hurricane hurricane) {
-        if(hurricane == null){
+        if(hurricane == null || !hasAnyPermission(Permission.APP_ADMINISTRATOR)){
             return false; 
         }
         hurricane.setActive(false);
@@ -346,7 +391,7 @@ public class HurricaneReliefSystem {
      * @return true if the addition is successful, false otherwise
      */
     public boolean addPermission(User user, Permission permission) {
-        if (currentUser.getPermissions().contains(Permission.APP_ADMINISTRATOR)) {
+        if (hasAnyPermission(Permission.APP_ADMINISTRATOR)) {
             return user.addPermission(permission);
         }
         return false;
@@ -359,7 +404,7 @@ public class HurricaneReliefSystem {
      * @return true if the removal is successful, false otherwise
      */
     public boolean removePermission(User user, Permission permission) {
-        if (currentUser.getPermissions().contains(Permission.APP_ADMINISTRATOR)) {
+        if (hasAnyPermission(Permission.APP_ADMINISTRATOR)) {
             return user.removePermission(permission);
         }
         return false;
@@ -371,6 +416,9 @@ public class HurricaneReliefSystem {
      * @return true if the addition is successful, false otherwise
      */
     public boolean addCredential(Credential credential) {
+        if (currentUser == null || !hasAnyPermission(Permission.VOLUNTEER)) {
+            return false;
+        }
         return currentUser.addCredential(credential);
     }
 
@@ -381,7 +429,7 @@ public class HurricaneReliefSystem {
      * @return true if the addition is successful, false otherwise
      */
     public boolean addCredential(User user, Credential credential) {
-        if (currentUser.getPermissions().contains(Permission.APP_ADMINISTRATOR)) {
+        if (hasAnyPermission(Permission.APP_ADMINISTRATOR)) {
             return user.addCredential(credential);
         }
         return false;
@@ -393,6 +441,9 @@ public class HurricaneReliefSystem {
      * @return true if the removal is successful, false otherwise
      */
     public boolean removeCredential(Credential credential) {
+        if (currentUser == null || !hasAnyPermission(Permission.VOLUNTEER)) {
+            return false;
+        }
         return currentUser.removeCredential(credential);
     }
     
@@ -403,7 +454,7 @@ public class HurricaneReliefSystem {
      * @return true if the removal is successful, false otherwise
      */
     public boolean removeCredential(User user, Credential credential) {
-        if (currentUser.getPermissions().contains(Permission.APP_ADMINISTRATOR)) {
+        if (hasAnyPermission(Permission.APP_ADMINISTRATOR)) {
             return user.removeCredential(credential);
         }
         return false;
@@ -422,7 +473,7 @@ public class HurricaneReliefSystem {
      * @return true if the creation is successful, false otherwise
      */
     public boolean createShelter(String name, double[] location, int capacity, boolean petAcceptance, ArrayList<ReliefResource> supplies, MedicalService medicalService, boolean vetService, Accessibility accessibility) {
-        if (currentUser.getPermissions().contains(Permission.APP_ADMINISTRATOR) || currentUser.getPermissions().contains(Permission.SHELTER_ADMIN)) {
+        if (hasAnyPermission(Permission.APP_ADMINISTRATOR, Permission.SHELTER_ADMIN)) {
             return shelterList.addShelter(name, location, capacity, petAcceptance, supplies, medicalService, vetService, accessibility, currentUser, new ArrayList<Person>(), new ArrayList<String>()) != null;
         }
         return false;
@@ -442,7 +493,7 @@ public class HurricaneReliefSystem {
      * @return true if the edit is successful, false otherwise
      */
     public boolean editShelter(Shelter shelter, String name, double[] location, int capacity, boolean petAcceptance, ArrayList<ReliefResource> supplies, MedicalService medicalService, boolean vetService, Accessibility accessibility) {
-        if (currentUser.getPermissions().contains(Permission.APP_ADMINISTRATOR) || shelter.getShelterAdmin().equals(currentUser)) {
+        if (hasAnyPermission(Permission.APP_ADMINISTRATOR) || shelter.getShelterAdmin().equals(currentUser)) {
             shelter.setName(name);
             shelter.setLocation(location);
             shelter.setCapacity(capacity);
@@ -462,7 +513,7 @@ public class HurricaneReliefSystem {
      * @return true if the deletion is successful, false otherwise
      */
     public boolean deleteShelter(Shelter shelter) {
-        if (currentUser.getPermissions().contains(Permission.APP_ADMINISTRATOR) || shelter.getShelterAdmin().equals(currentUser)) {
+        if (hasAnyPermission(Permission.APP_ADMINISTRATOR) || shelter.getShelterAdmin().equals(currentUser)) {
             return shelterList.removeShelter(shelter);
         }
         return false;
@@ -503,6 +554,16 @@ public class HurricaneReliefSystem {
     public boolean removeEquipment(ReliefResource equipment) {
         if (currentUser != null) {
             return currentUser.getEquipment().remove(equipment);
+        }
+        return false;
+    }
+
+    private boolean hasAnyPermission(Permission... permission) {
+        if (currentUser == null) return false;
+        for (Permission p : permission) {
+            if (currentUser.getPermissions().contains(p)) {
+                return true;
+            }
         }
         return false;
     }

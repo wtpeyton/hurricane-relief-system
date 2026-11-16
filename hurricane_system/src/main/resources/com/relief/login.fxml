@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
+
+<VBox alignment="CENTER" prefHeight="600.0" prefWidth="300.0" spacing="10.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.controllers.LoginController">
+   <children>
+      <ImageView fitHeight="100.0" fitWidth="100.0" preserveRatio="true" smooth="true">
+         <image>
+            <Image url="@../../images/logo_small.png" />
+         </image>
+      </ImageView>
+      <Label styleClass="welcome-title" text="Let's find you assistance" />
+      <Label prefWidth="324.0" styleClass="form-label" text="Phone Number" />
+      <StackPane>
+         <children>
+            <TextField fx:id="phoneNumberField" styleClass="icon-input">
+               <padding>
+                  <Insets left="32.0" />
+               </padding>
+            </TextField>
+            <ImageView fitHeight="16.0" fitWidth="16.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER_LEFT">
+               <image>
+                  <Image url="@../../images/login/phone.png" />
+               </image>
+               <StackPane.margin>
+                  <Insets left="10.0" />
+               </StackPane.margin>
+            </ImageView>
+         </children>
+      </StackPane>
+      <Label prefWidth="324.0" styleClass="form-label" text="Enter Password" />
+      <StackPane>
+         <children>
+            <PasswordField fx:id="passwordField">
+               <padding>
+                  <Insets left="32.0" />
+               </padding>
+               <styleClass>
+                  <String fx:value="password-input" />
+                  <String fx:value="icon-input" />
+               </styleClass></PasswordField>
+            <TextField fx:id="visiblePasswordField" visible="false">
+               <styleClass>
+                  <String fx:value="password-input" />
+                  <String fx:value="icon-input" />
+               </styleClass></TextField>
+            <Button fx:id="passwordVisibilityButton" accessibleText="Show password" onAction="#togglePasswordVisibility" styleClass="password-visibility-button" text="Show" StackPane.alignment="CENTER_RIGHT" />
+            <ImageView fitHeight="16.0" fitWidth="16.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER_LEFT">
+               <image>
+                  <Image url="@../../images/login/lock.png" />
+               </image>
+               <StackPane.margin>
+                  <Insets left="10.0" />
+               </StackPane.margin>
+            </ImageView>
+         </children>
+      </StackPane>
+      <HBox alignment="CENTER_RIGHT">
+         <children>
+            <Hyperlink onAction="#forgotPassword" text="Forgot password" underline="true"  />
+         </children>
+      </HBox>
+      <Label fx:id="errorLabel" managed="false" visible="false" styleClass="error-label" wrapText="true" prefWidth="324.0" />
+      <Button fx:id="secondaryButton" onAction="#login" prefWidth="324.0" text="Log In" />
+      <TextFlow textAlignment="CENTER">
+         <children>
+            <Text styleClass="account-text" text="Don't have an account? " />
+            <Hyperlink onAction="#createAccount" styleClass="account-link" text="Create Account" underline="true" />
+            <Text styleClass="account-text" text=" or " />
+            <Hyperlink onAction="#continueAsGuest" styleClass="account-link" text="Continue as Guest" underline="true" />
+         </children>
+      </TextFlow>
+   </children>
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+   <stylesheets>
+      <URL value="@styles.css" />
+   </stylesheets>
+</VBox>
