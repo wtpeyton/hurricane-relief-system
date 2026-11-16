@@ -129,6 +129,18 @@ public class HurricaneReliefSystem {
     }
 
     /**
+     * Finds a user's password with their phone number
+     * @param phoneNumber the phone number of the user
+     * @return  string of the user's password 
+     */
+    public String findPassword(String phoneNumber){
+        if(phoneNumber == null){
+            return null;
+        }
+        return userList.findUserByPhone(phoneNumber).getPassword();
+    }
+
+    /**
      * Creates a new user account with the given information.
      * @param firstName the user's first name
      * @param lastName the user's last name

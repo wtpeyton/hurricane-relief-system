@@ -2,16 +2,22 @@ package com.controllers;
 
 
 import java.io.IOException;
-import javafx.event.ActionEvent;
+
+import com.model.HurricaneReliefSystem;
 import com.relief.App;
+
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
-import com.model.*;
+import javafx.scene.control.TextField;
 
 
 public class LoginController {
+    @FXML
+    private Label errorLabel;
+
     @FXML
     private TextField phoneNumberField;
 
@@ -52,9 +58,17 @@ public class LoginController {
     void login(ActionEvent event) throws IOException {
         String phoneNumber = phoneNumberField.getText();
         String password = passwordField.getText();
-        System.out.println("Phone Number: " + phoneNumber);
-        System.out.println("Password: " + password);
-        App.setRoot("home");
+        if(HurricaneReliefSystem.getInstance().login(phoneNumber, password)){
+            App.setRoot("home");    
+        } else {
+            showError("Could not find that user.");
+        }
+    }
+
+    private void showError(String message){
+        errorLabel.setText(message);
+        errorLabel.setVisible(true);
+        errorLabel.setManaged(true);
     }
 
     @FXML
@@ -65,5 +79,10 @@ public class LoginController {
     @FXML
     void continueAsGuest(ActionEvent event) throws IOException {
         App.setRoot("home");
+    }
+
+    @FXML 
+    void forgotPassword(ActionEvent event) throws IOException {
+        App.setRoot("forgot_password");
     }
 }

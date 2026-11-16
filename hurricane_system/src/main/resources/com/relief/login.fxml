@@ -71,9 +71,10 @@
       </StackPane>
       <HBox alignment="CENTER_RIGHT">
          <children>
-            <Hyperlink text="Forgot password" underline="true" />
+            <Hyperlink onAction="#forgotPassword" text="Forgot password" underline="true"  />
          </children>
       </HBox>
+      <Label fx:id="errorLabel" managed="false" visible="false" styleClass="error-label" wrapText="true" prefWidth="324.0" />
       <Button fx:id="secondaryButton" onAction="#login" prefWidth="324.0" text="Log In" />
       <TextFlow textAlignment="CENTER">
          <children>

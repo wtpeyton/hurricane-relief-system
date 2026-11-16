@@ -1,8 +1,8 @@
 package com.model;
 
 import java.util.ArrayList;
-import java.util.UUID;
 import java.util.Iterator;
+import java.util.UUID;
 
 /**
  * Represents a list of users in the hurricane relief system.
@@ -166,6 +166,20 @@ public class UserList implements Iterable<User> {
             }
         }
         return false;
+    }
+
+    /**
+     * Checks if a user exists with the given phone number.
+     * @param phoneNumber the user's phone number to check
+     * @return user for use
+     */
+    public User findUserByPhone(String phoneNumber) {
+        for (User user : users) {
+            if (user.getPhoneNumber().equals(phoneNumber)) {
+                return user;
+            }
+        }
+        return null;
     }
 
     /**
