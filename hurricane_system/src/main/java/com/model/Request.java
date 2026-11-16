@@ -21,6 +21,8 @@ public class Request {
     private RequestStatus status;
     private String comment;
     private boolean forSomeoneElse;
+    private ArrayList<Person> people;
+    private ArrayList<String> pets;
 
     /**
      * Creates a new relief request
@@ -48,6 +50,8 @@ public class Request {
         this.status = RequestStatus.SUBMITTED;
         this.comment = "";
         this.forSomeoneElse = forSomeoneElse;
+        this.people = new ArrayList<Person>();
+        this.pets = new ArrayList<String>();
     }
 
     /**
@@ -77,6 +81,8 @@ public class Request {
         this.status = status;
         this.comment = comment;
         this.forSomeoneElse = forSomeoneElse;
+        this.people = new ArrayList<Person>();
+        this.pets = new ArrayList<String>();
     }
 
     /**
@@ -151,6 +157,38 @@ public class Request {
      */
     public void setLocation(double[] location) {
         this.location = location;
+    }
+
+    /**
+     * Adds a person to the relief request.
+     * @param person the person needing assistance
+     */
+    public void addPerson(Person person) {
+        people.add(person);
+    }
+
+    /**
+     * Returns the people included in the relief request.
+     * @return the list of people
+     */
+    public ArrayList<Person> getPeople() {
+        return people;
+    }
+
+    /**
+     * Adds a pet to the relief request.
+     * @param pet the name of the pet
+     */
+    public void addPet(String pet) {
+        pets.add(pet);
+    }
+
+    /**
+     * Returns the pets included in the relief request.
+     * @return the list of pets
+     */
+    public ArrayList<String> getPets() {
+        return pets;
     }
 
     /**

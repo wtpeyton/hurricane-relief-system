@@ -2,6 +2,7 @@ package com.model;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
+import java.util.UUID;
 
 /**
  * Tests the login, user lookup, and account validation in UserList
@@ -48,11 +49,13 @@ public class UsersTest {
 
         users.addUser(testUser);
 
-        User result = users.getUser("8035554321", "wrongpassword");
+        try {
+            User result = users.getUser("8035554321", "wrongpassword");
 
-        users.removeUser(testUser);
-
-        assertNull(result);
+            assertNull(result);
+        } finally {
+            users.removeUser(testUser);
+        }
     }
 
     /**
@@ -82,11 +85,25 @@ public class UsersTest {
 
         users.addUser(testUser);
 
-        User result = users.getUser(testUser.getUserId());
+        try {
+            User result = users.getUser(testUser.getUserId());
 
-        users.removeUser(testUser);
+            assertEquals(testUser, result);
+        } finally {
+            users.removeUser(testUser);
+        }
+    }
 
-        assertEquals(testUser, result);
+    /**
+     * Tests looking up a user ID that does not exist.
+     */
+    @Test
+    public void testUnknownUserId() {
+        UserList users = UserList.getInstance();
+
+        User result = users.getUser(UUID.randomUUID());
+
+        assertNull(result);
     }
 
     /**
@@ -95,21 +112,24 @@ public class UsersTest {
     @Test
     public void testValidAccountCreation() {
         UserList users = UserList.getInstance();
+        User newUser = null;
 
-        User newUser = users.addUser(
-            "Jane",
-            "Doe",
-            "password123",
-            "8035559876",
-            "29201",
-            new double[] {34.0007, -81.0348}
-        );
+        try {
+            newUser = users.addUser(
+                "Jane",
+                "Doe",
+                "password123",
+                "8035559876",
+                "29201",
+                new double[] {34.0007, -81.0348}
+            );
 
-        if (newUser != null) {
-            users.removeUser(newUser);
+            assertNotNull(newUser);
+        } finally {
+            if (newUser != null) {
+                users.removeUser(newUser);
+            }
         }
-
-        assertNotNull(newUser);
     }
 
     /**
@@ -239,6 +259,28 @@ public class UsersTest {
     }
 
     /**
+     * Tests checking whether a registered phone number exists.
+     */
+    @Test
+    public void testDoesUserExist() {
+        UserList users = UserList.getInstance();
+
+        User testUser = new User(
+            "Amy", "Smith", "password123",
+            "8035554321", "29201",
+            new double[] {34.0007, -81.0348}
+        );
+
+        users.addUser(testUser);
+
+        try {
+            assertTrue(users.doesUserExist("8035554321"));
+        } finally {
+            users.removeUser(testUser);
+        }
+    }
+
+    /**
      * Tests creating an account with letters in the phone number.
      */
     @Test
@@ -274,5 +316,35 @@ public class UsersTest {
         );
 
         assertNull(newUser);
+    }
+
+    /**
+     * Tests iterating through the user list.
+     */
+    @Test
+    public void testIterator() {
+        UserList users = UserList.getInstance();
+
+        User testUser = new User(
+            "Amy", "Smith", "password123",
+            "8035554321", "29201",
+            new double[] {34.0007, -81.0348}
+        );
+
+        users.addUser(testUser);
+
+        try {
+            boolean found = false;
+
+            for (User user : users) {
+                if (user == testUser) {
+                    found = true;
+                }
+            }
+
+            assertTrue(found);
+        } finally {
+            users.removeUser(testUser);
+        }
     }
 }
