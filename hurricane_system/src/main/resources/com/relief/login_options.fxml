@@ -14,9 +14,19 @@
             <Image url="@../../images/logo_small.png" />
          </image>
       </ImageView>
-      <Button text="Create Account" onAction="#createAccount" />
-      <Button text="Log In" onAction="#login" />
-      <Button text="Continue as Guest" onAction="#continueAsGuest" />
+   <Button text="Create Account"
+         onAction="#createAccount"
+         prefWidth="180"
+         styleClass="button,teal-button" />
+
+   <Button text="Log In"
+         onAction="#login"
+         prefWidth="180" />
+
+   <Button text="Continue as Guest"
+         onAction="#continueAsGuest"
+         prefWidth="180"
+         styleClass="button,outline-button" />
    </children>
    <stylesheets>
       <URL value="@styles.css" />

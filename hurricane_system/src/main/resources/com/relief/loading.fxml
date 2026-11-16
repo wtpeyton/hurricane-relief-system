@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 
-<VBox alignment="CENTER" prefHeight="600.0" prefWidth="300.0" spacing="20.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/13" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.controllers.LoadingController">
+<VBox alignment="CENTER" prefHeight="600.0" prefWidth="300.0" spacing="20.0" style="-fx-background-color: #11468C;" xmlns="http://javafx.com/javafx/13" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.controllers.LoadingController">
    <children>
       <ImageView fitHeight="220.0" fitWidth="250.0" preserveRatio="true" smooth="true">
          <image>
