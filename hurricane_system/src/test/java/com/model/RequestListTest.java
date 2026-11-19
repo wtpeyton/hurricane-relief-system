@@ -1,5 +1,7 @@
 package com.model;
 
+import com.location.Address;
+
 import org.junit.Test;
 
 public class RequestListTest {

@@ -1,5 +1,7 @@
 package com.model;
 
+import com.location.Address;
+
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -11,7 +13,7 @@ import org.junit.After;
 import org.junit.Before;
 
 public class HurricaneReliefSystemTest {
-    private static final double[] TEST_LOCATION = new double[]{34.0, -81.0};
+    private static final Address TEST_LOCATION = new Address("1244 Blossom Street", "Columbia", "SC", "29205");
 
     private HurricaneReliefSystem facade;
     private User testUser;
@@ -23,7 +25,7 @@ public class HurricaneReliefSystemTest {
     public void setUp() {
         facade = HurricaneReliefSystem.getInstance();
         testUser = facade.createAccount(
-            "Test", "User", "test-password", "9115550000", "29201", TEST_LOCATION
+            "Test", "User", "test-password", "9115550000", TEST_LOCATION
         );
         assertNotNull(testUser);
         createdUsers.add(testUser);
@@ -49,7 +51,7 @@ public class HurricaneReliefSystemTest {
 
     private User createAdditionalUser() {
         User additionalUser = facade.createAccount(
-            "Additional", "User", "test-password", "5555552222", "29201", TEST_LOCATION
+            "Additional", "User", "test-password", "5555552222", TEST_LOCATION
         );
         createdUsers.add(additionalUser);
         return additionalUser;
@@ -89,7 +91,7 @@ public class HurricaneReliefSystemTest {
     @Test
     public void testInvalidAccountCreation() {
         assertNull(facade.createAccount(
-            "Test", "User", "test-password", "not-a-phone", "29201", TEST_LOCATION
+            "Test", "User", "test-password", "not-a-phone", TEST_LOCATION
         ));
 
         assertFalse(facade.login("not-a-phone", "test-password"));
@@ -121,13 +123,13 @@ public class HurricaneReliefSystemTest {
         Request nearbyRequest = facade.submitReliefRequest(
             EnumSet.of(RequestType.ESSENTIAL_SUPPLIES),
             false,
-            new double[]{34.01, -81.0},
+            new Address("1244 Blossom Street", "Columbia", "SC", "29205"),
             "Need water"
         );
         Request distantRequest = facade.submitReliefRequest(
             EnumSet.of(RequestType.RESCUE_TRAPPED),
             false,
-            new double[]{35.0, -80.0},
+            new Address("1244 Blossom Street", "Columbia", "SC", "29205"),
             "Need rescue"
         );
         createdRequests.add(nearbyRequest);
@@ -151,7 +153,7 @@ public class HurricaneReliefSystemTest {
         facade.logout(false);
 
         User anotherUser = facade.createAccount(
-            "Another", "User", "test-password", "5555551111", "29201", TEST_LOCATION
+            "Another", "User", "test-password", "5555551111", TEST_LOCATION
         );
         createdUsers.add(anotherUser);
         facade.login("5555551111", "test-password");
@@ -183,7 +185,7 @@ public class HurricaneReliefSystemTest {
         facade.logout(false);
 
         User anotherUser = facade.createAccount(
-            "Another", "User", "test-password", "5555551111", "29201", TEST_LOCATION
+            "Another", "User", "test-password", "5555551111", TEST_LOCATION
         );
         createdUsers.add(anotherUser);
         facade.login("5555551111", "test-password");

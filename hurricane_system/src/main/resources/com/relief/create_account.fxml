@@ -77,10 +77,10 @@
             </ImageView>
          </children>
       </StackPane>
-      <Label prefWidth="324.0" styleClass="form-label" text="ZIP Code" />
+      <Label prefWidth="324.0" styleClass="form-label" text="Address" />
       <StackPane>
          <children>
-            <TextField fx:id="zipCodeField" styleClass="icon-input">
+            <TextField fx:id="addressField" promptText="Street, City, State ZIP" styleClass="icon-input">
                <padding>
                   <Insets left="32.0" />
                </padding>

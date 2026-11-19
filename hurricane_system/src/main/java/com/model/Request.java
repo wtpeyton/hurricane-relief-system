@@ -1,5 +1,7 @@
 package com.model;
 
+import com.location.Address;
+
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -16,7 +18,7 @@ public class Request {
     private Instant createdAt;
     private int priority;
     private EnumSet<RequestType> requestType;
-    private double[] location;
+    private Address location;
     private String description;
     private RequestStatus status;
     private String comment;
@@ -32,7 +34,7 @@ public class Request {
      * @param location the location of the request as a double array [latitude, longitude]
      * @param description a description of the request
      */
-    public Request(EnumSet<RequestType> requestType, User requester, boolean forSomeoneElse, double[] location, String description) {
+    public Request(EnumSet<RequestType> requestType, User requester, boolean forSomeoneElse, Address location, String description) {
         this.id = UUID.randomUUID();
         this.requester = requester;
         this.responders = new ArrayList<User>();
@@ -69,7 +71,7 @@ public class Request {
      * @param forSomeoneElse whether the request is for someone else
      */
     public Request(UUID id, User requester, ArrayList<User> responders, Instant createdAt, int  priority, EnumSet<RequestType> requestType, 
-        double[] location, String description, RequestStatus status, String comment, boolean forSomeoneElse) {  
+        Address location, String description, RequestStatus status, String comment, boolean forSomeoneElse) {  
         this.id = id;
         this.requester = requester;
         this.responders = responders;
@@ -155,7 +157,7 @@ public class Request {
      * Sets the location for the request.
      * @param location the new location for the request
      */
-    public void setLocation(double[] location) {
+    public void setLocation(Address location) {
         this.location = location;
     }
 
@@ -219,7 +221,7 @@ public class Request {
      * Returns the location of the request.
      * @return the location of the request
      */
-    public double[] getLocation() {
+    public Address getLocation() {
         return location;
     }
 

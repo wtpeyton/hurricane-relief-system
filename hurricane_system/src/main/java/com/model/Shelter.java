@@ -1,4 +1,6 @@
 package com.model;
+
+import com.location.Address;
 import java.util.ArrayList;
 import java.util.UUID;
 /**
@@ -8,7 +10,7 @@ import java.util.UUID;
 public class Shelter {
     private UUID shelterId;
     private String name;
-    private double[] location;
+    private Address location;
     private int capacity;
     private boolean petAcceptance;
     private ArrayList<ReliefResource> supplies;
@@ -35,7 +37,7 @@ public class Shelter {
      * @param occupants The list of people currently staying at the shelter.
      * @param pets The list of pets currently staying at the shelter.
      */
-    public Shelter(UUID shelterId, String name, double[] location, int capacity, boolean petAcceptance, 
+    public Shelter(UUID shelterId, String name, Address location, int capacity, boolean petAcceptance, 
                    ArrayList<ReliefResource> supplies, MedicalService medicalService,
                    boolean vetService, Accessibility accessibility, User shelterAdmin,
                    ArrayList<Person> occupants, ArrayList<String> pets)
@@ -68,7 +70,7 @@ public class Shelter {
      * @param occupants The list of people currently staying at the shelter.
      * @param pets The list of pets currently staying at the shelter.
      */
-    public Shelter(String name, double[] location, int capacity, boolean petAcceptance,
+    public Shelter(String name, Address location, int capacity, boolean petAcceptance,
                    ArrayList<ReliefResource> supplies, MedicalService medicalService,
                    boolean vetService, Accessibility accessibility, User shelterAdmin,
                    ArrayList<Person> occupants, ArrayList<String> pets)
@@ -112,7 +114,7 @@ public class Shelter {
     /**
      * @return The geographical location of the shelter.
      */
-    public double[] getLocation()
+    public Address getLocation()
     {
         return location;
     }
@@ -122,7 +124,7 @@ public class Shelter {
      *
      * @param location The new location of the shelter.
      */
-    public void setLocation(double[] location)
+    public void setLocation(Address location)
     {
         this.location = location;
     }

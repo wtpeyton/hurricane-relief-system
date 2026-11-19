@@ -1,5 +1,8 @@
 package com.model;
 
+import com.location.Address;
+import com.location.MapTools;
+
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.Iterator;
@@ -44,7 +47,7 @@ public class RequestList implements Iterable<Request> {
      * @return the newly added request
      */
     public Request addRequest(EnumSet<RequestType> requestType, User requester, 
-                              boolean forSomeoneElse, double[] location, String description) {
+                              boolean forSomeoneElse, Address location, String description) {
         Request request = new Request(requestType, requester, forSomeoneElse, location, description);
         requests.add(request);
         return request;
@@ -94,7 +97,7 @@ public class RequestList implements Iterable<Request> {
      * @param volunter searches the request based on if the volunteer is qualified to assist
      * @return an ArrayList of filtered requests
      */
-    public ArrayList<Request> searchRequest(UUID requestId, double[] location, RequestType type, User user, RequestStatus status, User volunteer, boolean ascending){ //Refer to Tristan for volunteerOrUser explanation it is to avoid same type parameter
+    public ArrayList<Request> searchRequest(UUID requestId, Address location, RequestType type, User user, RequestStatus status, User volunteer, boolean ascending){ //Refer to Tristan for volunteerOrUser explanation it is to avoid same type parameter
         ArrayList<Request> results = new ArrayList<Request>(requests);
         if(volunteer != null){ //Removes the requests that arent submitted status
             results = findVolunteerRequests(volunteer, results);
@@ -143,42 +146,8 @@ public class RequestList implements Iterable<Request> {
      * @param location the location to search from
      * @return the requests ordered from closest to farthest
      */
-    public ArrayList<Request> findRequestsByDistance(double[] location, ArrayList<Request> requests) {
-        ArrayList<Request> remaining = new ArrayList<Request>(requests);
-        ArrayList<Request> results = new ArrayList<Request>();
-
-        // Find the closest remaining request until all requests are ordered
-        while (!remaining.isEmpty()) {
-            Request closestRequest = remaining.get(0);
-            double[] closestLocation = closestRequest.getLocation();
-
-            // Calculate the distance from the given location
-            double closestDistance = Math.sqrt(
-                Math.pow(closestLocation[0] - location[0], 2)
-                + Math.pow(closestLocation[1] - location[1], 2)
-            );
-
-            // Check the remaining requests for one that is closer
-            for (Request request : remaining) {
-                double[] requestLocation = request.getLocation();
-
-                double distance = Math.sqrt(
-                    Math.pow(requestLocation[0] - location[0], 2)
-                    + Math.pow(requestLocation[1] - location[1], 2)
-                );
-
-                if (distance < closestDistance) {
-                    closestDistance = distance;
-                    closestRequest = request;
-                }
-            }
-
-            // Add the closest request and remove it from the remaining requests
-            results.add(closestRequest);
-            remaining.remove(closestRequest);
-        }
-
-        return results;
+    public ArrayList<Request> findRequestsByDistance(Address location, ArrayList<Request> requests) {
+        return MapTools.getInstance().sortByDrivingTime(location, requests, Request::getLocation);
     }
 
     /**

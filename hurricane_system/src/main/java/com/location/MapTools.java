@@ -3,6 +3,11 @@ package com.location;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.IdentityHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URLEncoder;
@@ -29,6 +34,7 @@ public class MapTools {
     private final String apiKey = System.getenv("MAP_API_KEY");
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
+    private final Map<String, Coordinates> coordinateCache = new HashMap<>();
 
     private MapTools() {
         httpClient = HttpClient.newBuilder()
@@ -54,6 +60,11 @@ public class MapTools {
      */
     public Coordinates getCoordinates(Address address)
             throws IOException, InterruptedException {
+
+        Coordinates cached = coordinateCache.get(address.toString());
+        if (cached != null) {
+            return cached;
+        }
 
         checkForApiKey();
 
@@ -95,7 +106,59 @@ public class MapTools {
 
         JsonNode bestResult = findBestResult(features);
 
-        return readCoordinates(bestResult);
+        Coordinates coordinates = readCoordinates(bestResult);
+        coordinateCache.put(address.toString(), coordinates);
+        return coordinates;
+    }
+
+    /**
+     * Calculates the driving time in seconds between two addresses.
+     * @param start The address we are driving from
+     * @param end The address we are driving to
+     * @return The number of seconds it takes to drive
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    public double getDrivingTime(Address start, Address end)
+            throws IOException, InterruptedException {
+        return getDrivingTime(getCoordinates(start), getCoordinates(end));
+    }
+
+    /**
+     * Sorts items by driving time from an address, shortest first. Items whose
+     * address cannot be located or routed are placed at the end. If the starting
+     * address cannot be located (or no API key is set) the original order is kept.
+     * @param from The address we are driving from
+     * @param items The items to sort
+     * @param addressOf Gets the address an item is located at
+     * @return A new list sorted by driving time
+     */
+    public <T> ArrayList<T> sortByDrivingTime(Address from, List<T> items,
+                                              Function<T, Address> addressOf) {
+        ArrayList<T> sorted = new ArrayList<>(items);
+        if (from == null) {
+            return sorted;
+        }
+
+        Map<T, Double> times = new IdentityHashMap<>();
+        for (T item : sorted) {
+            double time = Double.MAX_VALUE;
+            try {
+                Address address = addressOf.apply(item);
+                if (address != null) {
+                    time = getDrivingTime(from, address);
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return new ArrayList<>(items);
+            } catch (IOException | RuntimeException e) {
+                System.err.println("Could not route to item: " + e.getMessage());
+            }
+            times.put(item, time);
+        }
+
+        sorted.sort((a, b) -> Double.compare(times.get(a), times.get(b)));
+        return sorted;
     }
 
     /**

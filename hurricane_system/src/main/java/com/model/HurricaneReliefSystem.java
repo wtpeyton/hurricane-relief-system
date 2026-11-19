@@ -1,5 +1,7 @@
 package com.model;
 
+import com.location.Address;
+
 import java.util.ArrayList;
 import java.util.EnumSet;
 
@@ -146,27 +148,26 @@ public class HurricaneReliefSystem {
      * @param lastName the user's last name
      * @param password the user's password
      * @param phoneNumber the user's phone number
-     * @param locationZip the user's location ZIP code
-     * @param location the user's location coordinates
+     * @param location the user's home address
      * @return the created User object, or null if creation fails
      */
     public User createAccount(String firstName, String lastName,
                               String password, String phoneNumber,
-                              String locationZip, double[] location) {
+                              Address location) {
         if (currentUser != null) return null;
         userList = UserList.getInstance();
-        return userList.addUser(firstName, lastName, password, phoneNumber, locationZip, location);
+        return userList.addUser(firstName, lastName, password, phoneNumber, location);
         
     }
 
     /**
      * Submits a new relief request with the given information.
      * @param type the type of the request
-     * @param location the location coordinates of the request
+     * @param location the address of the request
      * @param description the description of the request
      * @return the created Request object, or null if submission fails
      */
-    public Request submitReliefRequest(EnumSet<RequestType> type, boolean forSomeoneElse,double[] location, String description) {
+    public Request submitReliefRequest(EnumSet<RequestType> type, boolean forSomeoneElse,Address location, String description) {
         if (currentUser == null) return null;
         return requestList.addRequest(type, currentUser, forSomeoneElse, location, description);
     }
@@ -463,7 +464,7 @@ public class HurricaneReliefSystem {
     /**
      * Creates a new shelter.
      * @param name the name of the shelter
-     * @param location the location of the shelter as a double array [latitude, longitude]
+     * @param location the location of the shelter as an address
      * @param capacity the capacity of the shelter
      * @param petAcceptance whether the shelter accepts pets
      * @param supplies the list of relief resources available at the shelter
@@ -472,7 +473,7 @@ public class HurricaneReliefSystem {
      * @param accessibility the accessibility features of the shelter
      * @return true if the creation is successful, false otherwise
      */
-    public boolean createShelter(String name, double[] location, int capacity, boolean petAcceptance, ArrayList<ReliefResource> supplies, MedicalService medicalService, boolean vetService, Accessibility accessibility) {
+    public boolean createShelter(String name, Address location, int capacity, boolean petAcceptance, ArrayList<ReliefResource> supplies, MedicalService medicalService, boolean vetService, Accessibility accessibility) {
         if (hasAnyPermission(Permission.APP_ADMINISTRATOR, Permission.SHELTER_ADMIN)) {
             return shelterList.addShelter(name, location, capacity, petAcceptance, supplies, medicalService, vetService, accessibility, currentUser, new ArrayList<Person>(), new ArrayList<String>()) != null;
         }
@@ -483,7 +484,7 @@ public class HurricaneReliefSystem {
      * Edits an existing shelter.
      * @param shelter the shelter to edit
      * @param name the new name of the shelter
-     * @param location the new location of the shelter as a double array [latitude, longitude]
+     * @param location the new location of the shelter as an address
      * @param capacity the new capacity of the shelter
      * @param petAcceptance whether the shelter accepts pets
      * @param supplies the new list of relief resources available at the shelter
@@ -492,7 +493,7 @@ public class HurricaneReliefSystem {
      * @param accessibility the new accessibility features of the shelter
      * @return true if the edit is successful, false otherwise
      */
-    public boolean editShelter(Shelter shelter, String name, double[] location, int capacity, boolean petAcceptance, ArrayList<ReliefResource> supplies, MedicalService medicalService, boolean vetService, Accessibility accessibility) {
+    public boolean editShelter(Shelter shelter, String name, Address location, int capacity, boolean petAcceptance, ArrayList<ReliefResource> supplies, MedicalService medicalService, boolean vetService, Accessibility accessibility) {
         if (hasAnyPermission(Permission.APP_ADMINISTRATOR) || shelter.getShelterAdmin().equals(currentUser)) {
             shelter.setName(name);
             shelter.setLocation(location);
@@ -523,10 +524,10 @@ public class HurricaneReliefSystem {
      * Adds a new piece of equipment to the current user.
      * @param type the type of equipment
      * @param quantity the quantity of equipment
-     * @param location the location of the equipment as a double array [latitude, longitude]
+     * @param location the location of the equipment as an address
      * @return true if the addition is successful, false otherwise
      */
-    public boolean addEquipment(String type, int quantity, double[] location) {
+    public boolean addEquipment(String type, int quantity, Address location) {
         if (currentUser != null) {
             ReliefResource equipment = new ReliefResource(type, quantity, location);
             currentUser.addEquipment(equipment);
