@@ -6,46 +6,46 @@ import com.location.MapTools;
 public class UI {
 
     public void run() {
-        // A Charleston address near the waterfront
+        // A Columbia address near the USC Horseshoe
         Address userAddress = new Address(
-                "1 Vendue Range",
-                "Charleston",
+                "701 Sumter Street",
+                "Columbia",
                 "SC",
-                "29401"
+                "29208"
         );
         Address closestShelter;
 
-        // Example hurricane-shelter locations
+        // Example hurricane-shelter locations around Columbia
         Address[] shelters = {
-                new Address("2950 Carner Avenue",
-                        "North Charleston", "SC", "29405"), // Military Magnet
+                new Address("3319 Millwood Avenue",
+                        "Columbia", "SC", "29205"), // Dreher High School
 
-                new Address("5200 Lackawanna Boulevard",
-                        "North Charleston", "SC", "29405"), // North Charleston CAES
+                new Address("4800 Monticello Road",
+                        "Columbia", "SC", "29203"), // Eau Claire High School
 
-                new Address("3841 Leeds Avenue",
-                        "North Charleston", "SC", "29405"), // Bond Court
+                new Address("5900 Powell Road",
+                        "Columbia", "SC", "29203"), // W.J. Keenan High School
 
-                new Address("3625 Ashley Phosphate Road",
-                        "North Charleston", "SC", "29418"), // Stall High School
+                new Address("1 Falcon Drive",
+                        "Columbia", "SC", "29204"), // A.C. Flora High School
 
-                new Address("6401 Dorchester Road",
-                        "North Charleston", "SC", "29418"), // Zucker Middle School
+                new Address("7500 Brookfield Road",
+                        "Columbia", "SC", "29223"), // Richland Northeast High School
 
-                new Address("1624 State Road",
-                        "Summerville", "SC", "29483"), // Cane Bay High School
+                new Address("120 Sparkleberry Lane",
+                        "Columbia", "SC", "29229"), // Spring Valley High School
 
-                new Address("1053 Russellville Road",
-                        "St. Stephen", "SC", "29479"), // St. Stephen Elementary
+                new Address("4801 Hardscrabble Road",
+                        "Columbia", "SC", "29229"), // Ridge View High School
 
-                new Address("200 Macedonia Foxes Circle",
-                        "St. Stephen", "SC", "29479"), // Macedonia Middle School
+                new Address("800 Langford Road",
+                        "Blythewood", "SC", "29016"), // Blythewood High School
 
-                new Address("101 Westview Boulevard",
-                        "Goose Creek", "SC", "29445"), // Westview Middle School
+                new Address("1 Redhawk Drive",
+                        "Blythewood", "SC", "29016"), // Westwood High School
 
-                new Address("1101 Boone Hill Road",
-                        "Summerville", "SC", "29483") // Summerville High School
+                new Address("2600 Lower Richland Boulevard",
+                        "Hopkins", "SC", "29061") // Lower Richland High School
         };
 
         try {

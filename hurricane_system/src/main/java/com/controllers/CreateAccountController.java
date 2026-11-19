@@ -11,7 +11,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.Alert;
 import com.model.*;
 import com.location.Address;
-import com.location.Coordinates;
 import com.location.MapTools;
 
 
@@ -26,7 +25,7 @@ public class CreateAccountController {
     private TextField phoneNumberField;
 
     @FXML
-    private TextField zipCodeField;
+    private TextField addressField;
 
     @FXML
     private PasswordField passwordField;
@@ -67,15 +66,15 @@ public class CreateAccountController {
         String lastName = lastNameField.getText();
         String phoneNumber = phoneNumberField.getText();
         String password = passwordField.getText();
-        String zipCode = zipCodeField.getText().trim();
+        String addressText = addressField.getText().trim();
         HurricaneReliefSystem system = HurricaneReliefSystem.getInstance();
 
         try {
-            Coordinates coordinates = MapTools.getInstance().getCoordinates(
-                    new Address("", "", "", zipCode));
+            Address address = Address.parse(addressText);
+            // Make sure the map service can find this address before creating the account
+            MapTools.getInstance().getCoordinates(address);
             User user = system.createAccount(firstName, lastName, password,
-                    phoneNumber, zipCode,
-                    new double[] {coordinates.getLatitude(), coordinates.getLongitude()});
+                    phoneNumber, address);
 
             if (user == null) {
                 showError("Account could not be created. Check your information and try again.");
@@ -93,8 +92,10 @@ public class CreateAccountController {
                 showError("Account was created, but automatic sign-in failed. Please log in.");
                 App.setRoot("login");
             }
+        } catch (IllegalArgumentException e) {
+            showError(e.getMessage());
         } catch (IOException | IllegalStateException e) {
-            showError("Unable to determine a location from that ZIP code: " + e.getMessage());
+            showError("Unable to find that address: " + e.getMessage());
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             showError("Location lookup was interrupted. Please try again.");

@@ -15,7 +15,10 @@ public abstract class DataConstants {
     // User JSON keys
     protected static final String USER_ID = "user_id";
     protected static final String USER_LOCATION = "location";
-    protected static final String USER_LOCATION_ZIP = "location_zip";
+    protected static final String ADDRESS_STREET = "street";
+    protected static final String ADDRESS_CITY = "city";
+    protected static final String ADDRESS_STATE = "state";
+    protected static final String ADDRESS_ZIP = "zip";
     protected static final String USER_FIRST_NAME = "first_name";
     protected static final String USER_LAST_NAME = "last_name";
     protected static final String USER_PASSWORD = "password";

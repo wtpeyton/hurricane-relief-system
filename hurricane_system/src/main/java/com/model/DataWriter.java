@@ -1,5 +1,7 @@
 package com.model;
 
+import com.location.Address;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,15 +30,10 @@ public class DataWriter extends DataConstants {
         JSONArray userArray = new JSONArray();
 
         for (User user: users) {
-            JSONArray userLocation = new JSONArray();
-            userLocation.add(user.getLocation()[0]);
-            userLocation.add(user.getLocation()[1]);
-
             JSONObject currentUser = new JSONObject();
             //Adding all of the items into the user object
             currentUser.put(USER_ID, user.getUserId().toString());
-            currentUser.put(USER_LOCATION, userLocation);
-            currentUser.put(USER_LOCATION_ZIP, user.getLocationZip());
+            currentUser.put(USER_LOCATION, createAddressObject(user.getLocation()));
             currentUser.put(USER_FIRST_NAME, user.getFirstName());
             currentUser.put(USER_LAST_NAME, user.getLastName());
             currentUser.put(USER_PASSWORD, user.getPassword());
@@ -76,10 +73,7 @@ public static boolean saveShelters(ArrayList<Shelter> shelters,
         currentShelter.put(SHELTER_CAPACITY, shelter.getCapacity());
         currentShelter.put(SHELTER_ID, shelter.getShelterId().toString());
 
-        JSONArray shelterLocation = new JSONArray();
-        shelterLocation.add(shelter.getLocation()[0]);
-        shelterLocation.add(shelter.getLocation()[1]);
-        currentShelter.put(SHELTER_LOCATION, shelterLocation);
+        currentShelter.put(SHELTER_LOCATION, createAddressObject(shelter.getLocation()));
 
         currentShelter.put(SHELTER_MEDICAL_SERVICE, shelter.getMedicalService().name());
         currentShelter.put(SHELTER_NAME, shelter.getName());
@@ -115,10 +109,7 @@ public static boolean saveShelters(ArrayList<Shelter> shelters,
             currentRequest.put(REQUEST_FOR_SOMEONE_ELSE, request.isForSomeoneElse());
             currentRequest.put(REQUEST_ID, request.getId().toString());
 
-            JSONArray requestLocation = new JSONArray();
-            requestLocation.add(request.getLocation()[0]);
-            requestLocation.add(request.getLocation()[1]);
-            currentRequest.put(REQUEST_LOCATION, requestLocation);
+            currentRequest.put(REQUEST_LOCATION, createAddressObject(request.getLocation()));
             
             currentRequest.put(REQUEST_PRIORITY, request.getPriority());
             currentRequest.put(REQUEST_REQUESTER, request.getRequester().getUserId().toString());
@@ -223,6 +214,22 @@ public static boolean saveShelters(ArrayList<Shelter> shelters,
         return permissions;
     }
     /**
+     * Converts an Address into a JSONObject
+     * @param address the address to convert
+     * @return a JSONObject of the address, or null if there is no address
+     */
+    private static JSONObject createAddressObject(Address address){
+        if(address == null){
+            return null;
+        }
+        JSONObject addressObject = new JSONObject();
+        addressObject.put(ADDRESS_STREET, address.getStreet());
+        addressObject.put(ADDRESS_CITY, address.getCity());
+        addressObject.put(ADDRESS_STATE, address.getState());
+        addressObject.put(ADDRESS_ZIP, address.getZip());
+        return addressObject;
+    }
+    /**
      * Iterates through a Users equipment and coverts them to a JSONArray
      * @param user the current user that we need to convert
      * @return A JSONArray of the equipment
@@ -233,11 +240,8 @@ public static boolean saveShelters(ArrayList<Shelter> shelters,
 
         for(ReliefResource item : iterable){
             JSONObject currentResource = new JSONObject();
-            JSONArray locationArray = new JSONArray();
-            locationArray.add(item.getLocation()[0]);
-            locationArray.add(item.getLocation()[1]);
             currentResource.put(RESOURCE_ID, item.getResourceId().toString());
-            currentResource.put(RESOURCE_LOCATION, locationArray);
+            currentResource.put(RESOURCE_LOCATION, createAddressObject(item.getLocation()));
             currentResource.put(RESOURCE_QUANTITY, item.getQuantity());
             currentResource.put(RESOURCE_TYPE, item.getType());
 
@@ -257,11 +261,8 @@ public static boolean saveShelters(ArrayList<Shelter> shelters,
 
         for(ReliefResource item : iterable){
             JSONObject currentResource = new JSONObject();
-            JSONArray locationArray = new JSONArray();
-            locationArray.add(item.getLocation()[0]);
-            locationArray.add(item.getLocation()[1]);
             currentResource.put(RESOURCE_ID, item.getResourceId().toString());
-            currentResource.put(RESOURCE_LOCATION, locationArray);
+            currentResource.put(RESOURCE_LOCATION, createAddressObject(item.getLocation()));
             currentResource.put(RESOURCE_QUANTITY, item.getQuantity());
             currentResource.put(RESOURCE_TYPE, item.getType());
 

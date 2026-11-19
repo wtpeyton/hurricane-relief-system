@@ -1,5 +1,7 @@
 package com.model;
 
+import com.location.Address;
+
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.UUID;
@@ -10,8 +12,7 @@ import java.util.UUID;
  */
 public class User {
     private UUID userId;
-    private double[] location;
-    private String locationZip;
+    private Address location;
     private String firstName;
     private String lastName;
     private String password;
@@ -25,8 +26,7 @@ public class User {
      */
     public User() {
         this.userId = UUID.randomUUID();
-        this.location = new double[]{0.0, 0.0};
-        this.locationZip = "";
+        this.location = null;
         this.firstName = "";
         this.lastName = "";
         this.password = "";
@@ -42,14 +42,12 @@ public class User {
      * @param lastName the user's last name
      * @param password the user's password
      * @param phoneNumber the user's phone number
-     * @param locationZip the user's location zip code
      * @param location the user's location as a double array [latitude, longitude]
      */
     public User(String firstName, String lastName, String password,
-                String phoneNumber, String locationZip, double[] location) {
+                String phoneNumber, Address location) {
         this.userId = UUID.randomUUID();
         this.location = location;
-        this.locationZip = locationZip;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
@@ -63,7 +61,6 @@ public class User {
      * Creates a user with existing user information
      * @param userId the user's unique identifier
      * @param location the user's location as a double array [latitude, longitude]
-     * @param locationZip the user's location zip code
      * @param firstName the user's first name
      * @param lastName the user's last name
      * @param password the user's password
@@ -72,14 +69,13 @@ public class User {
      * @param credentials the user's list of credentials
      * @param equipment the user's list of relief resources
      */
-    public User(UUID userId, double[] location, String locationZip,
+    public User(UUID userId, Address location,
                 String firstName, String lastName, String password,
                 String phoneNumber, EnumSet<Permission> permissions,
                 EnumSet<Credential> credentials,
                 ArrayList<ReliefResource> equipment) {
         this.userId = userId;
         this.location = location;
-        this.locationZip = locationZip;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
@@ -146,7 +142,7 @@ public class User {
      * Returns the user's location.
      * @return the user's location
      */
-    public double[] getLocation() {
+    public Address getLocation() {
         return location;
     }
 
@@ -155,7 +151,7 @@ public class User {
      * @return the user's location zip code
      */
     public String getLocationZip() {
-        return locationZip;
+        return location == null ? "" : location.getZip();
     }
 
     /**
@@ -228,6 +224,6 @@ public class User {
      */
     @Override
     public String toString() {
-        return userId + ", " + firstName + " " + lastName + ", " + phoneNumber + ", " + locationZip;
+        return userId + ", " + firstName + " " + lastName + ", " + phoneNumber + ", " + location;
     }
 }

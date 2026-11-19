@@ -1,5 +1,7 @@
 package com.model;
 
+import com.location.Address;
+
 import java.util.EnumSet;
 import org.junit.Test;
 import org.junit.Assert;
@@ -13,7 +15,7 @@ public class RequestTest {
     private User requester;
     private User responder;
     private EnumSet<RequestType> requestTypes;
-    private double[] location;
+    private Address location;
     private Request request;
 
     /**
@@ -22,12 +24,10 @@ public class RequestTest {
     @Before
     public void setUp() {
         requester = new User("Clark","Coats", "password123",
-                             "6034332110", "03290", 
-                             new double[]{43.1939, -71.5724}
+                             "6034332110", new Address("2 Main Street", "Concord", "NH", "03290")
                             );
         responder = new User( "Alex", "Krivejko", "password456",
-                             "6034332111", "03290", 
-                             new double[]{43.1939, -71.5724}
+                             "6034332111", new Address("2 Main Street", "Concord", "NH", "03290")
                             );
         responder.addPermission(Permission.VOLUNTEER);
     
@@ -35,7 +35,7 @@ public class RequestTest {
         requestTypes.add(RequestType.MEDICAL_EMERGENCY);
         requestTypes.add(RequestType.ESSENTIAL_SUPPLIES);
 
-        location = new double[] {32.7800, -79.9400};
+        location = new Address("1244 Blossom Street", "Columbia", "SC", "29205");
 
         request = new Request( requestTypes, requester, 
                false, location,
@@ -89,9 +89,9 @@ public class RequestTest {
      */
     @Test
     public void testSetLocation() {
-        double[] newLocation = {32.7900, -79.9600};
+        Address newLocation = new Address("1244 Blossom Street", "Columbia", "SC", "29205");
         request.setLocation(newLocation);
-        Assert.assertArrayEquals(newLocation, request.getLocation(), 0.0001);
+        Assert.assertEquals(newLocation, request.getLocation());
     }
     /**
      * Tests adding a volunteer to a request.
@@ -137,8 +137,8 @@ public class RequestTest {
     public void testAddResponderWithoutPermission() {
         User regularUser = new User(
             "Jane", "Doe", "password123",
-            "8035559876", "29201",
-            new double[] {34.0007, -81.0348}
+            "8035559876", 
+            new Address("1244 Blossom Street", "Columbia", "SC", "29205")
         );
 
         boolean wasAdded = request.addResponder(regularUser);
@@ -165,8 +165,8 @@ public class RequestTest {
     public void testAddMedicalVolunteer() {
         User medicalVolunteer = new User(
             "Jane", "Doe", "password123",
-            "8035559876", "29201",
-            new double[] {34.0007, -81.0348}
+            "8035559876", 
+            new Address("1244 Blossom Street", "Columbia", "SC", "29205")
         );
 
         medicalVolunteer.addPermission(Permission.MEDICAL_VOLUNTEER);
@@ -204,8 +204,8 @@ public class RequestTest {
     public void testStatusAfterRemovingOneOfTwoResponders() {
         User secondResponder = new User(
             "Jane", "Doe", "password123",
-            "8035559876", "29201",
-            new double[] {34.0007, -81.0348}
+            "8035559876", 
+            new Address("1244 Blossom Street", "Columbia", "SC", "29205")
         );
 
         secondResponder.addPermission(Permission.VOLUNTEER);

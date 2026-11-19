@@ -1,5 +1,7 @@
 package com.model;
 
+import com.location.Address;
+
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -18,7 +20,7 @@ public class ShelterTest {
     public void testNewShelterHasZeroOccupants() {
         Shelter shelter = new Shelter(
             "Test Shelter",
-            new double[] {34.0007, -81.0348},
+            new Address("1244 Blossom Street", "Columbia", "SC", "29205"),
             3, true,
             new ArrayList<ReliefResource>(),
             MedicalService.HIGH_SERVICE,
@@ -34,7 +36,7 @@ public class ShelterTest {
     public void testEmptyShelterAvailableSpaces() {
         Shelter shelter = new Shelter(
             "Test Shelter",
-            new double[] {34.0007, -81.0348},
+            new Address("1244 Blossom Street", "Columbia", "SC", "29205"),
             3, true,
             new ArrayList<ReliefResource>(),
             MedicalService.HIGH_SERVICE,
@@ -50,7 +52,7 @@ public class ShelterTest {
     public void testSuccessfulCheckIn() {
         Shelter shelter = new Shelter(
             "Test Shelter",
-            new double[] {34.0007, -81.0348},
+            new Address("1244 Blossom Street", "Columbia", "SC", "29205"),
             3, true,
             new ArrayList<ReliefResource>(),
             MedicalService.HIGH_SERVICE,
@@ -75,7 +77,7 @@ public class ShelterTest {
     public void testCheckInUpdatesOccupancyAndSpaces() {
         Shelter shelter = new Shelter(
             "Test Shelter",
-            new double[] {34.0007, -81.0348},
+            new Address("1244 Blossom Street", "Columbia", "SC", "29205"),
             3, true,
             new ArrayList<ReliefResource>(),
             MedicalService.HIGH_SERVICE,
@@ -98,7 +100,7 @@ public class ShelterTest {
     public void testCheckInExactlyFillsShelter() {
         Shelter shelter = new Shelter(
             "Test Shelter",
-            new double[] {34.0007, -81.0348},
+            new Address("1244 Blossom Street", "Columbia", "SC", "29205"),
             3, true,
             new ArrayList<ReliefResource>(),
             MedicalService.HIGH_SERVICE,
@@ -131,7 +133,7 @@ public class ShelterTest {
 
         Shelter shelter = new Shelter(
             "Test Shelter",
-            new double[] {34.0007, -81.0348},
+            new Address("1244 Blossom Street", "Columbia", "SC", "29205"),
             3, true,
             new ArrayList<ReliefResource>(),
             MedicalService.HIGH_SERVICE,
@@ -162,7 +164,7 @@ public class ShelterTest {
 
         Shelter shelter = new Shelter(
             "Test Shelter",
-            new double[] {34.0007, -81.0348},
+            new Address("1244 Blossom Street", "Columbia", "SC", "29205"),
             3, true,
             new ArrayList<ReliefResource>(),
             MedicalService.HIGH_SERVICE,
@@ -197,7 +199,7 @@ public class ShelterTest {
     public void testPetFriendlyCheckIn() {
         Shelter shelter = new Shelter(
             "Test Shelter",
-            new double[] {34.0007, -81.0348},
+            new Address("1244 Blossom Street", "Columbia", "SC", "29205"),
             3, true,
             new ArrayList<ReliefResource>(),
             MedicalService.HIGH_SERVICE,
@@ -227,7 +229,7 @@ public class ShelterTest {
     public void testNoPetsShelterRejectsPets() {
         Shelter shelter = new Shelter(
             "Test Shelter",
-            new double[] {34.0007, -81.0348},
+            new Address("1244 Blossom Street", "Columbia", "SC", "29205"),
             3, false,
             new ArrayList<ReliefResource>(),
             MedicalService.HIGH_SERVICE,
@@ -254,7 +256,7 @@ public class ShelterTest {
     public void testNoPetsShelterAcceptsPeople() {
         Shelter shelter = new Shelter(
             "Test Shelter",
-            new double[] {34.0007, -81.0348},
+            new Address("1244 Blossom Street", "Columbia", "SC", "29205"),
             3, false,
             new ArrayList<ReliefResource>(),
             MedicalService.HIGH_SERVICE,
@@ -281,7 +283,7 @@ public class ShelterTest {
     public void testNullPeopleList() {
         Shelter shelter = new Shelter(
             "Test Shelter",
-            new double[] {34.0007, -81.0348},
+            new Address("1244 Blossom Street", "Columbia", "SC", "29205"),
             3, true,
             new ArrayList<ReliefResource>(),
             MedicalService.HIGH_SERVICE,
@@ -305,7 +307,7 @@ public class ShelterTest {
     public void testNullPetsList() {
         Shelter shelter = new Shelter(
             "Test Shelter",
-            new double[] {34.0007, -81.0348},
+            new Address("1244 Blossom Street", "Columbia", "SC", "29205"),
             3, true,
             new ArrayList<ReliefResource>(),
             MedicalService.HIGH_SERVICE,
@@ -328,7 +330,7 @@ public class ShelterTest {
 public void testShelterEligibilityForCarterFamily() {
     Shelter shelter = new Shelter(
         "Charleston Test Shelter",
-        new double[] {32.7800, -79.9400},
+        new Address("1244 Blossom Street", "Columbia", "SC", "29205"),
         3, true,
         new ArrayList<ReliefResource>(),
         MedicalService.HIGH_SERVICE,
@@ -369,8 +371,8 @@ public void testCarterFamilyAndBuddySaveAndReload() throws Exception {
 
     User admin = new User(
         "Felix", "Smith", "password123",
-        "8035551234", "29201",
-        new double[] {32.7800, -79.9400}
+        "8035551234", 
+        new Address("1244 Blossom Street", "Columbia", "SC", "29205")
     );
 
     users.addUser(admin);
@@ -378,7 +380,7 @@ public void testCarterFamilyAndBuddySaveAndReload() throws Exception {
     try {
         Shelter shelter = new Shelter(
             "Charleston Test Shelter",
-            new double[] {32.7800, -79.9400},
+            new Address("1244 Blossom Street", "Columbia", "SC", "29205"),
             5, true,
             new ArrayList<ReliefResource>(),
             MedicalService.HIGH_SERVICE,
@@ -446,11 +448,11 @@ public void testCarterFamilyAndBuddySaveAndReload() throws Exception {
 }
 @Test
 public void testNewShelterConstructorValues() {
-    double[] location = new double[] {34.0007, -81.0348};
+    Address location = new Address("1244 Blossom Street", "Columbia", "SC", "29205");
 
     User admin = new User(
         "Felix", "Smith", "password123",
-        "8035551234", "29201", location
+        "8035551234", location
     );
 
     ArrayList<ReliefResource> supplies = new ArrayList<ReliefResource>();
@@ -471,7 +473,7 @@ public void testNewShelterConstructorValues() {
 
     assertNotNull(shelter.getShelterId());
     assertEquals("Test Shelter", shelter.getName());
-    assertArrayEquals(location, shelter.getLocation(), 0.000001);
+    assertEquals(location, shelter.getLocation());
     assertEquals(10, shelter.getCapacity());
     assertTrue(shelter.isPetAcceptance());
     assertEquals(supplies, shelter.getSupplies());
@@ -488,11 +490,11 @@ public void testNewShelterConstructorValues() {
 @Test
 public void testExistingShelterConstructorValues() {
     UUID shelterId = UUID.randomUUID();
-    double[] location = new double[] {32.7800, -79.9400};
+    Address location = new Address("1244 Blossom Street", "Columbia", "SC", "29205");
 
     User admin = new User(
         "Felix", "Smith", "password123",
-        "8035551234", "29201", location
+        "8035551234", location
     );
 
     ArrayList<ReliefResource> supplies = new ArrayList<ReliefResource>();
@@ -513,7 +515,7 @@ public void testExistingShelterConstructorValues() {
 
     assertEquals(shelterId, shelter.getShelterId());
     assertEquals("Saved Shelter", shelter.getName());
-    assertArrayEquals(location, shelter.getLocation(), 0.000001);
+    assertEquals(location, shelter.getLocation());
     assertEquals(20, shelter.getCapacity());
     assertTrue(shelter.isPetAcceptance());
     assertEquals(supplies, shelter.getSupplies());
@@ -534,7 +536,7 @@ public void testExistingShelterConstructorValues() {
 public void testShelterSettersUpdateValues() {
     Shelter shelter = new Shelter(
         "Original Shelter",
-        new double[] {34.0007, -81.0348},
+        new Address("1244 Blossom Street", "Columbia", "SC", "29205"),
         3, false,
         new ArrayList<ReliefResource>(),
         MedicalService.MINIMUM_SERVICE,
@@ -544,11 +546,11 @@ public void testShelterSettersUpdateValues() {
     );
 
     UUID originalId = shelter.getShelterId();
-    double[] newLocation = new double[] {32.7800, -79.9400};
+    Address newLocation = new Address("1244 Blossom Street", "Columbia", "SC", "29205");
 
     User admin = new User(
         "Felix", "Smith", "password123",
-        "8035551234", "29201", newLocation
+        "8035551234", newLocation
     );
 
     ArrayList<ReliefResource> supplies = new ArrayList<ReliefResource>();
@@ -565,7 +567,7 @@ public void testShelterSettersUpdateValues() {
     assertEquals("Updated Shelter", shelter.getName());
 
     shelter.setLocation(newLocation);
-    assertArrayEquals(newLocation, shelter.getLocation(), 0.000001);
+    assertEquals(newLocation, shelter.getLocation());
 
     shelter.setCapacity(10);
     assertEquals(10, shelter.getCapacity());
@@ -605,7 +607,7 @@ public void testShelterSettersUpdateValues() {
 public void testShelterToString() {
     Shelter shelter = new Shelter(
         "Test Shelter",
-        new double[] {34.0007, -81.0348},
+        new Address("1244 Blossom Street", "Columbia", "SC", "29205"),
         3, true,
         new ArrayList<ReliefResource>(),
         MedicalService.HIGH_SERVICE,

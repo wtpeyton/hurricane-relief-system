@@ -1,5 +1,7 @@
 package com.model;
 
+import com.location.Address;
+
 import java.util.UUID;
 /**
  * Represents a relief resource available at a shelter.
@@ -10,14 +12,14 @@ public class ReliefResource
     private UUID resourceId;
     private String type;
     private int quantity;
-    private double[] location;
+    private Address location;
     /**
      * Constructs a new ReliefResource with the specified type, quantity, and location.
      * @param type the type of the relief resource
      * @param quantity the quantity of the relief resource
      * @param location the location of the relief resource as a double array [latitude, longitude]
      */
-    public ReliefResource(String type, int quantity, double[] location)
+    public ReliefResource(String type, int quantity, Address location)
     {
         this.resourceId = UUID.randomUUID();
         this.type = type;
@@ -32,7 +34,7 @@ public class ReliefResource
      * @param quantity the quantity of the relief resource
      * @param location the location of the relief resource as a double array [latitude, longitude]
      */
-    public ReliefResource(UUID resourceId, String type, int quantity, double[] location)
+    public ReliefResource(UUID resourceId, String type, int quantity, Address location)
     {
         this.resourceId = resourceId;
         this.type = type;
@@ -79,7 +81,7 @@ public class ReliefResource
     /**
      * @return the location of the relief resource as a double array [latitude, longitude]
      */
-    public double[] getLocation()
+    public Address getLocation()
     {
         return location;
     }
@@ -87,7 +89,7 @@ public class ReliefResource
      * Sets the location of the relief resource.
      * @param location the new location of the relief resource as a double array [latitude, longitude]
      */
-    public void setLocation(double[] location)
+    public void setLocation(Address location)
     {
         this.location = location;
     }
@@ -100,7 +102,7 @@ public class ReliefResource
                 "resourceId=" + resourceId +
                 ", type='" + type + '\'' +
                 ", quantity=" + quantity +
-                ", location=[" + location[0] + ", " + location[1] + "]" +
+                ", location=" + location +
                 '}';
     }
 }

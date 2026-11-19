@@ -1,4 +1,7 @@
 package com.model;
+
+import com.location.Address;
+import com.location.MapTools;
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.Iterator;
@@ -40,7 +43,7 @@ public class ShelterList implements Iterable<Shelter>
      * @param shelterAdmin the administrator responsible for the shelter
      * @return the newly added Shelter object
      */
-    public Shelter addShelter(String name, double[] location, int capacity, boolean petAcceptance, 
+    public Shelter addShelter(String name, Address location, int capacity, boolean petAcceptance, 
                               ArrayList<ReliefResource> supplies, MedicalService medicalService, 
                               boolean vetService, Accessibility accessibility, User shelterAdmin,
                               ArrayList<Person> occupants, ArrayList<String> pets)
@@ -88,18 +91,11 @@ public class ShelterList implements Iterable<Shelter>
      * @param location the geographical location to measure distance from
      * @return a list of shelters sorted by proximity to the given location
      */
-    public ArrayList<Shelter> findSheltersByDistance(double[] location)
+    public ArrayList<Shelter> findSheltersByDistance(Address location)
     {
-        ArrayList<Shelter> nearbyShelters = new ArrayList<>(shelters);
-        nearbyShelters.sort((shelter1, shelter2) -> 
-            Double.compare
-            (
-                Math.sqrt(Math.pow(shelter1.getLocation()[0] - location[0], 2) + Math.pow(shelter1.getLocation()[1] - location[1], 2)),
-                Math.sqrt(Math.pow(shelter2.getLocation()[0] - location[0], 2) + Math.pow(shelter2.getLocation()[1] - location[1], 2))
-            )
-        );
-        return nearbyShelters;
+        return MapTools.getInstance().sortByDrivingTime(location, shelters, Shelter::getLocation);
     }
+
     /**
      * Saves the current list of shelters to persistent storage.
      * @return true if the shelters were successfully saved, false otherwise

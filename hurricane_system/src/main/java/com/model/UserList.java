@@ -1,5 +1,7 @@
 package com.model;
 
+import com.location.Address;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
@@ -71,21 +73,20 @@ public class UserList implements Iterable<User> {
      * @param lastName the user's last name
      * @param password the user's password
      * @param phoneNumber the user's phone number
-     * @param locationZip the user's location zip code
      * @param location the user's location as a double array [latitude, longitude]
      * @return the newly created user, or null if the account information is invalid
      */
 
     public User addUser(String firstName, String lastName, String password,
-                        String phoneNumber, String locationZip, double[] location) {
+                        String phoneNumber, Address location) {
         if (firstName.isEmpty() || lastName.isEmpty() || password.isEmpty()
                 || !isValidPhoneNumber(phoneNumber)
-                || !isValidZipCode(locationZip)
+                || !isValidAddress(location)
                 || doesUserExist(phoneNumber)) {
             return null;
         }
 
-        User user = new User(firstName, lastName, password, phoneNumber, locationZip, location);
+        User user = new User(firstName, lastName, password, phoneNumber, location);
         users.add(user);
         return user;
     }
@@ -111,20 +112,24 @@ public class UserList implements Iterable<User> {
 
     /**
      * Checks if a ZIP code contains exactly 5 digits.
-     * @param locationZip the ZIP code to check
      * @return true if the ZIP code is valid, otherwise false
      */
-    private boolean isValidZipCode(String locationZip) {
-        if (locationZip.length() != 5) {
+    private boolean isValidAddress(Address address) {
+        if (address == null || address.getStreet() == null || address.getStreet().isBlank()
+                || address.getCity() == null || address.getCity().isBlank()
+                || address.getState() == null || address.getState().isBlank()
+                || address.getZip() == null) {
             return false;
         }
-
-        for (int i = 0; i < locationZip.length(); i++) {
-            if (!Character.isDigit(locationZip.charAt(i))) {
+        String zip = address.getZip();
+        if (zip.length() != 5) {
+            return false;
+        }
+        for (int i = 0; i < zip.length(); i++) {
+            if (!Character.isDigit(zip.charAt(i))) {
                 return false;
             }
         }
-
         return true;
     }
 
@@ -205,8 +210,7 @@ public class UserList implements Iterable<User> {
             "Smith",
             "password123",
             "8035551234",
-            "29201",
-            new double[]{34.0007, -81.0348}
+            new Address("701 Sumter Street", "Columbia", "SC", "29201")
         );
 
         userList.addUser(testUser);
@@ -234,8 +238,7 @@ public class UserList implements Iterable<User> {
             "Doe",
             "password456",
             "8035555678",
-            "29205",
-            new double[]{34.0090, -81.0281}
+            new Address("701 Sumter Street", "Columbia", "SC", "29205")
         );
         System.out.println(newUser);
 
@@ -246,8 +249,7 @@ public class UserList implements Iterable<User> {
             "Doe",
             "password789",
             "8035555678",
-            "29208",
-            new double[]{34.0200, -81.0100}
+            new Address("701 Sumter Street", "Columbia", "SC", "29208")
         );
         System.out.println(duplicateUser);
 
@@ -258,8 +260,7 @@ public class UserList implements Iterable<User> {
                 "Jones",
                 "password123",
                 "8035559999",
-                "29201",
-            new double[]{34.0007, -81.0348}
+                new Address("701 Sumter Street", "Columbia", "SC", "29201")
         );
         System.out.println(emptyName);
 
@@ -270,21 +271,20 @@ public class UserList implements Iterable<User> {
             "Jones",
             "password123",
             "803555",
-            "29201",
-            new double[]{34.0007, -81.0348}
+            new Address("701 Sumter Street", "Columbia", "SC", "29201")
         );
         System.out.println(invalidPhone);
 
         System.out.println("Add user with letters in phone number:");
         System.out.println(userList.addUser("Jane", "Doe", "password123",
-                "803ABC5678", "29205", new double[] {34.0007, -81.0348}));
+                "803ABC5678", new Address("701 Sumter Street", "Columbia", "SC", "29205")));
 
         System.out.println("Add user with letters in ZIP code:");
         System.out.println(userList.addUser("Jane", "Doe", "password123",
-                "8035559999", "29ABC", new double[] {34.0007, -81.0348}));
+                "8035559999", new Address("701 Sumter Street", "Columbia", "SC", "29ABC")));
 
         System.out.println("Add user with invalid ZIP code length:");
         System.out.println(userList.addUser("Jane", "Doe", "password123",
-                "8035559999", "292", new double[] {34.0007, -81.0348}));
+                "8035559999", new Address("701 Sumter Street", "Columbia", "SC", "292")));
     }
 }
